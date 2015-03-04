@@ -1,0 +1,13 @@
+#过滤数据库文件、sln解决方案文件、配置文件
+*.mdb
+*.ldb
+*.sln
+*.config
+MetropolisLeasing/local.properties
+
+
+#过滤文件夹Debug,Release,obj
+MetropolisLeasing/.idea/
+MetropolisLeasing/build/
+MetropolisLeasing/app/build/
+
