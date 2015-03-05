@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mas="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f0eff5"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        android:background="@color/white">
+        <org.hand.mas.custom_view.RoundImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:src="@drawable/login_frame"
+            mas:type="circle"/>
+    </FrameLayout>
+
+    <View style="@style/SettingDivider" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.03"
+        android:background="#f2f3f8" />
+
+    <View style="@style/SettingDivider" />
+
+    <LinearLayout style="@style/SettingActivityLL">
+
+        <ImageView
+            style="@style/SettingActivityIcon"
+            android:src="@drawable/user_information" />
+
+        <TextView
+            style="@style/SettingActivity"
+            android:text="用户信息" />
+
+        <ImageView style="@style/SettingActivityDetail" />
+    </LinearLayout>
+
+    <View style="@style/SettingDivider" />
+
+    <LinearLayout style="@style/SettingActivityLL">
+
+        <ImageView
+            style="@style/SettingActivityIcon"
+
+            android:src="@drawable/muti_chara" />
+
+        <TextView
+            style="@style/SettingActivity"
+            android:text="更换角色" />
+
+        <ImageView style="@style/SettingActivityDetail" />
+
+    </LinearLayout>
+
+    <View style="@style/SettingDivider" />
+
+    <LinearLayout style="@style/SettingActivityLL">
+
+        <ImageView
+            style="@style/SettingActivityIcon"
+
+            android:src="@drawable/change_pswd" />
+
+        <TextView
+            style="@style/SettingActivity"
+            android:text="更换密码" />
+
+        <ImageView style="@style/SettingActivityDetail" />
+
+    </LinearLayout>
+
+    <View style="@style/SettingDivider" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.03"
+        android:background="#f2f3f8" />
+
+    <View style="@style/SettingDivider" />
+
+    <LinearLayout style="@style/SettingActivityLL">
+
+
+        <ImageView
+            style="@style/SettingActivityIcon"
+
+            android:src="@drawable/help" />
+
+        <TextView
+            style="@style/SettingActivity"
+            android:text="常见问题" />
+
+        <ImageView style="@style/SettingActivityDetail" />
+    </LinearLayout>
+
+    <View style="@style/SettingDivider" />
+
+    <LinearLayout style="@style/SettingActivityLL">
+
+        <ImageView
+            style="@style/SettingActivityIcon"
+
+            android:src="@drawable/comment" />
+
+        <TextView
+            style="@style/SettingActivity"
+            android:text="欢迎吐槽" />
+
+        <ImageView style="@style/SettingActivityDetail" />
+    </LinearLayout>
+
+    <View style="@style/SettingDivider" />
+
+    <LinearLayout style="@style/SettingActivityLL">
+
+        <ImageView
+            style="@style/SettingActivityIcon"
+
+            android:src="@drawable/update" />
+
+        <TextView
+            style="@style/SettingActivity"
+            android:text="版本升级" />
+
+        <ImageView style="@style/SettingActivityDetail" />
+    </LinearLayout>
+
+    <View style="@style/SettingDivider" />
+
+    <Button
+        android:id="@+id/quitBtn"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_weight="0.08"
+        android:background="@drawable/login_button_selector"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
+        android:text="退出"
+        android:textColor="@drawable/login_button_font_selector"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.15" />
+</LinearLayout>
