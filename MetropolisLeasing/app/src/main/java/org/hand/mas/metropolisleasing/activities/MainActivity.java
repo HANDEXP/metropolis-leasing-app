@@ -1,26 +1,24 @@
 package org.hand.mas.metropolisleasing.activities;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
+import android.view.Window;
 
-import org.hand.mas.custom_view.RoundImageDrawable;
 import org.hand.mas.metropolisleasing.R;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting);
-//        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.login_frame);
-//        ImageView iv = (ImageView) findViewById(R.id.login_background);
-//        iv.setImageDrawable(new RoundImageDrawable(bitmap,30,30));
+
+
+        setContentView(R.layout.activity_login);
     }
 
 

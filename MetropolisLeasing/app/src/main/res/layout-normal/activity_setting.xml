@@ -10,14 +10,49 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.3"
-        android:background="@color/white">
-        <org.hand.mas.custom_view.RoundImageView
-            android:layout_width="wrap_content"
+        android:background="#cdcdcd">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:src="@drawable/login_frame"
-            mas:type="circle"/>
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical">
+            <org.hand.mas.custom_view.RoundImageView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="0dp"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/login_frame"
+                mas:type="circle"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Benson"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="乘用车租赁专家"
+                    android:textStyle="normal"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+
+                    android:layout_marginTop="10dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
     </FrameLayout>
+
 
     <View style="@style/SettingDivider" />
 
@@ -143,11 +178,11 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="15dp"
         android:layout_weight="0.08"
-        android:background="@drawable/login_button_selector"
+        android:background="@drawable/logout_button_selector"
         android:paddingBottom="2dp"
         android:paddingTop="2dp"
         android:text="退出"
-        android:textColor="@drawable/login_button_font_selector"
+        android:textColor="@drawable/logout_button_font_selector"
         android:textSize="16sp" />
 
     <View

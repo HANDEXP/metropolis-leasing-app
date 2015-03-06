@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
@@ -42,8 +43,10 @@ public class RoundImageView extends ImageView {
      * 绘图
      */
     private Paint mBitmapPaint;
+    private Paint mStrokePaint;
 
     private  int mRadius;
+    private  int mStrokeWidth;
 
     /*
      * 3 x 3 Matrix,用于缩放
@@ -76,6 +79,14 @@ public class RoundImageView extends ImageView {
         mBitmapPaint = new Paint();
         mBitmapPaint.setAntiAlias(true);
 
+        mStrokeWidth = 5;
+        mStrokePaint = new Paint();
+        mBitmapPaint.setAntiAlias(true);
+        mStrokePaint.setStrokeWidth(mStrokeWidth);
+        mStrokePaint.setStyle(Paint.Style.FILL_AND_STROKE);
+
+        mStrokePaint.setColor(Color.parseColor("#ffffff"));
+
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RoundImageView);
         /*
         * default BorderRadius is 10dp
@@ -93,10 +104,15 @@ public class RoundImageView extends ImageView {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         if (type == TYPE_CIRCLE){
-            mWidth = Math.min(getMeasuredWidth(),getMeasuredHeight());
-            mRadius = mWidth / 2;
+            mWidth = Math.min(getMeasuredWidth(), getMeasuredHeight()) + mStrokeWidth;
+            mRadius = mWidth / 2 - mStrokeWidth;
             setMeasuredDimension(mWidth,mWidth);
         }
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
     }
 
     @Override
@@ -116,7 +132,11 @@ public class RoundImageView extends ImageView {
         if (type == TYPE_ROUND){
             canvas.drawRoundRect(mRoundRect,mBorderRadius,mBorderRadius,mBitmapPaint);
         }else{
-            canvas.drawCircle(mRadius,mRadius,mRadius,mBitmapPaint);
+
+            canvas.drawCircle(mRadius+mStrokeWidth,mRadius+mStrokeWidth,mRadius+mStrokeWidth/2,mStrokePaint);
+            canvas.drawCircle(mRadius+mStrokeWidth,mRadius+mStrokeWidth,mRadius,mBitmapPaint);
+//            measure(0, 0);
+
         }
     }
 
@@ -136,7 +156,7 @@ public class RoundImageView extends ImageView {
         float scale = 1.0f;
         if(type == TYPE_CIRCLE){
             int bSize = Math.min(bmp.getWidth(),bmp.getHeight());
-            scale = mWidth * 1.0f / bSize;
+            scale = mWidth * 1.0f / (bSize);
         }else if(type == TYPE_ROUND){
             scale = Math.max(getWidth() * 1.0f / bmp.getWidth(), getHeight() * 1.0f / bmp.getHeight());
         }
@@ -171,14 +191,15 @@ public class RoundImageView extends ImageView {
     }
 
     /* public methods */
-    public void setBorderRadius(int borderRadius){
+    public RoundImageView setBorderRadius(int borderRadius){
         int pxVal = dp2px(borderRadius);
         if (this.mBorderRadius != pxVal){
             this.mBorderRadius = pxVal;
             invalidate();
         }
+        return this;
     }
-    public void setType(int type){
+    public RoundImageView setType(int type){
         switch (this.type){
             case TYPE_CIRCLE:
                 this.type = type;
@@ -191,5 +212,17 @@ public class RoundImageView extends ImageView {
                 break;
         }
         requestLayout();
+        return this;
+    }
+
+    public RoundImageView setStrokeWidth(int strokeWidth){
+        int pxVal = dp2px(strokeWidth);
+        if (this.mStrokeWidth != pxVal){
+            this.mStrokeWidth = pxVal;
+            invalidate();
+        }
+
+
+        return this;
     }
 }
