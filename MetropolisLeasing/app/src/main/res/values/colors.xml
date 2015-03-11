@@ -3,4 +3,6 @@
     <color name="grey">#eeeeed</color>
     <color name="white">#FFFFFF</color>
     <color name="setting_text_font_color">#727272</color>
+    <color name="theme_color">#1fbaf3</color>
+    <color name="listview_font_color">#484b51</color>
 </resources>
