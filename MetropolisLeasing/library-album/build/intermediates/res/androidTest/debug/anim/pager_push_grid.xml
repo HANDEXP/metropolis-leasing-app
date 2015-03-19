@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<translate
+    android:fromYDelta="-100%p"
+ 	android:toYDelta="0"
+ 	  
+ 	
+ 	xmlns:android="http://schemas.android.com/apk/res/android"
+/>
+    
+  
+<!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-album/src/main/res/anim/pager_push_grid.xml --><!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-album/build/intermediates/bundles/debug/res/anim/pager_push_grid.xml -->

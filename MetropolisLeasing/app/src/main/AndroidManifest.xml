@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.hand.mas.metropolisleasing" >
+    xmlns:tools="http://schemas.android.com/tools"
+    package="org.hand.mas.metropolisleasing">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".application.MSApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.NoTitleBar" >
+        android:theme="@android:style/Theme.NoTitleBar"
+        tools:replace="android:icon">
         <activity
             android:name=".activities.OrderListActivity"
             android:label="@string/app_name" >
@@ -15,6 +21,16 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.DetailListActivity"
+            android:label="详情">
+        </activity>
+        <activity android:name=".activities.AlbumViewActivity"
+                  android:label="影像资料">
+        </activity>
+        <activity android:name=".activities.ViewPagerActivity"
+                  android:label="影像资料详情">
         </activity>
         <supports-screens
             android:largeScreens="true"

@@ -31,7 +31,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
 
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_setting);
 //        RoboSpring.autowire(this);
 //        Resource a =   new FileSystemResource("/data/data/org.hand.mas.metropolisleasing/untitled.xml");
 //        XmlBeanFactory factory = new XmlBeanFactory(a);

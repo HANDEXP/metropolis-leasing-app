@@ -31,7 +31,7 @@ public class RoundImageView extends ImageView {
     private int type;
     private static final int TYPE_CIRCLE = 0;
     private static final int TYPE_ROUND = 1;
-    private static final int BODER_RADIUS_DEFAULT = 10;
+    private static final int BODER_RADIUS_DEFAULT = 5;
 
     /*
     *
@@ -131,6 +131,7 @@ public class RoundImageView extends ImageView {
         setUpShader();
         if (type == TYPE_ROUND){
             canvas.drawRoundRect(mRoundRect,mBorderRadius,mBorderRadius,mBitmapPaint);
+
         }else{
 
             canvas.drawCircle(mRadius+mStrokeWidth,mRadius+mStrokeWidth,mRadius+mStrokeWidth/2,mStrokePaint);

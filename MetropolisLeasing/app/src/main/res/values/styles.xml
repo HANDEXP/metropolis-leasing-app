@@ -25,8 +25,9 @@
         <!-- <item name="android:layout_marginRight">10dp</item> -->
         <item name="android:background">@drawable/setting_view_selector</item>
         <item name="android:clickable">true</item>
-        <item name="android:showDividers">none</item>
-        <item name="android:divider">@drawable/layout_divider</item>
+
+        <item name="android:divider">#ffffff</item>
+        <item name="android:dividerHeight">2px</item>
     </style>
     <!-- 设置界面图标 -->
     <style name="SettingActivityIcon">
@@ -65,6 +66,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
         <item name="android:background">#d6d5d9</item>
+
     </style>
     <!-- 布局分割线 -->
     <style name="LayoutDivider">

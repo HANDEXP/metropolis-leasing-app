@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:id="@+id/mCamera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialog_view_selector"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+        <TextView
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="拍照"
+            android:textColor="#111111"
+            android:textSize="20sp"/>
+
+    </RelativeLayout>
+    <View style="@style/SettingDivider" />
+    <RelativeLayout
+        android:id="@+id/mPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialog_view_selector"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+        <TextView
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="从手机相册选择"
+            android:textColor="#111111"
+            android:textSize="20sp"/>
+    </RelativeLayout>
+    <View style="@style/SettingDivider" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#d6d6dd"/>
+    <RelativeLayout
+        android:id="@+id/mCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialog_view_selector"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+        <TextView
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="取消"
+            android:textColor="#111111"
+            android:textSize="20sp"/>
+    </RelativeLayout>
+</LinearLayout>

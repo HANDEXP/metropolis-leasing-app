@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -26,6 +27,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/project_number_for_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
@@ -51,6 +53,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/project_source_for_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
@@ -99,8 +102,11 @@
     </FrameLayout>
 
     <ListView
+        android:id="@+id/detail_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:divider="#f2f2f2"
+        android:dividerHeight="2px">
 
     </ListView>
 </LinearLayout>

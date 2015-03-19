@@ -1,1 +1,4 @@
-include ':app', ':robospring-1.0.5', ':library-pull'
+include ':app', ':robospring-1.0.5'
+include ':littleMvc'
+include ':library-pull'
+include ':library-album'
