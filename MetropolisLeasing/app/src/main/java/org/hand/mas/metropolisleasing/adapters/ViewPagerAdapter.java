@@ -53,6 +53,7 @@ public class ViewPagerAdapter extends PagerAdapter {
         String filePath = mList.get(position).getFilePath();
         String fileName = mList.get(position).getFileName();
         String fileSuffix = mList.get(position).getFileSuffix().toLowerCase();
+        boolean remote = mList.get(position).getRemote();
 
         Pattern pattern = Pattern.compile("png|jpeg|jpg|bmp");
         Matcher matcher = pattern.matcher(fileSuffix);
@@ -60,7 +61,12 @@ public class ViewPagerAdapter extends PagerAdapter {
             ImageLoader.getInstance().displayImage("https://avatars0.githubusercontent.com/u/3929205?v=3&u=578eeae7eb975f8de9b1facdeef5bac5225c258c&s=140",
                     photoView);
         }else {
-            ImageLoader.getInstance().displayImage(ConstantUrl.basicUrl+filePath,photoView);
+            if (!remote){
+                ImageLoader.getInstance().displayImage(filePath,photoView);
+            }else {
+                ImageLoader.getInstance().displayImage(ConstantUrl.basicUrl+filePath,photoView);
+            }
+
         }
 
 

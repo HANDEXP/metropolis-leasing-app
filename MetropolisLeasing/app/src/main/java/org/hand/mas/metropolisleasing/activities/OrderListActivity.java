@@ -35,7 +35,9 @@ import java.util.List;
 public class OrderListActivity extends Activity implements LMModelDelegate{
 
     private PullToRefreshListView mPullRefreshListView;
-    private ListView orderListView;
+    private ListView mOrderListView;
+    private TextView mTitleTextView;
+
     private List<OrderListModel> mOrderList;
     private OrderListSvcModel mModel;
     private OrderListAdapter adapter;
@@ -138,6 +140,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
         mModel = new OrderListSvcModel(this);
 
         mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.order_list);
+        mTitleTextView = (TextView) findViewById(R.id.titleTextView);
 
         mPullRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);
         mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
@@ -164,10 +167,10 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
 
             }
         });
-        orderListView = mPullRefreshListView.getRefreshableView();
+        mOrderListView = mPullRefreshListView.getRefreshableView();
 //        orderList.add(new OrderListModel());
 //        orderListView.setAdapter(new OrderListAdapter(mOrderList,getApplicationContext()));
-        orderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mOrderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String project_number = (String) ((TextView)view.findViewById(R.id.project_number_for_order)).getText();
@@ -179,6 +182,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                 overridePendingTransition(R.anim.move_in_right,R.anim.move_out_left);
             }
         });
+        mTitleTextView.setText("租赁申请查询");
     }
 
     /*

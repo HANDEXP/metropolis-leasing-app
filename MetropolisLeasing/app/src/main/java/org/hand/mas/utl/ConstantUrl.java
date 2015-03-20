@@ -5,6 +5,7 @@ package org.hand.mas.utl;
  */
 public class ConstantUrl {
     public static String basicUrl = "http://172.20.0.72:8080/xddev/";
+    public static String loginUrl = "modules/mobile_um/client/commons/login/mbs_login.svc";
     public static String orderListUrl = "modules/app/orderList.svc";
     public static String orderDetailUrl = "modules/app/detailList.svc";
     public static String cddGridUrl = "modules/app/cddGrid.svc";

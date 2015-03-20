@@ -2,28 +2,35 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:background="@color/theme_color"
-    android:layout_height="60dp"
-    android:padding="10dp">
+    android:layout_height="wrap_content"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
 
-    <TextView
-        android:layout_height="match_parent"
-        android:layout_width="wrap_content"
-        android:text="返回"
-        android:textColor="#fff"
-        android:gravity="center"
+    <ImageView
+        android:id="@+id/return_to_detailList"
+        android:layout_height="35dp"
+        android:layout_width="35dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:layout_alignParentLeft="true"
-        android:id="@+id/returnTextView"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:src="@drawable/left_bow"
+        android:background="@drawable/add_item_selector"
         />
 
     <TextView
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_centerInParent="true"
-        android:textSize="18dp"
+        android:textSize="20dp"
         android:textColor="#fff"
         android:gravity="center"
-        android:text=""
-        android:id="@+id/titleTextView_for_cdd_item"
+        android:text="TEST"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/titleTextView"
         />
 
     <ImageView
@@ -37,7 +44,7 @@
         android:layout_marginRight="5dp"
         android:src="@drawable/add_item"
         android:background="@drawable/add_item_selector"
-
+        android:visibility="gone"
         />
 
 

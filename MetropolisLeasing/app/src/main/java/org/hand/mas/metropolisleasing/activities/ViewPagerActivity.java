@@ -26,6 +26,8 @@ public class ViewPagerActivity extends Activity {
     private ViewPagerAdapter mViewPagerAdapter;
     private TextView mCurrencyPositionTextView;
 
+    private ImageView mCross;
+
 
     private int mCurrencyPosition;
 
@@ -73,7 +75,7 @@ public class ViewPagerActivity extends Activity {
     private void bindAllViews(){
         mViewPager = (ViewPager) findViewById(R.id.viewPager_for_cdd_item);
         mCurrencyPositionTextView = (TextView) findViewById(R.id.currencyPosition_for_cdd_item);
-
+        mCross = (ImageView) findViewById(R.id.cross_for_cdd_item);
 
         Intent intent = getIntent();
         mCddGridList = (List<CddGridModel>) intent.getSerializableExtra("cddGridList");
@@ -99,6 +101,12 @@ public class ViewPagerActivity extends Activity {
             @Override
             public void onPageScrollStateChanged(int state) {
 
+            }
+        });
+        mCross.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 

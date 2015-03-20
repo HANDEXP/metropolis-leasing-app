@@ -22,6 +22,7 @@
 
             >
             <org.hand.mas.custom_view.RoundImageView
+                android:id="@+id/img_for_login"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -32,16 +33,18 @@
             <View style="@style/SettingDivider" />
             <EditText
                 style="@style/LoginEditText"
+                android:id="@+id/login_editText"
                 android:hint="用户名"
                 android:drawableLeft="@drawable/user"/>
             <View style="@style/LayoutDivider" />
             <EditText
                 style="@style/LoginEditText"
+                android:id="@+id/password_editText"
                 android:hint="请输入密码"
                 android:drawableLeft="@drawable/password"/>
             <View style="@style/SettingDivider" />
             <Button
-                android:id="@+id/quitBtn"
+                android:id="@+id/loginBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
@@ -49,7 +52,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="25dp"
 
-                android:background="@drawable/logout_button_corners_press"
+                android:background="@drawable/login_button_selector"
                 android:paddingBottom="10dp"
                 android:paddingTop="10dp"
                 android:text="登陆"

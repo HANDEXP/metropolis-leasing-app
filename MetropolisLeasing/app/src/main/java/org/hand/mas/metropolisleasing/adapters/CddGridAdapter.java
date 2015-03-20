@@ -60,16 +60,18 @@ public class CddGridAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         if (convertView == null){
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.cdd_grid_item,null);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.cdd_grid_item,parent,false);
 
         }
         RoundImageView roundImageView = (RoundImageView) convertView.findViewById(R.id.roundImageView_for_cdd_item);
         TextView descriptionTextView = (TextView) convertView.findViewById(R.id.description_for_cdd_item);
 
+        String cddItemId = mList.get(position).getCddItemId();
         String description = mList.get(position).getDescription();
         String filePath = mList.get(position).getFilePath();
         String fileName = mList.get(position).getFileName();
         String fileSuffix = mList.get(position).getFileSuffix().toLowerCase();
+        boolean remote = mList.get(position).getRemote();
 
         descriptionTextView.setText(description);
 
@@ -103,32 +105,61 @@ public class CddGridAdapter extends BaseAdapter {
                     });
 
         }else{
-            ImageLoader.getInstance().displayImage(ConstantUrl.basicUrl+filePath,
-                    roundImageView,
-                    mOptions,
-                    new ImageLoadingListener() {
-                        @Override
-                        public void onLoadingStarted(String imageUri, View view) {
+            if(!remote){
+                ImageLoader.getInstance().displayImage(filePath,
+                        roundImageView,
+                        mOptions,
+                        new ImageLoadingListener() {
+                            @Override
+                            public void onLoadingStarted(String imageUri, View view) {
 
-                        }
+                            }
 
-                        @Override
-                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                            @Override
+                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
 
-                        }
+                            }
 
-                        @Override
-                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                            @Override
+                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 
-                        }
+                            }
 
-                        @Override
-                        public void onLoadingCancelled(String imageUri, View view) {
+                            @Override
+                            public void onLoadingCancelled(String imageUri, View view) {
 
-                        }
-                    });
+                            }
+                        });
+            }else{
+                ImageLoader.getInstance().displayImage(ConstantUrl.basicUrl+filePath,
+                        roundImageView,
+                        mOptions,
+                        new ImageLoadingListener() {
+                            @Override
+                            public void onLoadingStarted(String imageUri, View view) {
+
+                            }
+
+                            @Override
+                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+                            }
+
+                            @Override
+                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+
+                            }
+
+                            @Override
+                            public void onLoadingCancelled(String imageUri, View view) {
+
+                            }
+                        });
+            }
         }
 
         return convertView;
     }
+
+
 }

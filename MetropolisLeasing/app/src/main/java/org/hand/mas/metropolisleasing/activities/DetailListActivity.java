@@ -8,12 +8,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.littlemvc.model.LMModel;
 import com.littlemvc.model.LMModelDelegate;
 import com.littlemvc.model.request.AsHttpRequestModel;
-import com.mas.album.AlbumView;
 import com.mas.album.items.ImageItem;
 
 import org.hand.mas.metropolisleasing.R;
@@ -38,6 +36,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
     private ListView detailListView;
     private TextView projectNumberTextView;
     private TextView projectSourceTextView;
+    private TextView mTitleTextView;
 
     private List<DetailListModel> mDetailList;
     private DetailListSvcModel mModel;
@@ -148,6 +147,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
         projectNumberTextView = (TextView) findViewById(R.id.project_number_for_detail);
         projectSourceTextView = (TextView) findViewById(R.id.project_source_for_detail);
         detailListView = (ListView) findViewById(R.id.detail_list);
+        mTitleTextView = (TextView) findViewById(R.id.titleTextView);
 
         detailListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -156,6 +156,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
                 showAlbum(position);
             }
         });
+        mTitleTextView.setText("资料清单");
     }
 
     private void showAlbum(int position){
@@ -165,6 +166,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
         intent4ViewPager.putExtra("cdd_item_id",mDetailList.get(position).getCddItemId());
         intent4ViewPager.putExtra("bp_name",mDetailList.get(position).getBpName());
         startActivityForResult(intent4ViewPager,0);
+        overridePendingTransition(R.anim.move_in_right,R.anim.move_out_left);
     }
 
     private void initializeData(JSONArray jsonArray) throws JSONException {

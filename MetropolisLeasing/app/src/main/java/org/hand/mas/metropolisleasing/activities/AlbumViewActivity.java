@@ -2,10 +2,13 @@ package org.hand.mas.metropolisleasing.activities;
 
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +23,7 @@ import android.widget.Toast;
 import com.littlemvc.model.LMModel;
 import com.littlemvc.model.LMModelDelegate;
 import com.littlemvc.model.request.AsHttpRequestModel;
+import com.mas.album.Util;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ListHolder;
@@ -61,6 +65,7 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
     private TextView returnTextView;
     private TextView mTitleTextView;
     private ImageView mAddItemImageView;
+    private ImageView mReturnImageView;
 
     private DisplayImageOptions mOptions;
 
@@ -83,6 +88,11 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
 
         bindAllViews();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        finishWithAnim();
     }
 
     @Override
@@ -142,16 +152,51 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bitmap;
+        if (data == null){
+            return;
+        }
+        Bitmap bitmap = null;
         Uri originalUri;
-        ContentResolver cr;
+        String filePath;
+        String fileName;
+        String fileSuffix;
+        byte[] content = null;
         switch (requestCode){
             case IMAGE_CAPTURE:
+                originalUri = data.getData();
+                filePath = uri2path(originalUri.toString());
+                fileName = filePath.split("/")[filePath.split("/").length-1];
+                fileSuffix = filePath.split("\\.")[filePath.split("\\.").length-1];
+                try {
+                    mCddGridList.add(new CddGridModel(null,originalUri.toString(),fileName,null,fileSuffix,false));
+                    mCddAdapter.notifyDataSetChanged();
+                    System.gc();
+                }catch (Exception e){
+                    Toast.makeText(getApplicationContext(),"IMAGE_CAPTURE FAILED!",Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }finally {
+
+                }
+
                 break;
             case ACTION_GET_CONTENT:
                 originalUri = data.getData();
-                cr = this.getContentResolver();
-                
+                filePath = uri2path(originalUri.toString());
+                fileName = filePath.split("/")[filePath.split("/").length-1];
+                fileSuffix = filePath.split("\\.")[filePath.split("\\.").length-1];
+                try {
+//                    content = Util.readStream(getContentResolver().openInputStream(Uri.parse(originalUri.toString())));
+//                    bitmap = Util.CompressBytes(content);
+                    mCddGridList.add(new CddGridModel(null,originalUri.toString(),fileName,null,fileSuffix,false));
+                    mCddAdapter.notifyDataSetChanged();
+                    System.gc();
+                }catch (Exception e){
+                    Toast.makeText(getApplicationContext(),"ACTION_GET_CONTENT FAILED!",Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }finally {
+
+                }
+
                 break;
             default:
                 break;
@@ -173,7 +218,8 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
                         data.getString("file_path"),
                         data.getString("file_name"),
                         data.getString("description"),
-                        data.getString("file_suffix")
+                        data.getString("file_suffix"),
+                        true
                 );
                 mCddGridList.add(item);
             }catch (Exception e){
@@ -187,9 +233,11 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
 
     private void bindAllViews(){
 
-        mTitleTextView = (TextView) findViewById(R.id.titleTextView_for_cdd_item);
+        mTitleTextView = (TextView) findViewById(R.id.titleTextView);
         mGridView = (GridView) findViewById(R.id.gridView_for_cdd_grid);
         mAddItemImageView = (ImageView) findViewById(R.id.addItem_for_cdd_item);
+        mReturnImageView = (ImageView) findViewById(R.id.return_to_detailList);
+
 
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -249,6 +297,13 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
                 dialog.show();
             }
         });
+        mReturnImageView.setVisibility(View.VISIBLE);
+        mReturnImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishWithAnim();
+            }
+        });
 
         mOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(false)
@@ -256,5 +311,26 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
                 .build();
 
     }
+    /*
+     * convert uri to path
+     * @{param} String
+     */
+    private String uri2path(String uriString){
+        Uri uri = Uri.parse(uriString);
 
-}
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor actualImageCursor = this.managedQuery(uri,projection,null,null,null);
+        int actualImageColumnIndex = actualImageCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        actualImageCursor.moveToFirst();
+        String imgPath = actualImageCursor.getString(actualImageColumnIndex);
+        return imgPath;
+    }
+
+    /*
+    * finish activity
+    * */
+    private void finishWithAnim(){
+        finish();
+        overridePendingTransition(R.anim.move_in_left,R.anim.move_out_right);
+    }
+ }

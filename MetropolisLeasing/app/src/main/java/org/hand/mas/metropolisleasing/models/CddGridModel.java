@@ -12,13 +12,15 @@ public class CddGridModel implements Serializable{
     private String description;
     private String file_name;
     private String file_suffix;
+    private boolean remote;
 
-    public CddGridModel(String cdd_item_id, String file_path, String file_name, String description, String file_suffix) {
+    public CddGridModel(String cdd_item_id, String file_path, String file_name, String description, String file_suffix, boolean remote) {
         this.cdd_item_id = cdd_item_id;
         this.file_path = file_path;
         this.file_name = file_name;
         this.description = description;
         this.file_suffix = file_suffix;
+        this.remote = remote;
     }
 
     public String getCddItemId() {
@@ -40,4 +42,6 @@ public class CddGridModel implements Serializable{
     public String getFileSuffix() {
         return file_suffix;
     }
+
+    public boolean getRemote() {return remote;};
 }
