@@ -8,17 +8,16 @@ import org.hand.mas.utl.ConstantUrl;
 import java.util.HashMap;
 
 /**
- * Created by gonglixuan on 15/3/19.
+ * Created by gonglixuan on 15/3/20.
  */
-public class LoginSvcModel extends AsHttpRequestModel {
-
-    public LoginSvcModel(LMModelDelegate delegate) {
+public class DeleteAttachmentSvcModel extends AsHttpRequestModel {
+    public DeleteAttachmentSvcModel(LMModelDelegate delegate) {
         super(delegate);
     }
 
     public void load(HashMap param){
         try {
-            String url = ConstantUrl.loginUrl;
+            String url = ConstantUrl.deleteAttachmentUrl;
             this.post(url,param);
         }catch (Exception e){
             e.printStackTrace();

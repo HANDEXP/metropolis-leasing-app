@@ -1,9 +1,11 @@
 package org.hand.mas.metropolisleasing.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
@@ -26,6 +28,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 /**
  * Created by gonglixuan on 15/3/19.
  */
@@ -35,6 +39,7 @@ public class LoginActivity extends Activity implements LMModelDelegate{
     private EditText mPasswordEditText;
     private RoundImageView mImage;
     private Button mButton;
+    private SweetAlertDialog pDialog;
 
     private HashMap<String,String> param;
     private LoginSvcModel mModel;
@@ -43,6 +48,7 @@ public class LoginActivity extends Activity implements LMModelDelegate{
 
     private static int NO = 0;
     private static int YES = 1;
+    private int i = -1;
 
 
     @Override
@@ -78,17 +84,47 @@ public class LoginActivity extends Activity implements LMModelDelegate{
 
     @Override
     public void modelDidFinishLoad(LMModel model) {
+
         AsHttpRequestModel reponseModel = (AsHttpRequestModel) model;
         String json = new String(reponseModel.mresponseBody);
         try {
             JSONObject jsonObj = new JSONObject(json);
             String code =  ((JSONObject)jsonObj.get("head")).get("code").toString();
-            if (code.equals("success")){
+            if (code.equals("ok")){
                 saveUserData();
-                Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_SHORT).show();
-
+                new CountDownTimer(500*4,500){
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        i++;
+                        switch (i){
+                            case 1:
+                                break;
+                            case 2:
+                                pDialog.setTitleText("登录成功")
+                                        .setConfirmText("确定")
+                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                break;
+                            case 3:
+                                break;
+                            case 4:
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    @Override
+                    public void onFinish() {
+                        i = -1;
+                        pDialog.dismiss();
+                        Intent intent = new Intent(getApplicationContext(),OrderListActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }.start();
             }else {
-                Toast.makeText(getApplicationContext(),"Fail",Toast.LENGTH_SHORT).show();
+                pDialog.setTitleText("登录失败")
+                        .setConfirmText("确定")
+                        .changeAlertType(SweetAlertDialog.ERROR_TYPE);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -99,12 +135,19 @@ public class LoginActivity extends Activity implements LMModelDelegate{
 
     @Override
     public void modelDidStartLoad(LMModel model) {
-
+        pDialog = new SweetAlertDialog(this,SweetAlertDialog.PROGRESS_TYPE)
+                .setTitleText("登录中");
+        pDialog.setCancelable(false);
+        pDialog.getProgressHelper().setBarColor(getResources().getColor(R.color.theme_color));
+        pDialog.show();
     }
 
     @Override
     public void modelDidFailedLoadWithError(LMModel model) {
-
+        i = -1;
+        pDialog.setTitleText("网络错误，请稍后再试")
+               .setConfirmText("OK")
+               .changeAlertType(SweetAlertDialog.ERROR_TYPE);
     }
 
     /* Private Methods */
@@ -233,7 +276,7 @@ public class LoginActivity extends Activity implements LMModelDelegate{
     * 存储用户资料
     * */
     private void saveUserData(){
-        SharedPreferences preferences = getSharedPreferences("userInfo",MODE_APPEND);
+        SharedPreferences preferences = getSharedPreferences("userInfo", MODE_APPEND);
         String userName = param.get("user_name");
         String userPassword = param.get("user_password");
         preferences.edit().putString("userName",userName).commit();
@@ -251,4 +294,6 @@ public class LoginActivity extends Activity implements LMModelDelegate{
         mLoginEditText.setText(userName);
         mPasswordEditText.setText(userPassword);
     }
+
+
   }

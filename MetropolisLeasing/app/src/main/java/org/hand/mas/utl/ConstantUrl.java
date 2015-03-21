@@ -9,6 +9,7 @@ public class ConstantUrl {
     public static String orderListUrl = "modules/app/orderList.svc";
     public static String orderDetailUrl = "modules/app/detailList.svc";
     public static String cddGridUrl = "modules/app/cddGrid.svc";
+    public static String deleteAttachmentUrl = "modules/app/deleteAttachment.svc";
 
 //    public static String basicUrl = "http://192.168.0.100:1841/";
 //    public static String basicUrl = "http://m.hand-china.com/dev/";

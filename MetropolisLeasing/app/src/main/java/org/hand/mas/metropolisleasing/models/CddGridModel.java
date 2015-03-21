@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public class CddGridModel implements Serializable{
 
+    private String attachment_id;
     private String cdd_item_id;
     private String file_path;
     private String description;
@@ -14,7 +15,8 @@ public class CddGridModel implements Serializable{
     private String file_suffix;
     private boolean remote;
 
-    public CddGridModel(String cdd_item_id, String file_path, String file_name, String description, String file_suffix, boolean remote) {
+    public CddGridModel(String attachment_id, String cdd_item_id, String file_path, String file_name, String description, String file_suffix, boolean remote) {
+        this.attachment_id = attachment_id;
         this.cdd_item_id = cdd_item_id;
         this.file_path = file_path;
         this.file_name = file_name;
@@ -22,6 +24,8 @@ public class CddGridModel implements Serializable{
         this.file_suffix = file_suffix;
         this.remote = remote;
     }
+
+    public String getAttachment_id() { return attachment_id; }
 
     public String getCddItemId() {
         return cdd_item_id;

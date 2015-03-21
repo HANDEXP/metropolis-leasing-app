@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
     private TextView projectNumberTextView;
     private TextView projectSourceTextView;
     private TextView mTitleTextView;
+    private ImageView mReturnImageView;
 
     private List<DetailListModel> mDetailList;
     private DetailListSvcModel mModel;
@@ -101,8 +103,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
 
     @Override
     public void onBackPressed() {
-        finish();
-        overridePendingTransition(R.anim.move_in_left,R.anim.move_out_right);
+        finishWithAnim();
     }
 
     @Override
@@ -148,6 +149,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
         projectSourceTextView = (TextView) findViewById(R.id.project_source_for_detail);
         detailListView = (ListView) findViewById(R.id.detail_list);
         mTitleTextView = (TextView) findViewById(R.id.titleTextView);
+        mReturnImageView = (ImageView) findViewById(R.id.return_to_detailList);
 
         detailListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -157,6 +159,13 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
             }
         });
         mTitleTextView.setText("资料清单");
+        mReturnImageView.setVisibility(View.VISIBLE);
+        mReturnImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishWithAnim();
+            }
+        });
     }
 
     private void showAlbum(int position){
@@ -191,5 +200,12 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
             }
         }
 
+    }
+    /*
+    * finish activity
+    * */
+    private void finishWithAnim(){
+        finish();
+        overridePendingTransition(R.anim.move_in_left,R.anim.move_out_right);
     }
 }

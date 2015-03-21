@@ -56,13 +56,6 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
     private CddGridAdapter mCddAdapter;
 
 
-    private ImageView mBackImageView;
-    private ImageView mDelImageView;
-
-    private FrameLayout mFrameLayout;
-
-
-    private TextView returnTextView;
     private TextView mTitleTextView;
     private ImageView mAddItemImageView;
     private ImageView mReturnImageView;
@@ -79,6 +72,9 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
 
     // 相册
     public static final int ACTION_GET_CONTENT = 1;
+
+    // 详细
+    public static final int VIEW_PAGER = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +100,7 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
         String cdd_item_id = intentFromDetail.getStringExtra("cdd_item_id");
         mTitle = intentFromDetail.getStringExtra("bp_name");
         mTitleTextView.setText(mTitle);
+        mAddItemImageView.setVisibility(View.VISIBLE);
         if(mModel == null){
             param = new HashMap<String,String>();
             param.put("project_number",project_number);
@@ -168,7 +165,7 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
                 fileName = filePath.split("/")[filePath.split("/").length-1];
                 fileSuffix = filePath.split("\\.")[filePath.split("\\.").length-1];
                 try {
-                    mCddGridList.add(new CddGridModel(null,originalUri.toString(),fileName,null,fileSuffix,false));
+                    mCddGridList.add(new CddGridModel(null,null,originalUri.toString(),fileName,null,fileSuffix,false));
                     mCddAdapter.notifyDataSetChanged();
                     System.gc();
                 }catch (Exception e){
@@ -187,7 +184,7 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
                 try {
 //                    content = Util.readStream(getContentResolver().openInputStream(Uri.parse(originalUri.toString())));
 //                    bitmap = Util.CompressBytes(content);
-                    mCddGridList.add(new CddGridModel(null,originalUri.toString(),fileName,null,fileSuffix,false));
+                    mCddGridList.add(new CddGridModel(null,null,originalUri.toString(),fileName,null,fileSuffix,false));
                     mCddAdapter.notifyDataSetChanged();
                     System.gc();
                 }catch (Exception e){
@@ -196,7 +193,19 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
                 }finally {
 
                 }
+                break;
+            case VIEW_PAGER:
+                int positionForDeletedItem = data.getExtras().getInt("currencyPosition");
+                /* 远程影像资料需要通过接口删除 */
+                if (mCddGridList.get(positionForDeletedItem).getAttachment_id() != "null"){
 
+                }
+                /* 删除本地影像资料 */
+                mCddGridList.remove(positionForDeletedItem);
+                mCddAdapter.notifyDataSetChanged();
+
+
+                System.gc();
                 break;
             default:
                 break;
@@ -214,6 +223,7 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
             JSONObject data = (JSONObject)jsonArray.get(i);
             try {
                 CddGridModel item = new CddGridModel(
+                        data.getString("attachment_id"),
                         data.getString("cdd_item_id"),
                         data.getString("file_path"),
                         data.getString("file_name"),
@@ -250,7 +260,7 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
                 Intent intent = new Intent(getApplicationContext(),ViewPagerActivity.class);
                 intent.putExtra("position",position);
                 intent.putExtra("cddGridList", (java.io.Serializable) mCddGridList);
-                startActivityForResult(intent,1);
+                startActivityForResult(intent,VIEW_PAGER);
             }
         });
         mGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {

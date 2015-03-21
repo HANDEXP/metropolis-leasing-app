@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +17,10 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.littlemvc.model.LMModel;
 import com.littlemvc.model.LMModelDelegate;
 import com.littlemvc.model.request.AsHttpRequestModel;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.ListHolder;
+import com.orhanobut.dialogplus.OnClickListener;
+import com.orhanobut.dialogplus.ViewHolder;
 
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.adapters.OrderListAdapter;
@@ -37,6 +43,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
     private PullToRefreshListView mPullRefreshListView;
     private ListView mOrderListView;
     private TextView mTitleTextView;
+    private ImageView mFilterImageView;
 
     private List<OrderListModel> mOrderList;
     private OrderListSvcModel mModel;
@@ -141,15 +148,14 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
 
         mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.order_list);
         mTitleTextView = (TextView) findViewById(R.id.titleTextView);
+        mFilterImageView = (ImageView) findViewById(R.id.filter_for_orderList);
 
         mPullRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);
         mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 /* 重置适配器和数据 */
-                mOrderList = null;
-                adapter = null;
-                pageNum = 1;
+                resetAdapter();
                 if (param == null){
                     param = new HashMap<String, String>();
                 }
@@ -168,8 +174,6 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
             }
         });
         mOrderListView = mPullRefreshListView.getRefreshableView();
-//        orderList.add(new OrderListModel());
-//        orderListView.setAdapter(new OrderListAdapter(mOrderList,getApplicationContext()));
         mOrderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -183,6 +187,44 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
             }
         });
         mTitleTextView.setText("租赁申请查询");
+        mFilterImageView.setVisibility(View.VISIBLE);
+        mFilterImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogPlus dialog = new DialogPlus.Builder(OrderListActivity.this)
+                        .setContentHolder(new ViewHolder(R.layout.view_filter_order_list_dialog))
+                        .setGravity(DialogPlus.Gravity.CENTER)
+                        .setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(DialogPlus dialogPlus, View view) {
+                                if (param == null) {
+                                    param = new HashMap<String, String>();
+                                }
+                                switch (view.getId()) {
+                                    case R.id.filter_btn:
+                                        String project_number = ((EditText) findViewById(R.id.project_number_for_filter)).getText().toString();
+                                        String bp_name = ((EditText) findViewById(R.id.bp_name_for_filter)).getText().toString();
+                                        param.put("project_number", project_number);
+                                        param.put("bp_name",bp_name);
+                                        resetAdapter();
+                                        mModel.load(param);
+                                        dialogPlus.dismiss();
+
+                                        break;
+                                    case R.id.project_status_desc_for_filter:
+//                                        Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+//                                        startActivity(intent);
+                                        Toast.makeText(getApplicationContext(), "TEST", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        })
+                        .create();
+                dialog.show();
+            }
+        });
     }
 
     /*
@@ -194,7 +236,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
             mOrderList = new ArrayList<OrderListModel>();
         }
         int length = jsonArray.length();
-        for (int i = 0; i < 20; i++){
+        for (int i = 0; i < length; i++){
             JSONObject data = (JSONObject)jsonArray.get(i);
             try {
                 OrderListModel item = new OrderListModel(
@@ -214,5 +256,12 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
 
             }
         }
+    }
+
+    /* 重置适配器和数据 */
+    private void resetAdapter(){
+        mOrderList = null;
+        adapter = null;
+        pageNum = 1;
     }
  }
