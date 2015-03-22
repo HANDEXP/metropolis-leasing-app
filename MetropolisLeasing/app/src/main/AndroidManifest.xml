@@ -34,8 +34,11 @@
         </activity>
         <activity android:name=".activities.OrderListActivity"
                   android:label="租赁申请查询页面">
-
         </activity>
+        <activity android:name=".activities.FilteredOrderListActivity"
+                  android:label="筛选结果页面">
+        </activity>
+
         <supports-screens
             android:largeScreens="true"
             android:normalScreens="true"

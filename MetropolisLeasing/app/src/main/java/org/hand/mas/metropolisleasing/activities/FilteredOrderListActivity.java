@@ -3,26 +3,17 @@ package org.hand.mas.metropolisleasing.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.littlemvc.model.LMModel;
 import com.littlemvc.model.LMModelDelegate;
 import com.littlemvc.model.request.AsHttpRequestModel;
-import com.orhanobut.dialogplus.DialogPlus;
-import com.orhanobut.dialogplus.ListHolder;
-import com.orhanobut.dialogplus.OnClickListener;
-import com.orhanobut.dialogplus.ViewHolder;
 
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.adapters.OrderListAdapter;
@@ -36,45 +27,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
 /**
- * Created by gonglixuan on 15/3/10.
+ * Created by gonglixuan on 15/3/22.
  */
-public class OrderListActivity extends Activity implements LMModelDelegate{
+public class FilteredOrderListActivity extends Activity implements LMModelDelegate{
 
     private PullToRefreshListView mPullRefreshListView;
     private ListView mOrderListView;
     private TextView mTitleTextView;
-    private ImageView mFilterImageView;
-    private DialogPlus dialog;
+    private ImageView mReturnImageView;
 
     private List<OrderListModel> mOrderList;
     private OrderListSvcModel mModel;
     private OrderListAdapter adapter;
     private HashMap<String,String> param;
     private static int pageNum;
-    private boolean mFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_orders_list);
-
         param = new HashMap<>();
+        setContentView(R.layout.activity_orders_list);
         bindAllViews();
-        pageNum = 1;
-        mModel.load();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
+        mModel.load(param);
     }
 
     @Override
@@ -83,35 +58,16 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public void onBackPressed() {
-        if (dialog != null&& dialog.isShowing()){
-            dialog.dismiss();
-        }else{
-            exitWithTwiceBackPressed();
-        }
-
+        super.onBackPressed();
+        finishWithAnim();
     }
 
     @Override
     public void modelDidFinishLoad(LMModel model) {
 
         AsHttpRequestModel reponseModel = (AsHttpRequestModel) model;
-        if(model instanceof OrderListSvcModel){
+        if (model instanceof OrderListSvcModel){
             String json = new String(reponseModel.mresponseBody);
             try {
                 JSONObject jsonObj = new JSONObject(json);
@@ -141,29 +97,36 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                     mPullRefreshListView.onRefreshComplete();
                 }
             }
-
         }
     }
 
     @Override
     public void modelDidStartLoad(LMModel model) {
-        Log.d("StartLoad","modelDidStartLoad");
+
     }
 
     @Override
     public void modelDidFailedLoadWithError(LMModel model) {
-        Log.d("LoadWithError","modelDidFailedLoadWithError");
+
     }
 
-    /*私有方法*/
+    /* Private Methods */
     private void bindAllViews(){
         pageNum = 1;
         mModel = new OrderListSvcModel(this);
 
         mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.order_list);
         mTitleTextView = (TextView) findViewById(R.id.titleTextView);
-        mFilterImageView = (ImageView) findViewById(R.id.filter_for_orderList);
+        mReturnImageView = (ImageView) findViewById(R.id.return_to_detailList);
 
+        mTitleTextView.setText("筛选结果");
+        mReturnImageView.setVisibility(View.VISIBLE);
+        mReturnImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishWithAnim();
+            }
+        });
         mPullRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);
         mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
@@ -173,8 +136,8 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                 if (param == null){
                     param = new HashMap<String, String>();
                 }
-
-                mModel.load();
+                resetFilterParam();
+                mModel.load(param);
             }
 
             @Override
@@ -183,8 +146,8 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                     param = new HashMap<String, String>();
                 }
                 param.put("page_num",String.valueOf(++pageNum));
+                resetFilterParam();
                 mModel.load(param);
-
             }
         });
         mOrderListView = mPullRefreshListView.getRefreshableView();
@@ -200,68 +163,8 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                 overridePendingTransition(R.anim.move_in_right,R.anim.move_out_left);
             }
         });
-        mTitleTextView.setText("租赁申请查询");
-        mFilterImageView.setVisibility(View.VISIBLE);
-        mFilterImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog = new DialogPlus.Builder(OrderListActivity.this)
-                        .setContentHolder(new ViewHolder(R.layout.view_filter_dialog))
-                        .setGravity(DialogPlus.Gravity.TOP)
-                        .setOnClickListener(new OnClickListener() {
-                            @Override
-                            public void onClick(DialogPlus dialogPlus, View view) {
-                                switch (view.getId()) {
-                                    case R.id.filter_btn:
-                                        String project_number = ((EditText) findViewById(R.id.project_number_for_filter)).getText().toString();
-                                        String bp_name = ((EditText) findViewById(R.id.bp_name_for_filter)).getText().toString();
-                                        param.put("project_number", project_number);
-                                        param.put("bp_name",bp_name);
-                                        resetAdapter();
-                                        mModel.load(param);
-                                        dialogPlus.dismiss();
+        resetFilterParam();
 
-                                        break;
-                                    case R.id.cancel_btn_for_filter:
-                                        dialogPlus.dismiss();
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                        })
-                        .create();
-                dialog.show();
-                EditText mFilterEditText = (EditText) findViewById(R.id.edittext_for_filter);
-                mFilterEditText.requestFocus();
-                mFilterEditText.setOnKeyListener(new View.OnKeyListener() {
-                    @Override
-                    public boolean onKey(View v, int keyCode, KeyEvent event) {
-                        if (param == null) {
-                            param = new HashMap<String, String>();
-                        }
-                        if (KeyEvent.KEYCODE_ENTER == keyCode && event.getAction() == KeyEvent.ACTION_DOWN){
-                            String filter_param = ((EditText)v).getText().toString();
-                            dialog.dismiss();
-                            if (filter_param.isEmpty()){
-
-                            }else{
-                                Intent intentForFilter = new Intent(OrderListActivity.this,FilteredOrderListActivity.class);
-                                intentForFilter.putExtra("filter_param",filter_param);
-                                startActivity(intentForFilter);
-                                overridePendingTransition(R.anim.move_in_right,R.anim.move_out_left);
-
-                            }
-
-
-                        }
-
-                        return false;
-                    }
-                });
-
-            }
-        });
     }
 
     /*
@@ -302,27 +205,18 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
         pageNum = 1;
     }
 
-    /* 两次后退退出 */
-    private void exitWithTwiceBackPressed(){
-        if(mFlag == false){
-            mFlag = true;
-            Toast.makeText(getApplicationContext(),"再按一次退出",Toast.LENGTH_LONG).show();
-            new CountDownTimer(5*1000,1000){
-
-                @Override
-                public void onTick(long millisUntilFinished) {
-
-                }
-
-                @Override
-                public void onFinish() {
-                    mFlag = false;
-                }
-            }.start();
-        }else{
-            finish();
-            return;
-        }
-
+    /* 重置筛选参数 */
+    private void resetFilterParam(){
+        Intent intent = getIntent();
+        String filter_param = intent.getStringExtra("filter_param");
+        param.put("filter_param",filter_param);
     }
- }
+
+    /*
+    * finish activity
+    * */
+    private void finishWithAnim(){
+        finish();
+        overridePendingTransition(R.anim.move_in_left,R.anim.move_out_right);
+    }
+}
