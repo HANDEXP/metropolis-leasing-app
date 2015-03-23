@@ -1,5 +1,7 @@
 package org.hand.mas.metropolisleasing.activities;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +9,10 @@ import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,6 +30,7 @@ import com.orhanobut.dialogplus.ListHolder;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
+import org.hand.mas.custom_view.SlidingMenu;
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.adapters.OrderListAdapter;
 import org.hand.mas.metropolisleasing.models.OrderListModel;
@@ -46,6 +53,8 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
     private ListView mOrderListView;
     private TextView mTitleTextView;
     private ImageView mFilterImageView;
+    private ImageView mSlideMenuImageView;
+    private SlidingMenu mSlidingMenu;
     private DialogPlus dialog;
 
     private List<OrderListModel> mOrderList;
@@ -147,7 +156,10 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
 
     @Override
     public void modelDidStartLoad(LMModel model) {
+
         Log.d("StartLoad","modelDidStartLoad");
+//        fadeAnim(mSlideMenuImageView,0.0f,90.0f,1000);
+
     }
 
     @Override
@@ -163,7 +175,21 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
         mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.order_list);
         mTitleTextView = (TextView) findViewById(R.id.titleTextView);
         mFilterImageView = (ImageView) findViewById(R.id.filter_for_orderList);
+        mSlideMenuImageView = (ImageView) findViewById(R.id.slide_menu);
+        mSlidingMenu = (SlidingMenu) findViewById(R.id.sliding_menu_and_content);
 
+        mSlideMenuImageView.setVisibility(View.VISIBLE);
+        mSlideMenuImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!mSlidingMenu.getIsOpen()){
+                    mSlideMenuImageView.setImageDrawable(getResources().getDrawable(R.drawable.cross));
+                }else{
+                    mSlideMenuImageView.setImageDrawable(getResources().getDrawable(R.drawable.icon_for_slide_menu));
+                }
+                mSlidingMenu.toggle();
+            }
+        });
         mPullRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);
         mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
@@ -191,13 +217,16 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
         mOrderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String project_number = (String) ((TextView)view.findViewById(R.id.project_number_for_order)).getText();
-                String project_source = (String) ((TextView)view.findViewById(R.id.project_source_for_order)).getText();
-                Intent intent = new Intent(getApplicationContext(),DetailListActivity.class);
-                intent.putExtra("project_number",project_number);
-                intent.putExtra("project_source",project_source);
-                startActivity(intent);
-                overridePendingTransition(R.anim.move_in_right,R.anim.move_out_left);
+                if (mSlidingMenu.getIsOpen() == false){
+                    String project_number = (String) ((TextView)view.findViewById(R.id.project_number_for_order)).getText();
+                    String project_source = (String) ((TextView)view.findViewById(R.id.project_source_for_order)).getText();
+                    Intent intent = new Intent(getApplicationContext(),DetailListActivity.class);
+                    intent.putExtra("project_number",project_number);
+                    intent.putExtra("project_source",project_source);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.move_in_right,R.anim.move_out_left);
+                }
+
             }
         });
         mTitleTextView.setText("租赁申请查询");
@@ -250,10 +279,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                                 intentForFilter.putExtra("filter_param",filter_param);
                                 startActivity(intentForFilter);
                                 overridePendingTransition(R.anim.move_in_right,R.anim.move_out_left);
-
                             }
-
-
                         }
 
                         return false;
@@ -323,6 +349,16 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
             finish();
             return;
         }
+    }
+
+    private void fadeAnim(View v, float start, float end, int i) {
+//        RotateAnimation anim = new RotateAnimation(start,end, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+        AlphaAnimation anim = new AlphaAnimation(start,end);
+        anim.setDuration(i);
+        anim.setFillAfter(true);
+        v.startAnimation(anim);
+
 
     }
+
  }

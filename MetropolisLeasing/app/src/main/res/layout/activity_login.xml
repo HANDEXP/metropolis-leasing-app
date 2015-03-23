@@ -67,7 +67,7 @@
                     android:textColor="#7fa1c4"
                     android:text="遇到问题?"/>
         </LinearLayout>
-        
-    </FrameLayout>
 
+    </FrameLayout>
+    <!--<include layout="@layout/view_arcmenu"></include>-->
 </LinearLayout>

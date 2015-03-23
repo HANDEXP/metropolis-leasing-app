@@ -25,7 +25,7 @@ public class CddGridModel implements Serializable{
         this.remote = remote;
     }
 
-    public String getAttachment_id() { return attachment_id; }
+    public String getAttachmentId() { return attachment_id; }
 
     public String getCddItemId() {
         return cdd_item_id;

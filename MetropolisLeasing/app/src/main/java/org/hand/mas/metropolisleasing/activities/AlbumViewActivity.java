@@ -12,6 +12,8 @@ import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -197,7 +199,7 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
             case VIEW_PAGER:
                 int positionForDeletedItem = data.getExtras().getInt("currencyPosition");
                 /* 远程影像资料需要通过接口删除 */
-                if (mCddGridList.get(positionForDeletedItem).getAttachment_id() != "null"){
+                if (mCddGridList.get(positionForDeletedItem).getAttachmentId() != "null"){
 
                 }
                 /* 删除本地影像资料 */
@@ -257,9 +259,16 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
                     mCddGridList = new ArrayList<CddGridModel>();
                 }
 
+                CddGridModel item = mCddGridList.get(position);
+                boolean isRemote = item.getRemote();
+                String attachmentId = item.getAttachmentId();
+
                 Intent intent = new Intent(getApplicationContext(),ViewPagerActivity.class);
                 intent.putExtra("position",position);
                 intent.putExtra("cddGridList", (java.io.Serializable) mCddGridList);
+                intent.putExtra("isRemote",isRemote);
+                intent.putExtra("attachmentId",attachmentId);
+
                 startActivityForResult(intent,VIEW_PAGER);
             }
         });
@@ -274,6 +283,7 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
         mAddItemImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                rotateAddItem(v,0.0f,90.0f,300);
                 DialogPlus dialog = new DialogPlus.Builder(AlbumViewActivity.this)
                         .setContentHolder(new ViewHolder(R.layout.view_add_item_dialog))
                         .setOnClickListener(new OnClickListener() {
@@ -319,7 +329,6 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
                 .cacheInMemory(false)
                 .cacheOnDisk(true)
                 .build();
-
     }
     /*
      * convert uri to path
@@ -342,5 +351,12 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
     private void finishWithAnim(){
         finish();
         overridePendingTransition(R.anim.move_in_left,R.anim.move_out_right);
+    }
+
+    private void rotateAddItem(View v, float start, float end, int i) {
+        RotateAnimation anim = new RotateAnimation(start,end, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+        anim.setDuration(i);
+        anim.setFillAfter(true);
+        v.startAnimation(anim);
     }
  }

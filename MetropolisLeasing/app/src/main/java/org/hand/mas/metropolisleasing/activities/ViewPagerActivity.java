@@ -8,12 +8,18 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.littlemvc.model.LMModel;
+import com.littlemvc.model.LMModelDelegate;
+import com.littlemvc.model.request.AsHttpRequestModel;
 import com.orhanobut.dialogplus.DialogPlus;
 
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.adapters.ViewPagerAdapter;
 import org.hand.mas.metropolisleasing.models.CddGridModel;
+import org.hand.mas.metropolisleasing.models.DeleteAttachmentSvcModel;
+import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -21,18 +27,24 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 /**
  * Created by gonglixuan on 15/3/17.
  */
-public class ViewPagerActivity extends Activity {
+public class ViewPagerActivity extends Activity implements LMModelDelegate{
 
     private ViewPager mViewPager;
     private List<CddGridModel> mCddGridList;
-    private ViewPagerAdapter mViewPagerAdapter;
     private TextView mCurrencyPositionTextView;
-
     private ImageView mCrossImageView;
     private ImageView mTrashImageView;
+    private SweetAlertDialog mDialogPlus;
 
+    private ViewPagerAdapter mViewPagerAdapter;
+
+    private DeleteAttachmentSvcModel mDeleteModel;
+
+    private HashMap<String,String> param;
 
     private int mCurrencyPosition;
+    private String mCurrencyAttachmentId;
+    private boolean mCurrencyIsRemote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +86,48 @@ public class ViewPagerActivity extends Activity {
         super.onDestroy();
     }
 
+    @Override
+    public void modelDidFinishLoad(LMModel model) {
+        AsHttpRequestModel reponseModel = (AsHttpRequestModel) model;
+        String json = new String(reponseModel.mresponseBody);
+        try {
+            JSONObject jsonObj = new JSONObject(json);
+            String code = ((JSONObject)jsonObj.get("head")).get("code").toString();
+            if (code.equals("success")){
+                if (mDialogPlus != null){
+                    mDialogPlus.setTitleText("已删除!")
+                            .setContentText("该影像资料已经删除")
+                            .setConfirmText("确定")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    sweetAlertDialog.dismiss();
+                                    finish();
+                                }
+                            })
+                            .showCancelButton(false)
+                            .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                }
+            }
+        }catch (Exception e){
+            if (mDialogPlus.isShowing()){
+                mDialogPlus.dismiss();
+            }
+        }
+    }
+
+    @Override
+    public void modelDidStartLoad(LMModel model) {
+
+    }
+
+    @Override
+    public void modelDidFailedLoadWithError(LMModel model) {
+        if (mDialogPlus.isShowing()){
+            mDialogPlus.dismiss();
+        }
+    }
+
     /* Private Methods */
     private void bindAllViews() {
         mViewPager = (ViewPager) findViewById(R.id.viewPager_for_cdd_item);
@@ -84,6 +138,8 @@ public class ViewPagerActivity extends Activity {
         Intent intent = getIntent();
         mCddGridList = (List<CddGridModel>) intent.getSerializableExtra("cddGridList");
         mCurrencyPosition = intent.getIntExtra("position", 0);
+        mCurrencyAttachmentId = intent.getStringExtra("attachmentId");
+        mCurrencyIsRemote = intent.getBooleanExtra("isRemote",false);
 
         mCurrencyPositionTextView.setText(String.valueOf(mCurrencyPosition + 1).concat("/").concat(String.valueOf(mCddGridList.size())));
         mViewPagerAdapter = new ViewPagerAdapter(getApplicationContext(), mCddGridList);
@@ -98,7 +154,12 @@ public class ViewPagerActivity extends Activity {
 
             @Override
             public void onPageSelected(int position) {
+
+                CddGridModel item = mCddGridList.get(position);
                 mCurrencyPosition = position;
+                mCurrencyAttachmentId = item.getAttachmentId();
+                mCurrencyIsRemote = item.getRemote();
+
                 mCurrencyPositionTextView.setText(String.valueOf(position + 1).concat("/").concat(String.valueOf(mCddGridList.size())));
 
             }
@@ -117,7 +178,7 @@ public class ViewPagerActivity extends Activity {
         mTrashImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SweetAlertDialog(ViewPagerActivity.this, SweetAlertDialog.WARNING_TYPE)
+                mDialogPlus = new SweetAlertDialog(ViewPagerActivity.this, SweetAlertDialog.WARNING_TYPE)
                         .setTitleText("确定要删除影像资料？")
                         .setConfirmText("确定")
                         .setCancelText("取消")
@@ -126,25 +187,50 @@ public class ViewPagerActivity extends Activity {
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(final SweetAlertDialog sDialog) {
-                                sDialog.setTitleText("已删除!")
-                                        .setContentText("该影像资料已经删除")
-                                        .setConfirmText("确定")
-                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                            @Override
-                                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                                Intent intent = new Intent();
-                                                intent.putExtra("currencyPosition",mCurrencyPosition);
-                                                ViewPagerActivity.this.setResult(RESULT_OK,intent);
-                                                sDialog.dismiss();
-                                                finish();
-                                            }
-                                        })
-                                        .showCancelButton(false)
-                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                Intent intent = new Intent();
+                                intent.putExtra("currencyPosition",mCurrencyPosition);
+                                ViewPagerActivity.this.setResult(RESULT_OK,intent);
+
+                                if (!mCurrencyIsRemote){
+                                    sDialog.setTitleText("已删除!")
+                                            .setContentText("该影像资料已经删除")
+                                            .setConfirmText("确定")
+                                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                                @Override
+                                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                                    sDialog.dismiss();
+                                                    finish();
+                                                }
+                                            })
+                                            .showCancelButton(false)
+                                            .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                }else{
+                                    sDialog.setTitleText("请稍后")
+                                            .setContentText("正在删除服务器端附件")
+                                            .showCancelButton(false)
+                                            .changeAlertType(SweetAlertDialog.PROGRESS_TYPE);
+                                    deleteFileFromServer();
+
+                                }
                             }
-                        }).show();
+                        });
+                mDialogPlus.show();
             }
         });
     }
+
+    /* 删除远程附件 */
+    private void deleteFileFromServer() {
+        if (mDeleteModel == null){
+            mDeleteModel = new DeleteAttachmentSvcModel(this);
+        }
+
+        param = new HashMap<String,String>();
+
+        param.put("attachment_id",mCurrencyAttachmentId);
+        mDeleteModel.load(param);
+
+    }
+
 
 }
