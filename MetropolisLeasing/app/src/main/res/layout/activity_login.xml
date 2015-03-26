@@ -8,7 +8,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="30dp"
 
         android:background="@drawable/login_frame_background">
@@ -16,8 +16,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_height="match_parent"
             android:orientation="vertical"
 
             >
@@ -30,34 +29,40 @@
 
                 android:src="@drawable/login_frame"
                 mas:type="circle"/>
-            <View style="@style/SettingDivider" />
-            <EditText
-                style="@style/LoginEditText"
-                android:id="@+id/login_editText"
-                android:hint="用户名"
-                android:drawableLeft="@drawable/user"/>
-            <View style="@style/LayoutDivider" />
-            <EditText
-                style="@style/LoginEditText"
-                android:id="@+id/password_editText"
-                android:hint="请输入密码"
-                android:drawableLeft="@drawable/password"/>
-            <View style="@style/SettingDivider" />
-            <Button
-                android:id="@+id/loginBtn"
+
+            <LinearLayout
+                android:id="@+id/linearLayout_for_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <View style="@style/SettingDivider" />
+                <EditText
+                    style="@style/LoginEditText"
+                    android:id="@+id/login_editText"
+                    android:hint="用户名"
+                    android:drawableLeft="@drawable/user"/>
+                <View style="@style/LayoutDivider" />
+                <EditText
+                    style="@style/LoginEditText"
+                    android:id="@+id/password_editText"
+                    android:hint="请输入密码"
+                    android:drawableLeft="@drawable/password"/>
+                <View style="@style/SettingDivider" />
+                <Button
+                    android:id="@+id/loginBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
 
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="25dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="25dp"
 
-                android:background="@drawable/login_button_selector"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
-                android:text="登陆"
-                android:textColor="#50ffffff"
-                android:textSize="16sp" />
+                    android:background="@drawable/login_button_selector"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="登陆"
+                    android:textColor="#50ffffff"
+                    android:textSize="16sp" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -65,7 +70,9 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="25dp"
                     android:textColor="#7fa1c4"
+
                     android:text="遇到问题?"/>
+            </LinearLayout>
         </LinearLayout>
 
     </FrameLayout>

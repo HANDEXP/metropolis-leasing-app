@@ -13,13 +13,12 @@
         android:layout_height="match_parent"
         android:id="@+id/rootView"
         >
-
-
-
         <GridView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#e6e6e6"
+
+
             android:numColumns="2"
             android:scrollbars="none"
             android:id="@+id/gridView_for_cdd_grid"

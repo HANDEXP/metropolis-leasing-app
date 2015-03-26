@@ -16,9 +16,9 @@ import com.littlemvc.model.LMModelDelegate;
 import com.littlemvc.model.request.AsHttpRequestModel;
 
 import org.hand.mas.metropolisleasing.R;
-import org.hand.mas.metropolisleasing.adapters.OrderListAdapter;
 import org.hand.mas.metropolisleasing.models.OrderListModel;
 import org.hand.mas.metropolisleasing.models.OrderListSvcModel;
+import org.hand.mas.utl.CommonAdapter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,7 +39,7 @@ public class FilteredOrderListActivity extends Activity implements LMModelDelega
 
     private List<OrderListModel> mOrderList;
     private OrderListSvcModel mModel;
-    private OrderListAdapter adapter;
+    private CommonAdapter adapter;
     private HashMap<String,String> param;
     private static int pageNum;
 
@@ -78,7 +78,31 @@ public class FilteredOrderListActivity extends Activity implements LMModelDelega
                     try {
                         initializeData(bodyArr);
                         if (adapter == null){
-                            adapter = new OrderListAdapter(mOrderList,getApplicationContext());
+                            adapter = new CommonAdapter<OrderListModel>(getApplicationContext(), mOrderList, R.layout.activity_orders_list_child) {
+                                @Override
+                                public void convert(org.hand.mas.utl.ViewHolder helper, OrderListModel obj,int position) {
+                                    TextView projectNumberTextView = helper.getView(R.id.project_number_for_order);
+                                    TextView projectStatusDesc = helper.getView(R.id.project_status_desc_for_order);
+                                    TextView bpName = helper.getView(R.id.bp_name_for_order);
+                                    TextView projectSource = helper.getView(R.id.project_source_for_order);
+                                    TextView bpClass = helper.getView(R.id.bp_class_for_order);
+                                    TextView identifierCode = helper.getView(R.id.identifier_code_for_order);
+
+                                    OrderListModel item = (OrderListModel)obj;
+
+                                    projectNumberTextView.setText(item.getProjectNumber());
+                                    projectStatusDesc.setText(item.getProjectStatusDesc());
+                                    bpName.setText(item.getBpName());
+                                    projectSource.setText(item.getProjectSource());
+                                    bpClass.setText(item.getBpClass().concat("识别号:"));
+                                    if (bpClass.equals("ORG")){
+                                        identifierCode.setText(item.getOrganizationCode());
+                                    }else if (bpClass.equals("NP")){
+                                        identifierCode.setText(item.getIdCardNo());
+                                    }
+
+                                }
+                            };
                             mPullRefreshListView.setAdapter(adapter);
                         }else{
                             adapter.notifyDataSetChanged();

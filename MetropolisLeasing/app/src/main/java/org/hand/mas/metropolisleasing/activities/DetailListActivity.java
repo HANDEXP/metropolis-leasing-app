@@ -16,9 +16,10 @@ import com.littlemvc.model.request.AsHttpRequestModel;
 import com.mas.album.items.ImageItem;
 
 import org.hand.mas.metropolisleasing.R;
-import org.hand.mas.metropolisleasing.adapters.DetailListAdapter;
 import org.hand.mas.metropolisleasing.models.DetailListModel;
 import org.hand.mas.metropolisleasing.models.DetailListSvcModel;
+import org.hand.mas.utl.CommonAdapter;
+import org.hand.mas.utl.ViewHolder;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,6 +40,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
     private TextView projectSourceTextView;
     private TextView mTitleTextView;
     private ImageView mReturnImageView;
+    private TextView mHintTextView;
 
     private List<DetailListModel> mDetailList;
     private DetailListSvcModel mModel;
@@ -120,13 +122,29 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
                     JSONArray bodyArr = (JSONArray) ((JSONObject)jsonObj.get("body")).get("details");
                     try {
                         initializeData(bodyArr);
-                        detailListView.setAdapter(new DetailListAdapter(mDetailList,getApplicationContext()));
+//                        detailListView.setAdapter(new CustomDetailListAdapter(mDetailList,getApplicationContext()));
+                        detailListView.setAdapter(new CommonAdapter<DetailListModel>(getApplicationContext(),mDetailList,R.layout.activity_order_details_list_child) {
+                            @Override
+                            public void convert(ViewHolder helper, DetailListModel obj,int position) {
+                                TextView bpNameTextView = helper.getView(R.id.bp_name_for_detail);
+                                TextView descriptionTextView = helper.getView(R.id.description_for_detail);
+                                TextView ccdCountTextView = helper.getView(R.id.ccd_count_for_detail);
+
+                                DetailListModel item = obj;
+
+                                bpNameTextView.setText(item.getBpName());
+                                descriptionTextView.setText(item.getDescription());
+                                ccdCountTextView.setText(item.getCddCount());
+                            }
+                        });
                     } catch (Exception e){
                         e.printStackTrace();
                     }
                 }
             }catch (Exception e){
                 e.printStackTrace();
+            }finally {
+                mHintTextView.setVisibility(View.INVISIBLE);
             }
         }
     }
@@ -134,6 +152,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
     @Override
     public void modelDidStartLoad(LMModel model) {
         Log.d("StartLoad", "modelDidStartLoad");
+        mHintTextView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -150,6 +169,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
         detailListView = (ListView) findViewById(R.id.detail_list);
         mTitleTextView = (TextView) findViewById(R.id.titleTextView);
         mReturnImageView = (ImageView) findViewById(R.id.return_to_detailList);
+        mHintTextView = (TextView) findViewById(R.id.hint_for_details_loading);
 
         detailListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -170,18 +190,17 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
 
     private void showAlbum(int position){
         Intent intent4ViewPager = new Intent(this, AlbumViewActivity.class);
-//        ImageItem.mMemoryCache.put("imageList", imageList);
         intent4ViewPager.putExtra("project_number",project_number);
         intent4ViewPager.putExtra("cdd_item_id",mDetailList.get(position).getCddItemId());
+        intent4ViewPager.putExtra("check_id",mDetailList.get(position).getCheckId());
         intent4ViewPager.putExtra("bp_name",mDetailList.get(position).getBpName());
-        startActivityForResult(intent4ViewPager,0);
+        intent4ViewPager.putExtra("description",mDetailList.get(position).getDescription());
+        startActivityForResult(intent4ViewPager, 0);
         overridePendingTransition(R.anim.move_in_right,R.anim.move_out_left);
     }
 
     private void initializeData(JSONArray jsonArray) throws JSONException {
-        if (mDetailList == null){
-            mDetailList = new ArrayList<DetailListModel>();
-        }
+        mDetailList = new ArrayList<DetailListModel>();
         int length = jsonArray.length();
         for (int i = 0; i < length; i++){
             JSONObject data = (JSONObject)jsonArray.get(i);
@@ -189,6 +208,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
                 DetailListModel item = new DetailListModel(
                         data.getString("project_number"),
                         data.getString("bp_name"),
+                        data.getString("check_id"),
                         data.getString("description"),
                         data.getString("cdd_count"),
                         data.getString("cdd_item_id")

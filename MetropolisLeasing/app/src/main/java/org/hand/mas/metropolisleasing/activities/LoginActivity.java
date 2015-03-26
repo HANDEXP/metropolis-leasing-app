@@ -1,5 +1,7 @@
 package org.hand.mas.metropolisleasing.activities;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,8 +13,11 @@ import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +42,7 @@ public class LoginActivity extends Activity implements LMModelDelegate{
 
     private EditText mLoginEditText;
     private EditText mPasswordEditText;
+    private LinearLayout LLForEditText;
     private RoundImageView mImage;
     private Button mButton;
     private SweetAlertDialog pDialog;
@@ -101,8 +107,7 @@ public class LoginActivity extends Activity implements LMModelDelegate{
                                 break;
                             case 2:
                                 pDialog.setTitleText("登录成功")
-                                        .setConfirmText("确定")
-                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                        .changeAlertType(SweetAlertDialog.SUCCESS_AFTER_PROGRESS_TYPE);
                                 break;
                             case 3:
                                 break;
@@ -156,6 +161,7 @@ public class LoginActivity extends Activity implements LMModelDelegate{
         mPasswordEditText = (EditText) findViewById(R.id.password_editText);
         mImage = (RoundImageView) findViewById(R.id.img_for_login);
         mButton = (Button) findViewById(R.id.loginBtn);
+        LLForEditText = (LinearLayout) findViewById(R.id.linearLayout_for_edittext);
 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,6 +211,9 @@ public class LoginActivity extends Activity implements LMModelDelegate{
 
         mModel = new LoginSvcModel(this);
         setDefaultUserData();
+        fadeInView(mImage);
+//        translateYView(LLForEditText,800);
+        fadeInAndTranslateView(LLForEditText);
 
 
     }
@@ -295,5 +304,28 @@ public class LoginActivity extends Activity implements LMModelDelegate{
         mPasswordEditText.setText(userPassword);
     }
 
+    private void fadeInView(View v){
+        AlphaAnimation animation = new AlphaAnimation(0.0f,1.0f);
+        animation.setDuration(1500);
+        animation.setFillAfter(true);
+        v.setAnimation(animation);
+        v.startAnimation(animation);
+    }
 
+
+    private void fadeInAndTranslateView(final View view){
+        ObjectAnimator animator = ObjectAnimator
+                .ofFloat(view,"foobar",1.0f,0.0f)
+                .setDuration(1500);
+        animator.start();
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float currencyValue = (float) animation.getAnimatedValue();
+                view.setAlpha(1.0f - currencyValue);
+                view.setTranslationY(currencyValue * 300.0f);
+
+            }
+        });
+    }
   }
