@@ -21,13 +21,13 @@ import uk.co.senab.photoview.PhotoView;
 /**
  * Created by gonglixuan on 15/3/17.
  */
-public class ViewPagerAdapter extends PagerAdapter {
+public class CddViewPagerAdapter extends PagerAdapter {
 
     private Context mContext;
     private List<CddGridModel> mList;
     private List<String> stringList;
 
-    public ViewPagerAdapter(Context mContext, List<CddGridModel> mList) {
+    public CddViewPagerAdapter(Context mContext, List<CddGridModel> mList) {
         this.mContext = mContext;
         this.mList = mList;
         this.stringList = new ArrayList<String>();

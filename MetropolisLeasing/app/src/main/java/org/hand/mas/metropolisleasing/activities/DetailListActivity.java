@@ -189,7 +189,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
     }
 
     private void showAlbum(int position){
-        Intent intent4ViewPager = new Intent(this, AlbumViewActivity.class);
+        Intent intent4ViewPager = new Intent(this, CddGridActivity.class);
         intent4ViewPager.putExtra("project_number",project_number);
         intent4ViewPager.putExtra("cdd_item_id",mDetailList.get(position).getCddItemId());
         intent4ViewPager.putExtra("check_id",mDetailList.get(position).getCheckId());

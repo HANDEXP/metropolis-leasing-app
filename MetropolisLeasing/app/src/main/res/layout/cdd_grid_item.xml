@@ -3,7 +3,7 @@
     xmlns:mas="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp">
+    android:padding="5dp">
 
     <org.hand.mas.custom_view.RoundImageView
         android:id="@+id/roundImageView_for_cdd_item"
@@ -16,12 +16,11 @@
     <ImageButton
         android:id="@+id/deleteImageButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
+        android:layout_height="40dp"
+
         android:layout_alignParentRight="true"
-        android:padding="5dp"
         android:background="#00000000"
         android:src="@drawable/icon_for_delete"
-        android:visibility="gone"
+
         />
 </RelativeLayout>

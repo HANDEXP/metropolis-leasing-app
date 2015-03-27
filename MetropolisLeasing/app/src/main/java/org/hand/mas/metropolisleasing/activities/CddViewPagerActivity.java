@@ -11,10 +11,9 @@ import android.widget.TextView;
 import com.littlemvc.model.LMModel;
 import com.littlemvc.model.LMModelDelegate;
 import com.littlemvc.model.request.AsHttpRequestModel;
-import com.orhanobut.dialogplus.DialogPlus;
 
 import org.hand.mas.metropolisleasing.R;
-import org.hand.mas.metropolisleasing.adapters.ViewPagerAdapter;
+import org.hand.mas.metropolisleasing.adapters.CddViewPagerAdapter;
 import org.hand.mas.metropolisleasing.models.CddGridModel;
 import org.hand.mas.metropolisleasing.models.DeleteAttachmentSvcModel;
 import org.json.JSONObject;
@@ -27,7 +26,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 /**
  * Created by gonglixuan on 15/3/17.
  */
-public class ViewPagerActivity extends Activity implements LMModelDelegate{
+public class CddViewPagerActivity extends Activity implements LMModelDelegate{
 
     private ViewPager mViewPager;
     private List<CddGridModel> mCddGridList;
@@ -36,7 +35,7 @@ public class ViewPagerActivity extends Activity implements LMModelDelegate{
     private ImageView mTrashImageView;
     private SweetAlertDialog mDialogPlus;
 
-    private ViewPagerAdapter mViewPagerAdapter;
+    private CddViewPagerAdapter mViewPagerAdapter;
 
     private DeleteAttachmentSvcModel mDeleteModel;
 
@@ -142,7 +141,7 @@ public class ViewPagerActivity extends Activity implements LMModelDelegate{
         mCurrencyIsRemote = intent.getBooleanExtra("isRemote",false);
 
         mCurrencyPositionTextView.setText(String.valueOf(mCurrencyPosition + 1).concat("/").concat(String.valueOf(mCddGridList.size())));
-        mViewPagerAdapter = new ViewPagerAdapter(getApplicationContext(), mCddGridList);
+        mViewPagerAdapter = new CddViewPagerAdapter(getApplicationContext(), mCddGridList);
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.setCurrentItem(mCurrencyPosition);
 
@@ -178,7 +177,7 @@ public class ViewPagerActivity extends Activity implements LMModelDelegate{
         mTrashImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDialogPlus = new SweetAlertDialog(ViewPagerActivity.this, SweetAlertDialog.WARNING_TYPE)
+                mDialogPlus = new SweetAlertDialog(CddViewPagerActivity.this, SweetAlertDialog.WARNING_TYPE)
                         .setTitleText("确定要删除影像资料？")
                         .setConfirmText("确定")
                         .setCancelText("取消")
@@ -189,7 +188,7 @@ public class ViewPagerActivity extends Activity implements LMModelDelegate{
                             public void onClick(final SweetAlertDialog sDialog) {
                                 Intent intent = new Intent();
                                 intent.putExtra("currencyPosition",mCurrencyPosition);
-                                ViewPagerActivity.this.setResult(RESULT_OK,intent);
+                                CddViewPagerActivity.this.setResult(RESULT_OK,intent);
 
                                 if (!mCurrencyIsRemote){
                                     sDialog.setTitleText("已删除!")

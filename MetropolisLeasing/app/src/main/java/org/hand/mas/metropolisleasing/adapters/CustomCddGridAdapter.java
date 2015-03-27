@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ public class CustomCddGridAdapter<T> extends CommonAdapter<T> {
     }
     public CustomCddGridAdapter(List mList, Context mContext,int mItemLayoutId, DisplayImageOptions mOptions, View.OnClickListener mIconClickListener,View.OnClickListener mImgClickListener){
         super(mContext, mList,mItemLayoutId);
+        this.mOptions = mOptions;
         this.mIconClickListener = mIconClickListener;
         this.mImgClickListener = mImgClickListener;
 
@@ -100,7 +102,7 @@ public class CustomCddGridAdapter<T> extends CommonAdapter<T> {
                         new ImageLoadingListener() {
                             @Override
                             public void onLoadingStarted(String imageUri, View view) {
-
+                                ((ImageView)view).setImageResource(R.drawable.friends_sends_pictures_no);
                             }
 
                             @Override
