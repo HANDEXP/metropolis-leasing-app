@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -31,6 +32,7 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -54,6 +56,8 @@ public class AlbumViewActivity extends Activity {
      * 所有的图片
      */
     private List<String> mImgs;
+    private List<Object> mSelectedList = null;
+    private View.OnClickListener mOnClickListener;
 
     private GridView mGirdView;
     private TextView mPreviewTextView;
@@ -65,6 +69,9 @@ public class AlbumViewActivity extends Activity {
      * 临时的辅助类，用于防止同一个文件夹的多次扫描
      */
     private HashSet<String> mDirPaths = new HashSet<String>();
+
+    private final int View_Pager_All = 0;
+    private final int View_Pager_Selected = 1;
 
     private Handler mHandler = new Handler()
     {
@@ -82,36 +89,7 @@ public class AlbumViewActivity extends Activity {
             /**
              * 文件夹的路径和图片的路径分开保存,减少内存的消耗；
              */
-            mAdapter = new CustomAlbumAdapter(getApplicationContext(),mImgs,mImgDir.getAbsolutePath(),new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (v.getId() == R.id.album_item_select_button){
-                        Object position = v.getTag(R.id.position);
-                        List<Object> List = mAdapter.mList;
-                        if (!List.contains((Object)position)){
-                            List.add((Object) position);
-                            ((ImageButton)v).setImageResource(R.drawable.icon_for_pic_selected);
-                        }
-                        else{
-                            ((ImageButton)v).setImageResource(R.drawable.icon_for_pic_unselected);
-                            List.remove((Object) position);
-                        }
-                        if (List.isEmpty()){
-                            mPreviewTextView.setAlpha(0.3f);
-                            mFinishTextView.setAlpha(0.3f);
-                            mCountTextView.setVisibility(View.INVISIBLE);
-                        }else {
-                            mPreviewTextView.setAlpha(1.0f);
-                            mFinishTextView.setAlpha(1.0f);
-                            mCountTextView.setText(String.valueOf(List.size()));
-                            mCountTextView.setVisibility(View.VISIBLE);
-                        }
-                    }else if (v.getId() == R.id.album_item_image){
-                        int position = Integer.valueOf(v.getTag(R.id.position).toString());
-                        startViewpagerActivity(position);
-                    }
-                }
-            });
+            mAdapter = new CustomAlbumAdapter(getApplicationContext(),mImgs,mSelectedList,mImgDir.getAbsolutePath(),mOnClickListener);
 
             mGirdView.setAdapter(mAdapter);
         };
@@ -124,6 +102,7 @@ public class AlbumViewActivity extends Activity {
 
         bindAllViews();
         getImages();
+
     }
 
 
@@ -131,6 +110,7 @@ public class AlbumViewActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+
     }
 
     @Override
@@ -140,7 +120,25 @@ public class AlbumViewActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        if (data == null){
+            return;
+        }
+        switch (requestCode){
+            case View_Pager_All:
+                mSelectedList = (List<Object>) data.getSerializableExtra("mSelectedList");
+                updateUIs();
+                break;
+            case View_Pager_Selected:
+                List<Object> selectedList = (List<Object>) data.getSerializableExtra("mSelectedList");
+                List<Object> tmpList = new ArrayList<Object>();
+                for (int i = 0; i < selectedList.size();i++){
+                    int position = (int) selectedList.get(i);
+                    tmpList.add(mSelectedList.get(position));
+                }
+                mSelectedList = tmpList;
+                updateUIs();
+        }
+
     }
 
     private void getImages() {
@@ -206,10 +204,72 @@ public class AlbumViewActivity extends Activity {
         mPreviewTextView = (TextView) findViewById(R.id.preview_textview);
         mFinishTextView = (TextView) findViewById(R.id.finish_textview);
         mCountTextView = (TextView) findViewById(R.id.count_for_list);
+
+        mOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (v.getId() == R.id.album_item_select_button){
+                    Object position = v.getTag(R.id.position);
+                    List<Object> List = mAdapter.mSelectedList;
+                    if (!List.contains((Object)position)){
+                        List.add((Object) position);
+                        ((ImageButton)v).setImageResource(R.drawable.icon_for_pic_selected);
+                    }
+                    else{
+                        ((ImageButton)v).setImageResource(R.drawable.icon_for_pic_unselected);
+                        List.remove((Object) position);
+                    }
+                    if (List.isEmpty()){
+                        mPreviewTextView.setAlpha(0.3f);
+                        mFinishTextView.setAlpha(0.3f);
+                        mCountTextView.setVisibility(View.INVISIBLE);
+                    }else {
+                        mPreviewTextView.setAlpha(1.0f);
+                        mFinishTextView.setAlpha(1.0f);
+                        mCountTextView.setText(String.valueOf(List.size()));
+                        mCountTextView.setVisibility(View.VISIBLE);
+                    }
+                }else if (v.getId() == R.id.album_item_image){
+                    int position = Integer.valueOf(v.getTag(R.id.position).toString());
+                    startViewpagerActivity(position);
+                }
+            }
+        };
+        mPreviewTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mSelectedList == null){
+                    mSelectedList = getAdapterList();
+                }
+                if (mSelectedList.isEmpty()){
+                    return;
+                }
+                startViewpagerActivity();
+            }
+        });
+        mFinishTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mSelectedList == null){
+                    mSelectedList = getAdapterList();
+                }
+                if (mSelectedList.isEmpty()){
+                    return;
+                }
+                generateUploadList();
+            }
+        });
+        mCountTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     /**
-     * 打开AlbumViewPagerActivity
+     * 打开AlbumViewPagerActivity,浏览所有图片
      * @param position
      */
     private void startViewpagerActivity(int position) {
@@ -219,8 +279,65 @@ public class AlbumViewActivity extends Activity {
         intent.putExtra("position",position);
         intent.putExtra("mImgDirPath", mImgDir.getAbsolutePath());
         intent.putExtra("mImgs", (java.io.Serializable) mImgs);
+        intent.putExtra("mSelectedList", (java.io.Serializable) getAdapterList());
 
 
-        startActivityForResult(intent, 0);
+        startActivityForResult(intent, View_Pager_All);
+    }
+
+    /**
+     * 打开AlbumViewPagerActivity,浏览被选择图片
+     *
+     */
+    private void startViewpagerActivity(){
+        Intent intent = new Intent(getApplicationContext(), AlbumViewPagerActivity.class);
+        List<String> mSelectedImgs = new ArrayList<String>();
+        mSelectedList = mAdapter.mSelectedList;
+        /* 传入的都是被选择的图片 */
+        List<Object> selectedList = new ArrayList<Object>();
+        int length = mSelectedList.size();
+        for (int i = 0;i < length;i++){
+            mSelectedImgs.add(mImgs.get((Integer)mSelectedList.get(i)));
+            selectedList.add((Object)i);
+        }
+        intent.putExtra("mImgDirPath", mImgDir.getAbsolutePath());
+        intent.putExtra("mImgs", (java.io.Serializable) mSelectedImgs);
+        intent.putExtra("mSelectedList", (java.io.Serializable) selectedList);
+        startActivityForResult(intent,View_Pager_Selected);
+    }
+
+    public List<Object> getAdapterList(){
+        return mAdapter.mSelectedList;
+    }
+
+    /**
+     * 更新UI；
+     */
+    private void updateUIs(){
+        mAdapter.mSelectedList = mSelectedList;
+//                mAdapter = new CustomAlbumAdapter(getApplicationContext(),mImgs,mSelectedList,mImgDir.getAbsolutePath(),mOnClickListener);
+        mGirdView.setAdapter(mAdapter);
+        mCountTextView.setText(String.valueOf(mSelectedList.size()));
+        if (mSelectedList.isEmpty()){
+            mCountTextView.setVisibility(View.INVISIBLE);
+        }else {
+            mCountTextView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     *
+     * 创建上传文件的列表
+     * @return 上传文件的绝对路径
+     */
+    private List<String> generateUploadList(){
+        List<String> uploadList = new ArrayList<String>();
+        String filePath;
+        int length = mSelectedList.size();
+        for (int i = 0;i < length;i++){
+            filePath = mImgDir.getAbsolutePath()+"/"+mImgs.get((Integer)mSelectedList.get(i));
+            uploadList.add(filePath);
+        }
+        return uploadList;
     }
 }

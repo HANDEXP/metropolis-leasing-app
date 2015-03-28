@@ -256,6 +256,7 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
                     paramForUpload.put("check_id", mCheckId);
 
                     try {
+
                         byte[] bytes = Util.readStream(getContentResolver().openInputStream(Uri.parse(originalUri.toString())));
                         mUploadModel.upload(paramForUpload, bytes, fileName);
                     } catch (Exception e) {

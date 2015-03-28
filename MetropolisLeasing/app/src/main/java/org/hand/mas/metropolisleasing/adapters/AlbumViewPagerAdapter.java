@@ -24,6 +24,7 @@ public class AlbumViewPagerAdapter extends PagerAdapter {
     private String mImgDir;
     private List<String> mList;
     private Bitmap bitmap;
+    private LocalImageLoader mImageLoader;
     private PhotoViewAttacher.OnPhotoTapListener mOnPhotoTapListener;
 
     public AlbumViewPagerAdapter(Context mContext, String mImgDir, List<String> mImgs, PhotoViewAttacher.OnPhotoTapListener mOnPhotoTapListener) {
@@ -31,6 +32,7 @@ public class AlbumViewPagerAdapter extends PagerAdapter {
         this.mImgDir = mImgDir;
         this.mList = mImgs;
         this.mOnPhotoTapListener = mOnPhotoTapListener;
+        mImageLoader = LocalImageLoader.getInstance();
 
     }
 
@@ -55,7 +57,8 @@ public class AlbumViewPagerAdapter extends PagerAdapter {
         photoView.setTag(R.id.className,"PhotoView");
         initEvent(photoView);
         String filePath = mImgDir + "/" + mList.get(position);
-        bitmap = LocalImageLoader.getInstance().decodeSizedBitmapFromResource(filePath);
+//        mImageLoader.loadImage(filePath,photoView);
+        bitmap = mImageLoader.decodeSizedBitmapFromResource(filePath);
         photoView.setImageBitmap(bitmap);
         container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);

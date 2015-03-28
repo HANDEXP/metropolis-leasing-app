@@ -2,6 +2,7 @@ package org.hand.mas.metropolisleasing.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,20 +25,25 @@ public class CustomAlbumAdapter<T> extends CommonAdapter<T> {
 
     private String mDirPath;
     private LocalImageLoader mImageLoader;
-    public List<Object> mList;
+    public List<Object> mSelectedList;
     private View.OnClickListener mOnClickListener;
 
-    public CustomAlbumAdapter(Context mContext, List<T> mList,String mDirPath,View.OnClickListener mOnClickListener) {
-        this(mContext, mList, R.layout.album_grid_item,mDirPath,mOnClickListener);
+    public CustomAlbumAdapter(Context mContext, List<T> mImgs, List<Object>mSelectedList, String mDirPath,View.OnClickListener mOnClickListener) {
+        this(mContext, mImgs,mSelectedList, R.layout.album_grid_item,mDirPath,mOnClickListener);
 
     }
 
-    public CustomAlbumAdapter(Context mContext, List<T> mList, int itemLayoutId,String mDirPath,View.OnClickListener mOnClickListener) {
-        super(mContext, mList, itemLayoutId);
+    public CustomAlbumAdapter(Context mContext, List<T> mImgs, List<Object>mSelectedList, int itemLayoutId,String mDirPath,View.OnClickListener mOnClickListener) {
+        super(mContext, mImgs, itemLayoutId);
 
         this.mDirPath = mDirPath;
         this.mImageLoader = LocalImageLoader.getInstance(3, LocalImageLoader.Type.LIFO);
-        this.mList = new ArrayList<>();
+        if (mSelectedList == null){
+            this.mSelectedList = new ArrayList<>();
+        }else {
+            this.mSelectedList = mSelectedList;
+        }
+
         this.mOnClickListener = mOnClickListener;
 
 
@@ -59,7 +65,7 @@ public class CustomAlbumAdapter<T> extends CommonAdapter<T> {
         imageView.setTag(R.id.position,position);
         imageButton.setTag(R.id.position,position);
 
-        if (!mList.contains((Object)position)){
+        if (!mSelectedList.contains((Object)position)){
             imageButton.setImageResource(R.drawable.icon_for_pic_unselected);
         }else {
             imageButton.setImageResource(R.drawable.icon_for_pic_selected);
@@ -68,7 +74,8 @@ public class CustomAlbumAdapter<T> extends CommonAdapter<T> {
 
         initEvent(imageView, imageButton,position);
         imageView.setImageResource(R.drawable.friends_sends_pictures_no);
-        mImageLoader.loadImage(mDirPath.concat("/").concat(obj.toString()),imageView);
+        String filePath = mDirPath.concat("/").concat(obj.toString());
+        mImageLoader.loadImage(filePath,imageView);
     }
 
 

@@ -10,6 +10,7 @@
 
         />
     <RelativeLayout
+        android:id="@+id/top_bar_for_album_pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#B0000000"
@@ -27,8 +28,8 @@
             android:paddingRight="10dp"
             android:scaleType="centerInside"
             android:src="@drawable/left_bow"/>
-        <ImageView
-            android:id="@+id/is_selected_imageview"
+        <ImageButton
+            android:id="@+id/is_selected_imagebutton"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
@@ -37,9 +38,11 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:scaleType="centerInside"
+            android:background="#00000000"
             android:src="@drawable/icon_for_pic_unselected"/>
     </RelativeLayout>
     <RelativeLayout
+        android:id="@+id/bottom_bar_for_album_pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#B0000000"
@@ -48,10 +51,20 @@
         android:paddingBottom="10dp"
         android:paddingRight="15dp">
         <TextView
+            android:id="@+id/count_for_list_in_viewpager"
+            android:layout_toLeftOf="@+id/finish_for_viewpager_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textSize="16sp"
+            android:textColor="@color/white"/>
+        <TextView
+            android:id="@+id/finish_for_viewpager_textview"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:text="完成"
             android:textSize="16sp"
             android:textColor="@color/theme_color"/>
