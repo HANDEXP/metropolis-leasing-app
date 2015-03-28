@@ -10,6 +10,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.models.CddGridModel;
 import org.hand.mas.utl.ConstantUrl;
+import org.hand.mas.utl.LocalImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,15 +62,10 @@ public class CddViewPagerAdapter extends PagerAdapter {
             ImageLoader.getInstance().displayImage("https://avatars0.githubusercontent.com/u/3929205?v=3&u=578eeae7eb975f8de9b1facdeef5bac5225c258c&s=140",
                     photoView);
         }else {
-            if (!remote){
-                ImageLoader.getInstance().displayImage(filePath,photoView);
-            }else {
-                ImageLoader.getInstance().displayImage(ConstantUrl.basicUrl+filePath,photoView);
-            }
-
+            LocalImageLoader.getInstance().isSampleForViewPager = false;
+            LocalImageLoader.getInstance().setRatios(0.8f,0.8f);
+            LocalImageLoader.getInstance().loadImage(ConstantUrl.basicUrl+filePath,photoView,false);
         }
-
-
         // Now just add PhotoView to ViewPager and return it
         container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);

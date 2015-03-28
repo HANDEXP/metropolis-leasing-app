@@ -59,6 +59,7 @@ public class AlbumViewPagerAdapter extends PagerAdapter {
         String filePath = mImgDir + "/" + mList.get(position);
 //        mImageLoader.loadImage(filePath,photoView);
         bitmap = mImageLoader.decodeSizedBitmapFromResource(filePath);
+        LocalImageLoader.getInstance().setRatios(0.8f,0.8f);
         photoView.setImageBitmap(bitmap);
         container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);

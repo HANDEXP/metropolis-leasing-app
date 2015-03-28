@@ -19,6 +19,7 @@ import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.models.CddGridModel;
 import org.hand.mas.utl.CommonAdapter;
 import org.hand.mas.utl.ConstantUrl;
+import org.hand.mas.utl.LocalImageLoader;
 import org.hand.mas.utl.ViewHolder;
 
 import java.util.List;
@@ -62,90 +63,17 @@ public class CustomCddGridAdapter<T> extends CommonAdapter<T> {
         String fileSuffix = item.getFileSuffix().toLowerCase();
         boolean remote = item.getRemote();
 
-        roundImageView.setTag(position);
-        deleteImageButton.setTag(position);
+        roundImageView.setTag(R.id.position,position);
+        deleteImageButton.setTag(R.id.position,position);
 
         Pattern pattern = Pattern.compile("png|jpeg|jpg|bmp|gif");
         Matcher matcher = pattern.matcher(fileSuffix);
         if(!matcher.find()){
-            ImageLoader.getInstance().displayImage(
-                    "https://avatars0.githubusercontent.com/u/3929205?v=3&u=578eeae7eb975f8de9b1facdeef5bac5225c258c&s=140",
-                    roundImageView,
-                    mOptions,
-                    new ImageLoadingListener() {
-                        @Override
-                        public void onLoadingStarted(String imageUri, View view) {
-
-                        }
-
-                        @Override
-                        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-                        }
-
-                        @Override
-                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                            initEvent(deleteImageButton, roundImageView);
-                        }
-
-                        @Override
-                        public void onLoadingCancelled(String imageUri, View view) {
-
-                        }
-                    });
-
-        }else{
-            if(!remote){
-                ImageLoader.getInstance().displayImage(filePath,
-                        roundImageView,
-                        mOptions,
-                        new ImageLoadingListener() {
-                            @Override
-                            public void onLoadingStarted(String imageUri, View view) {
-                                ((ImageView)view).setImageResource(R.drawable.friends_sends_pictures_no);
-                            }
-
-                            @Override
-                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-                            }
-
-                            @Override
-                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                                initEvent(deleteImageButton, roundImageView);
-                            }
-
-                            @Override
-                            public void onLoadingCancelled(String imageUri, View view) {
-
-                            }
-                        });
-            }else{
-                ImageLoader.getInstance().displayImage(ConstantUrl.basicUrl+filePath,
-                        roundImageView,
-                        mOptions,
-                        new ImageLoadingListener() {
-                            @Override
-                            public void onLoadingStarted(String imageUri, View view) {
-
-                            }
-
-                            @Override
-                            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-                            }
-
-                            @Override
-                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                                initEvent(deleteImageButton, roundImageView);
-                            }
-
-                            @Override
-                            public void onLoadingCancelled(String imageUri, View view) {
-
-                            }
-                        });
-            }
+            roundImageView.setImageResource(R.drawable.friends_sends_pictures_no);
+        }else {
+            LocalImageLoader.getInstance().isSampleForViewPager = true;
+            LocalImageLoader.getInstance().loadImage(ConstantUrl.basicUrl+filePath,roundImageView,false);
+            initEvent(deleteImageButton,roundImageView);
         }
     }
 

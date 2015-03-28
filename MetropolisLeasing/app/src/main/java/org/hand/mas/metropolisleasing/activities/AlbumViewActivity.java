@@ -21,16 +21,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.littlemvc.model.LMModel;
+import com.littlemvc.model.LMModelDelegate;
 
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.adapters.AlbumViewPagerAdapter;
 import org.hand.mas.metropolisleasing.adapters.CustomAlbumAdapter;
 import org.hand.mas.metropolisleasing.models.CddGridModel;
+import org.hand.mas.metropolisleasing.models.UploadAttachmentSvcModel;
+import org.hand.mas.utl.ConstantUtl;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -39,7 +44,7 @@ import java.util.Objects;
 /**
  * Created by gonglixuan on 15/3/27.
  */
-public class AlbumViewActivity extends Activity {
+public class AlbumViewActivity extends Activity implements LMModelDelegate{
 
     private ProgressDialog mProgressDialog;
     private ImageView mImageView;
@@ -65,6 +70,13 @@ public class AlbumViewActivity extends Activity {
     private TextView mCountTextView;
 
     private CustomAlbumAdapter mAdapter;
+
+    private UploadAttachmentSvcModel mUploadModel;
+
+    private HashMap<String,String> param;
+
+    private boolean isUploadSuccess;
+
     /**
      * 临时的辅助类，用于防止同一个文件夹的多次扫描
      */
@@ -111,6 +123,21 @@ public class AlbumViewActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
+    }
+
+    @Override
+    public void modelDidFinishLoad(LMModel model) {
+
+    }
+
+    @Override
+    public void modelDidStartLoad(LMModel model) {
+
+    }
+
+    @Override
+    public void modelDidFailedLoadWithError(LMModel model) {
+        isUploadSuccess = false;
     }
 
     @Override
@@ -200,6 +227,10 @@ public class AlbumViewActivity extends Activity {
     }
 
     private void bindAllViews() {
+
+        mUploadModel = new UploadAttachmentSvcModel(this);
+        param = new HashMap<String,String>();
+
         mGirdView = (GridView) findViewById(R.id.gridView_for_album_grid);
         mPreviewTextView = (TextView) findViewById(R.id.preview_textview);
         mFinishTextView = (TextView) findViewById(R.id.finish_textview);
@@ -257,15 +288,35 @@ public class AlbumViewActivity extends Activity {
                 if (mSelectedList.isEmpty()){
                     return;
                 }
-                generateUploadList();
-            }
-        });
-        mCountTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                if (param == null){
+                    param = new HashMap<String,String>();
+                }
+                if (mUploadModel == null){
+                    mUploadModel = new UploadAttachmentSvcModel(AlbumViewActivity.this);
+                }
+                Intent intent = getIntent();
+                String projectNumber = intent.getStringExtra("project_number");
+                String cddItemId = intent.getStringExtra("cdd_item_id");
+                String checkId = intent.getStringExtra("check_id");
+                param.put("project_number",projectNumber);
+                param.put("cdd_item_id",cddItemId);
+                param.put("check_id",checkId);
+                String filePath = null;
+                byte[] bytes = null;
+                String fileName = null;
+                List<String> uploadList = generateUploadList();
+                isUploadSuccess = true;
+                for (int i = 0;i<uploadList.size();i++){
+                    filePath = uploadList.get(i);
+                    bytes = ConstantUtl.getBytes(filePath);
+                    fileName = filePath.split("/")[filePath.split("/").length - 1];
+                    mUploadModel.upload(param,bytes,fileName);
+                }
+//                mUploadModel.upload();
 
             }
         });
+
     }
 
     /**
@@ -340,4 +391,8 @@ public class AlbumViewActivity extends Activity {
         }
         return uploadList;
     }
+
+
+
+
 }

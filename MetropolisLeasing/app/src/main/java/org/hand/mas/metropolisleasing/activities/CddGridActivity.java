@@ -3,6 +3,7 @@ package org.hand.mas.metropolisleasing.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,8 +18,10 @@ import android.widget.Toast;
 import com.littlemvc.model.LMModel;
 import com.littlemvc.model.LMModelDelegate;
 import com.littlemvc.model.request.AsHttpRequestModel;
+import com.mas.album.AlbumView;
 import com.mas.album.Util;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
@@ -140,8 +143,7 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
                     mCddAdapter = new CustomCddGridAdapter(mCddGridList, getApplicationContext(), R.layout.cdd_grid_item, mOptions, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
-                            mDeletedCurrencyPosition = (int) v.getTag();
+                            mDeletedCurrencyPosition = (int) v.getTag(R.id.position);
                             CddGridModel item = mCddGridList.get(mDeletedCurrencyPosition);
                             mDeletedAttachmentId = item.getAttachmentId();
                                     /* Swal */
@@ -168,8 +170,8 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
                     }, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(getApplicationContext(), v.getTag().toString(), Toast.LENGTH_SHORT).show();
-                            startViewpagerActivity((int) v.getTag());
+                            int position = (int) v.getTag(R.id.position);
+                            startViewpagerActivity(position);
                         }
                     });
                     mGridView.setAdapter(mCddAdapter);
@@ -235,34 +237,7 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
 
                 break;
             case ACTION_GET_CONTENT:
-                originalUri = data.getData();
-                filePath = uri2path(originalUri.toString());
-                fileName = filePath.split("/")[filePath.split("/").length - 1];
-                fileSuffix = filePath.split("\\.")[filePath.split("\\.").length - 1];
-                try {
-                    mCddGridList.add(new CddGridModel(null, null, originalUri.toString(), fileName, null, fileSuffix, false));
-                    mCddAdapter.notifyDataSetChanged();
-                    System.gc();
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), "ACTION_GET_CONTENT FAILED!", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                } finally {
-                    if (mUploadModel == null) {
-                        mUploadModel = new UploadAttachmentSvcModel(this);
-                    }
-                    HashMap<String, String> paramForUpload = new HashMap<>();
-                    paramForUpload.put("project_number", mProjectNumber);
-                    paramForUpload.put("cdd_item_id", mCddItemId);
-                    paramForUpload.put("check_id", mCheckId);
 
-                    try {
-
-                        byte[] bytes = Util.readStream(getContentResolver().openInputStream(Uri.parse(originalUri.toString())));
-                        mUploadModel.upload(paramForUpload, bytes, fileName);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
                 break;
             case VIEW_PAGER:
                 int positionForDeletedItem = data.getExtras().getInt("currencyPosition");
@@ -335,12 +310,11 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
                                                 IMAGE_CAPTURE);
                                         break;
                                     case R.id.mPhoto:
-                                        Toast.makeText(getApplicationContext(), "Photo", Toast.LENGTH_LONG).show();
-                                        Intent getImage = new Intent(
-                                                Intent.ACTION_GET_CONTENT);
-                                        getImage.addCategory(Intent.CATEGORY_OPENABLE);
-                                        getImage.setType("image/jpeg");
-                                        startActivityForResult(getImage,
+                                        Intent getImageIntent = new Intent(getApplicationContext(), AlbumViewActivity.class);
+                                        getImageIntent.putExtra("project_number", mProjectNumber);
+                                        getImageIntent.putExtra("cdd_item_id",mCddItemId);
+                                        getImageIntent.putExtra("check_id",mCheckId);
+                                        startActivityForResult(getImageIntent,
                                                 ACTION_GET_CONTENT);
                                         break;
                                     case R.id.mCancel:
@@ -362,12 +336,15 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
             }
         });
 
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 10;
         mOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(false)
                 .cacheOnDisk(true)
                 .showImageOnLoading(R.drawable.friends_sends_pictures_no)
                 .showImageOnFail(R.drawable.friends_sends_pictures_no)
                 .showImageForEmptyUri(R.drawable.friends_sends_pictures_no)
+                .decodingOptions(options)
                 .build();
     }
 
