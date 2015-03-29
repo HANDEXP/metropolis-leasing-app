@@ -31,7 +31,7 @@
             android:gravity="center"
             android:text="相机胶卷"
             android:layout_marginBottom="10dp"
-            android:id="@+id/titleTextView"
+            android:id="@+id/title_textView"
             />
 
         <ImageView
@@ -41,7 +41,7 @@
             android:paddingRight="15dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:id="@+id/exitAlbum"
+            android:id="@+id/exit_album"
             android:src="@drawable/cross"
             android:background="#00000000"
 

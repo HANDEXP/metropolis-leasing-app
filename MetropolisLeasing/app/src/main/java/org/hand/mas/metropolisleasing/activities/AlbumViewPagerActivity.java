@@ -46,6 +46,7 @@ public class AlbumViewPagerActivity extends Activity {
     private int mCurrencyPosition;
 
     private final int RESULT_OK = 0;
+    private final int RESULT_CANCEL = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,7 @@ public class AlbumViewPagerActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        finishViewPager();
+        finishViewPagerWithResultCode(RESULT_CANCEL);
     }
 
     private void bindAllViews(){
@@ -125,7 +126,7 @@ public class AlbumViewPagerActivity extends Activity {
         mExitImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finishViewPager();
+                finishViewPagerWithResultCode(RESULT_CANCEL);
             }
         });
         mFinishTextView.setOnClickListener(new View.OnClickListener() {
@@ -134,7 +135,8 @@ public class AlbumViewPagerActivity extends Activity {
                 if (mSelectedList.isEmpty()){
                     mSelectedList.add((Object) mCurrencyPosition);
                 }
-                generateUploadList();
+
+                finishViewPagerWithResultCode(RESULT_OK);
             }
         });
         updateUI(mCurrencyPosition);
@@ -174,13 +176,17 @@ public class AlbumViewPagerActivity extends Activity {
         return false;
     }
 
-    private void finishViewPager(){
+    private void finishViewPagerWithResultCode(int resultCode){
         Intent intent = new Intent();
         /* View_Pager_All 传回 mSelectedList */
         /* 若是View_pager_Selected 则传回 selectedList */
         /* 需在AlbumViewActivity 中讨论 */
         intent.putExtra("mSelectedList", (java.io.Serializable) mSelectedList);
-        setResult(RESULT_OK, intent);
+        if (resultCode == RESULT_CANCEL){
+            List<String> uploadList = generateUploadList();
+            intent.putExtra("mUploadList", (java.io.Serializable) uploadList);
+        }
+        setResult(resultCode, intent);
         finish();
     }
 

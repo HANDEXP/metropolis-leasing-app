@@ -18,10 +18,7 @@ import android.widget.Toast;
 import com.littlemvc.model.LMModel;
 import com.littlemvc.model.LMModelDelegate;
 import com.littlemvc.model.request.AsHttpRequestModel;
-import com.mas.album.AlbumView;
-import com.mas.album.Util;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
@@ -32,6 +29,7 @@ import org.hand.mas.metropolisleasing.models.CddGridModel;
 import org.hand.mas.metropolisleasing.models.CddGridSvcModel;
 import org.hand.mas.metropolisleasing.models.DeleteAttachmentSvcModel;
 import org.hand.mas.metropolisleasing.models.UploadAttachmentSvcModel;
+import org.hand.mas.utl.ConstantUtl;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,7 +70,7 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
     private int mDeletedCurrencyPosition;
 
     int i = 0;
-    SweetAlertDialog pDialog;
+    DialogPlus  dialog;
 
     // 拍照
     public static final int IMAGE_CAPTURE = 0;
@@ -82,6 +80,9 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
 
     // 详细
     public static final int VIEW_PAGER = 2;
+
+    private final int RESULT_OK = 0;
+    private final int RESULT_CANCEL = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,10 +112,11 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
         mTitleTextView.setText(mTitle);
         mAddItemImageView.setVisibility(View.VISIBLE);
         if (mModel == null) {
-            param = new HashMap<String, String>();
-            param.put("project_number", mProjectNumber);
-            param.put("cdd_item_id", mCddItemId);
-            param.put("check_id", mCheckId);
+            resetParam();
+//            param = new HashMap<String, String>();
+//            param.put("project_number", mProjectNumber);
+//            param.put("cdd_item_id", mCddItemId);
+//            param.put("check_id", mCheckId);
             mModel = new CddGridSvcModel(this);
             mModel.load(param);
         }
@@ -211,7 +213,10 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null) {
-            return;
+            if (requestCode != ACTION_GET_CONTENT){
+                return;
+            }
+
         }
         Uri originalUri;
         String filePath;
@@ -224,9 +229,13 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
                 fileName = filePath.split("/")[filePath.split("/").length - 1];
                 fileSuffix = filePath.split("\\.")[filePath.split("\\.").length - 1];
                 try {
-                    mCddGridList.add(new CddGridModel(null, null, originalUri.toString(), fileName, null, fileSuffix, false));
-                    mCddAdapter.notifyDataSetChanged();
-                    System.gc();
+                    byte[] bytes = ConstantUtl.getBytes(filePath);
+                    if (mUploadModel == null){
+                        mUploadModel = new UploadAttachmentSvcModel(CddGridActivity.this);
+                    }
+                    resetParam();
+                    mUploadModel.upload(param,bytes,fileName);
+                    mModel.load(param);
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), "IMAGE_CAPTURE FAILED!", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
@@ -237,7 +246,16 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
 
                 break;
             case ACTION_GET_CONTENT:
+                if (resultCode == RESULT_OK){
+                    if (dialog != null && dialog.isShowing()){
+                        dialog.dismiss();
+                    }
+                    resetParam();
+                    mModel.load(param);
+                }
+                else if (resultCode == RESULT_CANCEL){
 
+                }
                 break;
             case VIEW_PAGER:
                 int positionForDeletedItem = data.getExtras().getInt("currencyPosition");
@@ -295,7 +313,7 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
             @Override
             public void onClick(View v) {
                 rotateAddItem(v, 0.0f, 90.0f, 300);
-                DialogPlus dialog = new DialogPlus.Builder(CddGridActivity.this)
+                dialog = new DialogPlus.Builder(CddGridActivity.this)
                         .setContentHolder(new ViewHolder(R.layout.view_add_item_dialog))
                         .setOnClickListener(new OnClickListener() {
                             @Override
@@ -310,7 +328,7 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
                                                 IMAGE_CAPTURE);
                                         break;
                                     case R.id.mPhoto:
-                                        Intent getImageIntent = new Intent(getApplicationContext(), AlbumViewActivity.class);
+                                        Intent getImageIntent = new Intent(getApplicationContext(), AlbumGridActivity.class);
                                         getImageIntent.putExtra("project_number", mProjectNumber);
                                         getImageIntent.putExtra("cdd_item_id",mCddItemId);
                                         getImageIntent.putExtra("check_id",mCheckId);
@@ -412,4 +430,12 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
         mDeleteModel.load(paramFordelete);
     }
 
+    private void resetParam(){
+        mCddAdapter = null;
+        mCddGridList = null;
+        param = new HashMap<String, String>();
+        param.put("project_number", mProjectNumber);
+        param.put("cdd_item_id", mCddItemId);
+        param.put("check_id", mCheckId);
+    }
 }

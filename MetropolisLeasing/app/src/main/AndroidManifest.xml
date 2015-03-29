@@ -38,7 +38,7 @@
         <activity android:name=".activities.FilteredOrderListActivity"
                   android:label="筛选结果页面">
         </activity>
-        <activity android:name=".activities.AlbumViewActivity"
+        <activity android:name=".activities.AlbumGridActivity"
             android:label="相册">
         </activity>
         <activity android:name=".activities.AlbumViewPagerActivity"

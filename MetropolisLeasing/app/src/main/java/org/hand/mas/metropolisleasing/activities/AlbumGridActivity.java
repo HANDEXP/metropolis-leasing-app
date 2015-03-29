@@ -5,15 +5,12 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -25,9 +22,7 @@ import com.littlemvc.model.LMModel;
 import com.littlemvc.model.LMModelDelegate;
 
 import org.hand.mas.metropolisleasing.R;
-import org.hand.mas.metropolisleasing.adapters.AlbumViewPagerAdapter;
 import org.hand.mas.metropolisleasing.adapters.CustomAlbumAdapter;
-import org.hand.mas.metropolisleasing.models.CddGridModel;
 import org.hand.mas.metropolisleasing.models.UploadAttachmentSvcModel;
 import org.hand.mas.utl.ConstantUtl;
 
@@ -37,14 +32,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * Created by gonglixuan on 15/3/27.
  */
-public class AlbumViewActivity extends Activity implements LMModelDelegate{
+public class AlbumGridActivity extends Activity implements LMModelDelegate{
 
     private ProgressDialog mProgressDialog;
     private ImageView mImageView;
@@ -68,6 +63,9 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
     private TextView mPreviewTextView;
     private TextView mFinishTextView;
     private TextView mCountTextView;
+    private ImageView mExitImageView;
+
+    private SweetAlertDialog sweetAlertDialog;
 
     private CustomAlbumAdapter mAdapter;
 
@@ -75,7 +73,13 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
 
     private HashMap<String,String> param;
 
-    private boolean isUploadSuccess;
+    private boolean isUploadSuccess = true;
+
+    private int countForUploadSuccess = 0;
+    private int countForFailure = 0;
+
+    private final int RESULT_OK = 0;
+    private final int RESULT_CANCEL = -1;
 
     /**
      * 临时的辅助类，用于防止同一个文件夹的多次扫描
@@ -127,6 +131,21 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
 
     @Override
     public void modelDidFinishLoad(LMModel model) {
+        countForUploadSuccess++;
+        if (countForFailure+countForUploadSuccess == mSelectedList.size()){
+            if (sweetAlertDialog.isShowing()){
+                sweetAlertDialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                sweetAlertDialog.setTitleText("上传结束")
+                                .setConfirmText("确定")
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                        finishWithResultCode(RESULT_OK);
+                                    }
+                                });
+            }
+
+        }
 
     }
 
@@ -138,11 +157,13 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
     @Override
     public void modelDidFailedLoadWithError(LMModel model) {
         isUploadSuccess = false;
+        Toast.makeText(getApplicationContext(),"有文件上传失败，请检查网络后再试",Toast.LENGTH_SHORT).show();
+        countForFailure++;
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        finishWithResultCode(RESULT_CANCEL);
     }
 
     @Override
@@ -164,7 +185,14 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
                 }
                 mSelectedList = tmpList;
                 updateUIs();
+                break;
         }
+        if (resultCode == RESULT_OK){
+            Toast.makeText(getApplicationContext(),"TEST",Toast.LENGTH_SHORT).show();
+            List<String> uploadList = (List<String>) data.getSerializableExtra("mUploadList");
+            uploadAttachment(uploadList);
+        }
+
 
     }
 
@@ -180,7 +208,7 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
             @Override
             public void run() {
                 Uri mImageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                ContentResolver mContentResolver = AlbumViewActivity.this.getContentResolver();
+                ContentResolver mContentResolver = AlbumGridActivity.this.getContentResolver();
 
                 //查询jpeg，png，jpg，gif
                 Cursor mCursor = mContentResolver.query(mImageUri,null,
@@ -235,6 +263,7 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
         mPreviewTextView = (TextView) findViewById(R.id.preview_textview);
         mFinishTextView = (TextView) findViewById(R.id.finish_textview);
         mCountTextView = (TextView) findViewById(R.id.count_for_list);
+        mExitImageView = (ImageView) findViewById(R.id.exit_album);
 
         mOnClickListener = new View.OnClickListener() {
             @Override
@@ -282,38 +311,13 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
         mFinishTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mSelectedList == null){
-                    mSelectedList = getAdapterList();
-                }
-                if (mSelectedList.isEmpty()){
-                    return;
-                }
-                if (param == null){
-                    param = new HashMap<String,String>();
-                }
-                if (mUploadModel == null){
-                    mUploadModel = new UploadAttachmentSvcModel(AlbumViewActivity.this);
-                }
-                Intent intent = getIntent();
-                String projectNumber = intent.getStringExtra("project_number");
-                String cddItemId = intent.getStringExtra("cdd_item_id");
-                String checkId = intent.getStringExtra("check_id");
-                param.put("project_number",projectNumber);
-                param.put("cdd_item_id",cddItemId);
-                param.put("check_id",checkId);
-                String filePath = null;
-                byte[] bytes = null;
-                String fileName = null;
-                List<String> uploadList = generateUploadList();
-                isUploadSuccess = true;
-                for (int i = 0;i<uploadList.size();i++){
-                    filePath = uploadList.get(i);
-                    bytes = ConstantUtl.getBytes(filePath);
-                    fileName = filePath.split("/")[filePath.split("/").length - 1];
-                    mUploadModel.upload(param,bytes,fileName);
-                }
-//                mUploadModel.upload();
-
+                uploadAttachment(null);
+            }
+        });
+        mExitImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishWithResultCode(RESULT_CANCEL);
             }
         });
 
@@ -370,8 +374,12 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
         mGirdView.setAdapter(mAdapter);
         mCountTextView.setText(String.valueOf(mSelectedList.size()));
         if (mSelectedList.isEmpty()){
+            mPreviewTextView.setAlpha(0.3f);
+            mFinishTextView.setAlpha(0.3f);
             mCountTextView.setVisibility(View.INVISIBLE);
         }else {
+            mPreviewTextView.setAlpha(1.0f);
+            mFinishTextView.setAlpha(1.0f);
             mCountTextView.setVisibility(View.VISIBLE);
         }
     }
@@ -392,7 +400,62 @@ public class AlbumViewActivity extends Activity implements LMModelDelegate{
         return uploadList;
     }
 
+    /**
+     *
+     * finish并返回result_code
+     * @param resultCode
+     */
+    private void finishWithResultCode(int resultCode){
+        setResult(resultCode);
+        finish();
+    }
 
-
+    private void uploadAttachment(List<String> mUploadList){
+        if (mSelectedList == null){
+            mSelectedList = getAdapterList();
+        }
+        if (mSelectedList.isEmpty()){
+            return;
+        }
+        if (param == null){
+            param = new HashMap<String,String>();
+        }
+        if (mUploadModel == null){
+            mUploadModel = new UploadAttachmentSvcModel(AlbumGridActivity.this);
+        }
+        Intent intent = getIntent();
+        String projectNumber = intent.getStringExtra("project_number");
+        String cddItemId = intent.getStringExtra("cdd_item_id");
+        String checkId = intent.getStringExtra("check_id");
+        param.put("project_number",projectNumber);
+        param.put("cdd_item_id",cddItemId);
+        param.put("check_id",checkId);
+        String filePath = null;
+        byte[] bytes = null;
+        String fileName = null;
+        List<String> uploadList;
+        if (mUploadList == null){
+            uploadList = generateUploadList();
+        }else {
+            uploadList = mUploadList;
+        }
+        isUploadSuccess = true;
+        countForUploadSuccess = 0;
+        countForFailure = 0;
+        sweetAlertDialog = new SweetAlertDialog(AlbumGridActivity.this,SweetAlertDialog.PROGRESS_TYPE)
+                .setTitleText("附件上传中")
+                .showCancelButton(false);
+        sweetAlertDialog.setCancelable(false);
+        sweetAlertDialog.getProgressHelper().setBarColor(getResources().getColor(R.color.theme_color));
+        for (int i = 0;i<uploadList.size();i++){
+            filePath = uploadList.get(i);
+            bytes = ConstantUtl.getBytes(filePath);
+            fileName = filePath.split("/")[filePath.split("/").length - 1];
+            mUploadModel.upload(param,bytes,fileName);
+        }
+        if (!sweetAlertDialog.isShowing()){
+            sweetAlertDialog.show();
+        }
+    }
 
 }
