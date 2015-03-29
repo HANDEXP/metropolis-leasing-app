@@ -44,6 +44,9 @@
         <activity android:name=".activities.AlbumViewPagerActivity"
             android:label="相册浏览">
         </activity>
+        <activity android:name=".activities.ChangeDirectActivity"
+            android:label="更改相册路径">
+        </activity>
         <supports-screens
             android:largeScreens="true"
             android:normalScreens="true"

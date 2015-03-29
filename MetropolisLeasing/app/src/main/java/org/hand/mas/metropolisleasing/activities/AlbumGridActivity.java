@@ -23,6 +23,7 @@ import com.littlemvc.model.LMModelDelegate;
 
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.adapters.CustomAlbumAdapter;
+import org.hand.mas.metropolisleasing.bean.ImageFolder;
 import org.hand.mas.metropolisleasing.models.UploadAttachmentSvcModel;
 import org.hand.mas.utl.ConstantUtl;
 
@@ -64,6 +65,8 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
     private TextView mFinishTextView;
     private TextView mCountTextView;
     private ImageView mExitImageView;
+    private ImageView mDirectImageView;
+    private TextView mTitleTextView;
 
     private SweetAlertDialog sweetAlertDialog;
 
@@ -88,12 +91,17 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
 
     private final int View_Pager_All = 0;
     private final int View_Pager_Selected = 1;
+    private final int Direct_Changed = 2;
+
+    private List<ImageFolder> imageFolderList;
+
 
     private Handler mHandler = new Handler()
     {
         public void handleMessage(android.os.Message msg)
         {
-            mProgressDialog.dismiss();
+            if (mProgressDialog.isShowing())
+                mProgressDialog.dismiss();
             mImgs = Arrays.asList(mImgDir.list(new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String filename) {
@@ -105,9 +113,10 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
             /**
              * 文件夹的路径和图片的路径分开保存,减少内存的消耗；
              */
-            mAdapter = new CustomAlbumAdapter(getApplicationContext(),mImgs,mSelectedList,mImgDir.getAbsolutePath(),mOnClickListener);
-
+            String dirPath = mImgDir.getAbsolutePath();
+            mAdapter = new CustomAlbumAdapter(getApplicationContext(),mImgs,null,dirPath,mOnClickListener);
             mGirdView.setAdapter(mAdapter);
+            mTitleTextView.setText(dirPath.split("/")[dirPath.split("/").length - 1]);
         };
     };
 
@@ -186,9 +195,12 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
                 mSelectedList = tmpList;
                 updateUIs();
                 break;
+            case Direct_Changed:
+                mImgDir = new File(data.getStringExtra("mImgDir"));
+                mHandler.sendEmptyMessage(0x110);
+                break;
         }
         if (resultCode == RESULT_OK){
-            Toast.makeText(getApplicationContext(),"TEST",Toast.LENGTH_SHORT).show();
             List<String> uploadList = (List<String>) data.getSerializableExtra("mUploadList");
             uploadAttachment(uploadList);
         }
@@ -203,6 +215,7 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
         }
 
         mProgressDialog = ProgressDialog.show(this,null,"正在加载...");
+        imageFolderList = new ArrayList<ImageFolder>();
 
         new Thread(new Runnable() {
             @Override
@@ -240,6 +253,8 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
                             return false;
                         }
                     }).length;
+                    ImageFolder imageFolder = new ImageFolder(dirPath,path,dirPath.split("/")[dirPath.split("/").length - 1],picSize);
+                    imageFolderList.add(imageFolder);
                     if (picSize > mPicsSize){
                         mPicsSize = picSize;
                         mImgDir = parentFile;
@@ -264,6 +279,8 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
         mFinishTextView = (TextView) findViewById(R.id.finish_textview);
         mCountTextView = (TextView) findViewById(R.id.count_for_list);
         mExitImageView = (ImageView) findViewById(R.id.exit_album);
+        mDirectImageView = (ImageView) findViewById(R.id.to_direct_list_imageview);
+        mTitleTextView = (TextView) findViewById(R.id.title_textView);
 
         mOnClickListener = new View.OnClickListener() {
             @Override
@@ -318,6 +335,15 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
             @Override
             public void onClick(View v) {
                 finishWithResultCode(RESULT_CANCEL);
+            }
+        });
+        mDirectImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AlbumGridActivity.this,ChangeDirectActivity.class);
+                intent.putExtra("imageFolderList", (java.io.Serializable) imageFolderList);
+                startActivityForResult(intent,Direct_Changed);
+                overridePendingTransition(R.anim.move_in_left,R.anim.move_out_right);
             }
         });
 

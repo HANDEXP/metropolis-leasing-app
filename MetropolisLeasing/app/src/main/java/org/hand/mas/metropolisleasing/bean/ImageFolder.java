@@ -1,9 +1,11 @@
 package org.hand.mas.metropolisleasing.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by gonglixuan on 15/3/26.
  */
-public class ImageFolder {
+public class ImageFolder implements Serializable {
     /**
      * 图片的文件夹路径
      */
@@ -22,6 +24,13 @@ public class ImageFolder {
      *
      */
     private int count;
+
+    public ImageFolder(String dir, String firstImagePath, String name, int count) {
+        this.dir = dir;
+        this.firstImagePath = firstImagePath;
+        this.name = name;
+        this.count = count;
+    }
 
     public String getDir(){
         return dir;
