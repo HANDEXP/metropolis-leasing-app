@@ -5,8 +5,6 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.models.CddGridModel;
 import org.hand.mas.utl.ConstantUrl;
@@ -59,8 +57,8 @@ public class CddViewPagerAdapter extends PagerAdapter {
         Pattern pattern = Pattern.compile("png|jpeg|jpg|bmp");
         Matcher matcher = pattern.matcher(fileSuffix);
         if (!matcher.find()){
-            ImageLoader.getInstance().displayImage("https://avatars0.githubusercontent.com/u/3929205?v=3&u=578eeae7eb975f8de9b1facdeef5bac5225c258c&s=140",
-                    photoView);
+//            ImageLoader.getInstance().displayImage("https://avatars0.githubusercontent.com/u/3929205?v=3&u=578eeae7eb975f8de9b1facdeef5bac5225c258c&s=140",
+//                    photoView);
         }else {
             LocalImageLoader.getInstance().isSampleForViewPager = false;
             LocalImageLoader.getInstance().setRatios(0.8f,0.8f);

@@ -2,11 +2,13 @@ package org.hand.mas.metropolisleasing.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -15,6 +17,7 @@ import com.littlemvc.model.LMModel;
 import com.littlemvc.model.LMModelDelegate;
 import com.littlemvc.model.request.AsHttpRequestModel;
 
+import org.hand.mas.custom_view.SlidingMenu;
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.models.OrderListModel;
 import org.hand.mas.metropolisleasing.models.OrderListSvcModel;
@@ -142,7 +145,11 @@ public class FilteredOrderListActivity extends Activity implements LMModelDelega
         mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.order_list);
         mTitleTextView = (TextView) findViewById(R.id.titleTextView);
         mReturnImageView = (ImageView) findViewById(R.id.return_to_detailList);
+        SlidingMenu slidingMenu = (SlidingMenu) findViewById(R.id.sliding_menu_and_content);
+        RelativeLayout slidingMenuContent = (RelativeLayout) findViewById(R.id.slide_menu_content);
 
+        slidingMenu.setBackgroundColor(Color.WHITE);
+        slidingMenuContent.setVisibility(View.GONE);
         mTitleTextView.setText("筛选结果");
         mReturnImageView.setVisibility(View.VISIBLE);
         mReturnImageView.setOnClickListener(new View.OnClickListener() {

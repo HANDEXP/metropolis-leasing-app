@@ -30,5 +30,14 @@
         <attr name="rightPadding"></attr>
     </declare-styleable>
 
+    <!-- Badge -->
+    <attr name="solidColor" format="color"/>
+    <attr name="innerRadius" format="dimension"/>
+    <attr name="innerFontSize" format="dimension"/>
+    <declare-styleable name="Badge">
+        <attr name="solidColor"></attr>
+        <attr name="innerRadius"></attr>
+        <attr name="innerFontSize"></attr>
+    </declare-styleable>
 
 </resources>

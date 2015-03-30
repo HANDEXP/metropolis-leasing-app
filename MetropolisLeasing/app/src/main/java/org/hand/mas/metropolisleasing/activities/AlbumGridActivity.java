@@ -21,8 +21,10 @@ import android.widget.Toast;
 import com.littlemvc.model.LMModel;
 import com.littlemvc.model.LMModelDelegate;
 
+import org.hand.mas.custom_view.Badge;
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.adapters.CustomAlbumAdapter;
+import org.hand.mas.metropolisleasing.application.MSApplication;
 import org.hand.mas.metropolisleasing.bean.ImageFolder;
 import org.hand.mas.metropolisleasing.models.UploadAttachmentSvcModel;
 import org.hand.mas.utl.ConstantUtl;
@@ -44,6 +46,7 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
 
     private ProgressDialog mProgressDialog;
     private ImageView mImageView;
+    private Badge mCountBadge;
 
     /**
      * 存储文件夹中的图片数量
@@ -63,7 +66,7 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
     private GridView mGirdView;
     private TextView mPreviewTextView;
     private TextView mFinishTextView;
-    private TextView mCountTextView;
+
     private ImageView mExitImageView;
     private ImageView mDirectImageView;
     private TextView mTitleTextView;
@@ -123,6 +126,7 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_album_grid);
 
         bindAllViews();
@@ -197,10 +201,11 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
                 break;
             case Direct_Changed:
                 mImgDir = new File(data.getStringExtra("mImgDir"));
+                resetBottomBar();
                 mHandler.sendEmptyMessage(0x110);
                 break;
         }
-        if (resultCode == RESULT_OK){
+        if (resultCode == RESULT_OK &&requestCode != Direct_Changed){
             List<String> uploadList = (List<String>) data.getSerializableExtra("mUploadList");
             uploadAttachment(uploadList);
         }
@@ -277,10 +282,11 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
         mGirdView = (GridView) findViewById(R.id.gridView_for_album_grid);
         mPreviewTextView = (TextView) findViewById(R.id.preview_textview);
         mFinishTextView = (TextView) findViewById(R.id.finish_textview);
-        mCountTextView = (TextView) findViewById(R.id.count_for_list);
         mExitImageView = (ImageView) findViewById(R.id.exit_album);
         mDirectImageView = (ImageView) findViewById(R.id.to_direct_list_imageview);
         mTitleTextView = (TextView) findViewById(R.id.title_textView);
+        mCountBadge = (Badge) findViewById(R.id.count_badge_for_album_grid);
+
 
         mOnClickListener = new View.OnClickListener() {
             @Override
@@ -300,12 +306,14 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
                     if (List.isEmpty()){
                         mPreviewTextView.setAlpha(0.3f);
                         mFinishTextView.setAlpha(0.3f);
-                        mCountTextView.setVisibility(View.INVISIBLE);
+//                        mCountTextView.setVisibility(View.INVISIBLE);
+                        mCountBadge.setVisibility(View.INVISIBLE);
                     }else {
                         mPreviewTextView.setAlpha(1.0f);
                         mFinishTextView.setAlpha(1.0f);
-                        mCountTextView.setText(String.valueOf(List.size()));
-                        mCountTextView.setVisibility(View.VISIBLE);
+//                        mCountTextView.setText(String.valueOf(List.size()));
+                        mCountBadge.setCount(String.valueOf(List.size()));
+                        mCountBadge.setVisibility(View.VISIBLE);
                     }
                 }else if (v.getId() == R.id.album_item_image){
                     int position = Integer.valueOf(v.getTag(R.id.position).toString());
@@ -342,11 +350,13 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
             public void onClick(View v) {
                 Intent intent = new Intent(AlbumGridActivity.this,ChangeDirectActivity.class);
                 intent.putExtra("imageFolderList", (java.io.Serializable) imageFolderList);
+                mAdapter.mSelectedList = mSelectedList = null;
                 startActivityForResult(intent,Direct_Changed);
                 overridePendingTransition(R.anim.move_in_left,R.anim.move_out_right);
             }
         });
 
+        resetBottomBar();
     }
 
     /**
@@ -398,15 +408,16 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
         mAdapter.mSelectedList = mSelectedList;
 //                mAdapter = new CustomAlbumAdapter(getApplicationContext(),mImgs,mSelectedList,mImgDir.getAbsolutePath(),mOnClickListener);
         mGirdView.setAdapter(mAdapter);
-        mCountTextView.setText(String.valueOf(mSelectedList.size()));
+//        mCountTextView.setText(String.valueOf(mSelectedList.size()));
+        mCountBadge.setCount(String.valueOf(mSelectedList.size()));
         if (mSelectedList.isEmpty()){
             mPreviewTextView.setAlpha(0.3f);
             mFinishTextView.setAlpha(0.3f);
-            mCountTextView.setVisibility(View.INVISIBLE);
+            mCountBadge.setVisibility(View.INVISIBLE);
         }else {
             mPreviewTextView.setAlpha(1.0f);
             mFinishTextView.setAlpha(1.0f);
-            mCountTextView.setVisibility(View.VISIBLE);
+            mCountBadge.setVisibility(View.VISIBLE);
         }
     }
 
@@ -484,4 +495,9 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
         }
     }
 
+    private void resetBottomBar(){
+        mPreviewTextView.setAlpha(0.3f);
+        mFinishTextView.setAlpha(0.3f);
+        mCountBadge.setVisibility(View.INVISIBLE);
+    }
 }

@@ -16,6 +16,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ import com.orhanobut.dialogplus.ViewHolder;
 
 import org.hand.mas.custom_view.SlidingMenu;
 import org.hand.mas.metropolisleasing.R;
+import org.hand.mas.metropolisleasing.application.MSApplication;
 import org.hand.mas.metropolisleasing.models.OrderListModel;
 import org.hand.mas.metropolisleasing.models.OrderListSvcModel;
 import org.hand.mas.utl.CommonAdapter;
@@ -56,6 +58,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
     private ImageView mSlideMenuImageView;
     private SlidingMenu mSlidingMenu;
     private DialogPlus dialog;
+    private LinearLayout settingLL;
 
     private List<OrderListModel> mOrderList;
     private OrderListSvcModel mModel;
@@ -67,7 +70,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        MSApplication.getApplication().addActivity(this);
         setContentView(R.layout.activity_orders_list);
 
         param = new HashMap<>();
@@ -201,6 +204,8 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
         mFilterImageView = (ImageView) findViewById(R.id.filter_for_orderList);
         mSlideMenuImageView = (ImageView) findViewById(R.id.slide_menu);
         mSlidingMenu = (SlidingMenu) findViewById(R.id.sliding_menu_and_content);
+        /* Sliding Menu */
+        settingLL = (LinearLayout) mSlidingMenu.findViewById(R.id.settingLL);
 
         mSlideMenuImageView.setVisibility(View.VISIBLE);
         mSlideMenuImageView.setOnClickListener(new View.OnClickListener() {
@@ -310,6 +315,22 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                     }
                 });
 
+            }
+        });
+
+        settingLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(OrderListActivity.this,SettingActivity.class);
+                if (mSlidingMenu.getIsOpen()){
+                    mSlideMenuImageView.setImageDrawable(getResources().getDrawable(R.drawable.icon_for_slide_menu));
+                    mSlidingMenu.closeMenu();
+                }
+                while (mSlidingMenu.getIsOpen()){
+                    continue;
+                }
+                startActivity(intent);
+                overridePendingTransition(R.anim.move_in_bottm,R.anim.alpha_out);
             }
         });
     }

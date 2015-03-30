@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.littlemvc.model.LMModel;
 import com.littlemvc.model.LMModelDelegate;
 import com.littlemvc.model.request.AsHttpRequestModel;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
@@ -53,7 +52,6 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
 
     private CustomCddGridAdapter mCddAdapter;
 
-    private DisplayImageOptions mOptions;
 
     private HashMap<String, String> param;
     private CddGridSvcModel mModel;
@@ -142,7 +140,7 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
                 JSONArray bodyArr = (JSONArray) ((JSONObject) jsonObj.get("body")).get("grid");
                 try {
                     initializeData(bodyArr);
-                    mCddAdapter = new CustomCddGridAdapter(mCddGridList, getApplicationContext(), R.layout.cdd_grid_item, mOptions, new View.OnClickListener() {
+                    mCddAdapter = new CustomCddGridAdapter(mCddGridList, getApplicationContext(), R.layout.cdd_grid_item, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             mDeletedCurrencyPosition = (int) v.getTag(R.id.position);
@@ -356,14 +354,6 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 10;
-        mOptions = new DisplayImageOptions.Builder()
-                .cacheInMemory(false)
-                .cacheOnDisk(true)
-                .showImageOnLoading(R.drawable.friends_sends_pictures_no)
-                .showImageOnFail(R.drawable.friends_sends_pictures_no)
-                .showImageForEmptyUri(R.drawable.friends_sends_pictures_no)
-                .decodingOptions(options)
-                .build();
     }
 
     /*

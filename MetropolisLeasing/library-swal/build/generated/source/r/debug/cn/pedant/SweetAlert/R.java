@@ -1278,19 +1278,19 @@ containing a value of this type.
         public static int abc_config_showMenuShortcutsWhenKeyboardPresent=0x7f050005;
     }
     public static final class color {
-        public static int abc_background_cache_hint_selector_material_dark=0x7f060044;
-        public static int abc_background_cache_hint_selector_material_light=0x7f060045;
+        public static int abc_background_cache_hint_selector_material_dark=0x7f060046;
+        public static int abc_background_cache_hint_selector_material_light=0x7f060047;
         public static int abc_input_method_navigation_guard=0x7f060000;
-        public static int abc_primary_text_disable_only_material_dark=0x7f060046;
-        public static int abc_primary_text_disable_only_material_light=0x7f060047;
-        public static int abc_primary_text_material_dark=0x7f060048;
-        public static int abc_primary_text_material_light=0x7f060049;
-        public static int abc_search_url_text=0x7f06004a;
+        public static int abc_primary_text_disable_only_material_dark=0x7f060048;
+        public static int abc_primary_text_disable_only_material_light=0x7f060049;
+        public static int abc_primary_text_material_dark=0x7f06004a;
+        public static int abc_primary_text_material_light=0x7f06004b;
+        public static int abc_search_url_text=0x7f06004c;
         public static int abc_search_url_text_normal=0x7f060001;
         public static int abc_search_url_text_pressed=0x7f060002;
         public static int abc_search_url_text_selected=0x7f060003;
-        public static int abc_secondary_text_material_dark=0x7f06004b;
-        public static int abc_secondary_text_material_light=0x7f06004c;
+        public static int abc_secondary_text_material_dark=0x7f06004d;
+        public static int abc_secondary_text_material_light=0x7f06004e;
         public static int accent_material_dark=0x7f060004;
         public static int accent_material_light=0x7f060005;
         public static int background_floating_material_dark=0x7f060006;
@@ -1353,8 +1353,10 @@ containing a value of this type.
         public static int switch_thumb_normal_material_dark=0x7f06003f;
         public static int switch_thumb_normal_material_light=0x7f060040;
         public static int text_color=0x7f060041;
-        public static int trans_success_stroke_color=0x7f060042;
-        public static int warning_stroke_color=0x7f060043;
+        public static int theme_color=0x7f060042;
+        public static int theme_color_dark=0x7f060043;
+        public static int trans_success_stroke_color=0x7f060044;
+        public static int warning_stroke_color=0x7f060045;
     }
     public static final class dimen {
         public static int abc_action_bar_default_height_material=0x7f070000;

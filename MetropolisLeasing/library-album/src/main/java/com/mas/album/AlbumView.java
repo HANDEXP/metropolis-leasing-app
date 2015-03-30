@@ -11,9 +11,6 @@ import uk.co.senab.photoview.PhotoView;
 import com.mas.album.adapter.ImageGridAdapter;
 import com.mas.album.adapter.ViewPagerAdapter;
 import com.mas.album.items.ImageItem;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -88,7 +85,6 @@ public class AlbumView extends Activity {
 	public static final int ACTION_GET_CONTENT = 1;
 
     /* 设置图片显示的类 */
-    private DisplayImageOptions options;
 
     /* 图片路径 */
     private String[] imageUrls;
@@ -292,7 +288,6 @@ public class AlbumView extends Activity {
 //		imageList = (ArrayList<ImageItem>) ImageItem.mMemoryCache
 //				.get("imageList");
 
-        options = new DisplayImageOptions.Builder().cacheInMemory(true).displayer(new FadeInBitmapDisplayer(100)).build();
 
 
 

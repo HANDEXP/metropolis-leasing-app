@@ -15,8 +15,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import com.nostra13.universalimageloader.utils.ImageSizeUtils;
-
 import org.hand.mas.metropolisleasing.application.MSApplication;
 
 import java.io.BufferedInputStream;

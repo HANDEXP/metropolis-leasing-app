@@ -3,6 +3,7 @@ package org.hand.mas.custom_view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -81,7 +82,7 @@ public class RoundImageView extends ImageView {
 
         mStrokeWidth = 5;
         mStrokePaint = new Paint();
-        mBitmapPaint.setAntiAlias(true);
+        mStrokePaint.setAntiAlias(true);
         mStrokePaint.setStrokeWidth(mStrokeWidth);
         mStrokePaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
@@ -153,6 +154,9 @@ public class RoundImageView extends ImageView {
             return;
         }
         Bitmap bmp = drawableToBitmap(drawable);
+        if (bmp == null){
+            bmp = BitmapFactory.decodeResource(getResources(),R.drawable.friends_sends_pictures_no);
+        }
         mBitmapShader = new BitmapShader(bmp, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
         float scale = 1.0f;
         if(type == TYPE_CIRCLE){

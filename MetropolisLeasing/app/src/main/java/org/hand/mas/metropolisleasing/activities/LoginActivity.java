@@ -27,6 +27,7 @@ import com.littlemvc.model.request.AsHttpRequestModel;
 
 import org.hand.mas.custom_view.RoundImageView;
 import org.hand.mas.metropolisleasing.R;
+import org.hand.mas.metropolisleasing.application.MSApplication;
 import org.hand.mas.metropolisleasing.models.LoginSvcModel;
 import org.hand.mas.utl.ConstantUtl;
 import org.json.JSONObject;

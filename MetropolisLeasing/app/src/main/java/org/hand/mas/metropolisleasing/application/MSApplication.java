@@ -1,26 +1,27 @@
 package org.hand.mas.metropolisleasing.application;
 
+import android.app.Activity;
 import android.app.Application;
 
 import com.littlemvc.model.request.AsHttpRequestModel;
 import com.littlemvc.utl.AsNetWorkUtl;
-import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
-import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import org.hand.mas.utl.ConstantUrl;
 
-import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by gonglixuan on 15/3/11.
  */
 public class MSApplication extends Application{
-    public static MSApplication application;
+    private static MSApplication application;
+    private List<Activity> mList = new LinkedList();
 
     public static MSApplication getApplication(){
+        if (application == null){
+            application = new MSApplication();
+        }
         return application;
     }
 
@@ -33,18 +34,16 @@ public class MSApplication extends Application{
         AsNetWorkUtl.application = this;
         AsHttpRequestModel.utl = AsNetWorkUtl.getAsNetWorkUtl(ConstantUrl.basicUrl);
 
-        File cacheDir = StorageUtils.getOwnCacheDirectory(getApplicationContext(), "imageloader/Cache");
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration
-                .Builder(getApplicationContext())
-                .memoryCacheExtraOptions(480,800)
-                .threadPoolSize(3)
-                .denyCacheImageMultipleSizesInMemory()
-                .memoryCache(new UsingFreqLimitedMemoryCache(2*1024*1024))
-                .memoryCacheSize(2*1024*1024)
-                .diskCache(new UnlimitedDiscCache(cacheDir))
-                .diskCacheFileCount(100)
-                .writeDebugLogs()
-                .build();
-        ImageLoader.getInstance().init(config);
+    }
+
+    public void addActivity(Activity activity){
+        mList.add(activity);
+    }
+
+    public void exit(){
+        for (Activity activity:mList){
+            activity.finish();
+        }
+        System.exit(0);
     }
 }

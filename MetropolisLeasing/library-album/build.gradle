@@ -17,5 +17,5 @@ android {
 
 dependencies {
     compile 'com.android.support:support-v4:19.+'
-    compile 'com.nostra13.universalimageloader:universal-image-loader:+'
+//    compile 'com.nostra13.universalimageloader:universal-image-loader:+'
 }

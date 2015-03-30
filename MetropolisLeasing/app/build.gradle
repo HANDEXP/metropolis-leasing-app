@@ -21,7 +21,6 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:21.0.3'
-    compile files('libs/robospring-1.0.5.jar')
     compile project(':library-pull')
     compile project(':library-album')
     compile project(':library-swal')

@@ -9,10 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import org.hand.mas.custom_view.RoundImageView;
 import org.hand.mas.metropolisleasing.R;
@@ -31,17 +27,14 @@ import java.util.regex.Pattern;
  */
 public class CustomCddGridAdapter<T> extends CommonAdapter<T> {
 
-    private DisplayImageOptions mOptions;
     private View.OnClickListener mIconClickListener;
     private View.OnClickListener mImgClickListener;
 
-    public CustomCddGridAdapter(List mList, Context mContext,int mItemLayoutId, DisplayImageOptions mOptions) {
+    public CustomCddGridAdapter(List mList, Context mContext,int mItemLayoutId) {
         super(mContext, mList,mItemLayoutId);
-        this.mOptions = mOptions;
     }
-    public CustomCddGridAdapter(List mList, Context mContext,int mItemLayoutId, DisplayImageOptions mOptions, View.OnClickListener mIconClickListener,View.OnClickListener mImgClickListener){
+    public CustomCddGridAdapter(List mList, Context mContext,int mItemLayoutId, View.OnClickListener mIconClickListener,View.OnClickListener mImgClickListener){
         super(mContext, mList,mItemLayoutId);
-        this.mOptions = mOptions;
         this.mIconClickListener = mIconClickListener;
         this.mImgClickListener = mImgClickListener;
 
