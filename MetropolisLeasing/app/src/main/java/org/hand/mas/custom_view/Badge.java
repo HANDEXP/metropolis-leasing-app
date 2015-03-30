@@ -10,11 +10,10 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
-import android.view.animation.ScaleAnimation;
 
 import org.hand.mas.metropolisleasing.R;
+import org.hand.mas.utl.OptAnimationLoader;
 
 /**
  * Created by gonglixuan on 15/3/30.

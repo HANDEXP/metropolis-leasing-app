@@ -1,4 +1,4 @@
-package org.hand.mas.custom_view;
+package org.hand.mas.utl;
 
 import android.content.Context;
 import android.content.res.Resources;

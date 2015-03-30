@@ -238,6 +238,9 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
                 while (mCursor.moveToNext()){
                     String path = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA));
                     File parentFile = new File(path).getParentFile();
+                    if(parentFile.list()==null){
+                        continue;
+                    }
                     String dirPath = parentFile.getAbsolutePath();
 
                     if (mDirPaths.contains(dirPath)){
@@ -264,6 +267,7 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
                         mPicsSize = picSize;
                         mImgDir = parentFile;
                     }
+
                 }
                 mCursor.close();
                 //扫描完成，辅助的HashSet也就可以释放内存了

@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.hand.mas.custom_view.Badge;
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.adapters.AlbumViewPagerAdapter;
 
@@ -30,7 +31,8 @@ public class AlbumViewPagerActivity extends Activity {
     private ImageButton mIsSelectedImageButton;
     private ImageView mExitImageView;
     private TextView mFinishTextView;
-    private TextView mCountTextView;
+
+    private Badge mCountBadge;
 
     private AlbumViewPagerAdapter mAdapter;
 
@@ -73,7 +75,7 @@ public class AlbumViewPagerActivity extends Activity {
         mIsSelectedImageButton = (ImageButton) findViewById(R.id.is_selected_imagebutton);
         mExitImageView = (ImageView) findViewById(R.id.exit_album_view_pager_imageview);
         mFinishTextView = (TextView) findViewById(R.id.finish_for_viewpager_textview);
-        mCountTextView = (TextView) findViewById(R.id.count_for_list_in_viewpager);
+        mCountBadge = (Badge) findViewById(R.id.count_badge_for_album_viewpager);
 
         generateParam();
         mAdapter = new AlbumViewPagerAdapter(getApplicationContext(),mImgDirPath,mImgs,new PhotoViewAttacher.OnPhotoTapListener() {
@@ -161,11 +163,11 @@ public class AlbumViewPagerActivity extends Activity {
         }else{
             mIsSelectedImageButton.setImageResource(R.drawable.icon_for_pic_unselected);
         }
-        mCountTextView.setText(String.valueOf(mSelectedList.size()));
+        mCountBadge.setCount(String.valueOf(mSelectedList.size()));
         if (mSelectedList.isEmpty()){
-            mCountTextView.setVisibility(View.INVISIBLE);
+            mCountBadge.setVisibility(View.INVISIBLE);
         }else {
-            mCountTextView.setVisibility(View.VISIBLE);
+            mCountBadge.setVisibility(View.VISIBLE);
         }
     }
 

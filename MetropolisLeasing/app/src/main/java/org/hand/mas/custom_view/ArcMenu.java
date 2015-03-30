@@ -10,7 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
+import android.view.animation.TranslateAnimation;
 
 import org.hand.mas.metropolisleasing.R;
 
@@ -26,6 +28,10 @@ public class ArcMenu extends ViewGroup implements View.OnClickListener{
 
     private Position mPosition = Position.LEFT_BOTTOM;
     private int mRadius;
+    private Status mCurrentStatus = Status.CLOSE;
+    /**
+     * 主按钮
+     */
     private View mMainButton;
 
     private OnMenuItemClickListener mMenuItemClickListener;
@@ -89,9 +95,10 @@ public class ArcMenu extends ViewGroup implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        rotateMainButton(v,0.0f,360.0f,300);
-    }
 
+        rotateMainButton(v,0.0f,360.0f,300);
+        toggleMenu(300);
+    }
 
 
     @Override
@@ -113,7 +120,7 @@ public class ArcMenu extends ViewGroup implements View.OnClickListener{
             Log.d("TAG", "count = " + count);
             for(int i = 1; i < count;i++){
                 View childView = getChildAt(i);
-                childView.setVisibility(VISIBLE);
+                childView.setVisibility(View.GONE);
                 int left4child = (int) (mRadius*Math.sin(Math.PI/2/(count-2)*(i-1)));
                 int top4child = (int) (mRadius*Math.cos(Math.PI / 2 / (count - 2) * (i - 1)));
 
@@ -176,6 +183,106 @@ public class ArcMenu extends ViewGroup implements View.OnClickListener{
         anim.setFillAfter(true);
         v.startAnimation(anim);
 
+    }
+
+
+    /**
+     * 打开／关闭菜单
+     * @param interval
+     */
+    private void toggleMenu(int interval) {
+
+        int count = getChildCount();
+
+        for (int i = 1; i < count; i++){
+
+            final View childView = getChildAt(i);
+            childView.setVisibility(VISIBLE);
+
+            int cl = (int) (mRadius * Math.sin(Math.PI / 2 / (count - 2) * (i-1)));
+            int ct = (int) (mRadius * Math.cos(Math.PI / 2 / (count - 2) * (i - 1)));
+            int xflag = 1;
+            int yflag = 1;
+
+            if (mPosition == Position.LEFT_TOP
+                    || mPosition == Position.LEFT_BOTTOM)
+            {
+                xflag = -1;
+            }
+
+            if (mPosition == Position.LEFT_TOP
+                    || mPosition == Position.RIGHT_TOP)
+            {
+                yflag = -1;
+            }
+
+            AnimationSet animationSet = new AnimationSet(true);
+            Animation tranAnimation = null;
+
+            if (mCurrentStatus == Status.CLOSE){
+                tranAnimation = new TranslateAnimation(xflag * cl,0,yflag * ct,0);
+                childView.setClickable(true);
+                childView.setFocusable(true);
+            }else {
+                tranAnimation = new TranslateAnimation(0,xflag * cl,0,yflag * ct);
+                childView.setClickable(false);
+                childView.setFocusable(false);
+            }
+
+            //子View延迟展开
+            tranAnimation.setFillAfter(true);
+            tranAnimation.setDuration(interval);
+            tranAnimation.setStartOffset(((i-1) * 100) / count);
+            tranAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    if (mCurrentStatus == Status.CLOSE){
+                        childView.setVisibility(GONE);
+                    }
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            // 旋转动画
+            RotateAnimation rotateAnimation = new RotateAnimation(0,720,Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+            rotateAnimation.setDuration(interval);
+            rotateAnimation.setFillAfter(true);
+
+            animationSet.addAnimation(rotateAnimation);
+            animationSet.addAnimation(tranAnimation);
+
+            childView.startAnimation(animationSet);
+
+            final int pos = i;
+            childView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
+        }
+        changeStatus();
+    }
+
+    /**
+     * 改变状态
+     */
+    private void changeStatus() {
+        mCurrentStatus = mCurrentStatus == Status.CLOSE ? Status.OPEN : Status.CLOSE;
+    }
+
+    public boolean isOpen()
+    {
+        return mCurrentStatus == Status.OPEN;
     }
 
 }
