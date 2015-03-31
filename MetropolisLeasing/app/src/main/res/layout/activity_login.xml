@@ -45,6 +45,7 @@
                 <EditText
                     style="@style/LoginEditText"
                     android:id="@+id/password_editText"
+                    android:inputType="textPassword"
                     android:hint="请输入密码"
                     android:drawableLeft="@drawable/password"/>
                 <View style="@style/SettingDivider" />

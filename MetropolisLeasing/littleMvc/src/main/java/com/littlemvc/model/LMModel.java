@@ -17,7 +17,7 @@ public abstract class LMModel {
 		modelDelegate.modelDidStartLoad(model);
 	}
 	
-	protected void didFinshLoad(LMModel model) {
+	protected void didFinishLoad(LMModel model) {
 		modelDelegate.modelDidFinishLoad(model);
 	}
 	

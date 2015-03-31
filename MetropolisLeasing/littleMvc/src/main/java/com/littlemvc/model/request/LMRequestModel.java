@@ -22,7 +22,7 @@ public class LMRequestModel extends LMModel implements ILMRequestModel{
 
 	@Override
 	public void requestDidFinishLoad(LMRequestModel model) {
-		super.didFinshLoad(model);
+		super.didFinishLoad(model);
 		// TODO Auto-generated method stub 	
 		
 	}

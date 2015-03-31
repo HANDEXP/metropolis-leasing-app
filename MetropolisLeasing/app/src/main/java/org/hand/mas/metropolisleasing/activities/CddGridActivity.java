@@ -1,6 +1,7 @@
 package org.hand.mas.metropolisleasing.activities;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
@@ -33,7 +34,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -72,6 +75,7 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
 
     // 拍照
     public static final int IMAGE_CAPTURE = 0;
+    private Uri photoUri;
 
     // 相册
     public static final int ACTION_GET_CONTENT = 1;
@@ -211,7 +215,7 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null) {
-            if (requestCode != ACTION_GET_CONTENT){
+            if (requestCode == VIEW_PAGER){
                 return;
             }
 
@@ -222,8 +226,14 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
         String fileSuffix;
         switch (requestCode) {
             case IMAGE_CAPTURE:
-                originalUri = data.getData();
-                filePath = uri2path(originalUri.toString());
+                originalUri = photoUri;
+                String[] proj = { MediaStore.Images.Media.DATA };
+                Cursor cursor = this.getContentResolver().query(originalUri, proj, null,
+                        null, null);
+                int column_index = cursor
+                        .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                cursor.moveToFirst();
+                filePath = cursor.getString(column_index);
                 fileName = filePath.split("/")[filePath.split("/").length - 1];
                 fileSuffix = filePath.split("\\.")[filePath.split("\\.").length - 1];
                 try {
@@ -322,6 +332,17 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
                                         Toast.makeText(getApplicationContext(), "Camera", Toast.LENGTH_LONG).show();
                                         Intent getImageByCamera = new Intent(
                                                 "android.media.action.IMAGE_CAPTURE");
+                                        SimpleDateFormat timeStampFormat = new SimpleDateFormat(
+                                                "yyyy_MM_dd_HH_mm_ss");
+                                        String filename = timeStampFormat
+                                                .format(new Date());
+                                        ContentValues values = new ContentValues();
+                                        values.put(MediaStore.Images.Media.TITLE, filename);
+                                        photoUri = getContentResolver()
+                                                .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                                                        values);
+                                        getImageByCamera.putExtra(MediaStore.EXTRA_OUTPUT,
+                                                photoUri);
                                         startActivityForResult(getImageByCamera,
                                                 IMAGE_CAPTURE);
                                         break;

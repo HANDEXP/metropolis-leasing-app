@@ -61,13 +61,15 @@ public class CustomCddGridAdapter<T> extends CommonAdapter<T> {
 
         Pattern pattern = Pattern.compile("png|jpeg|jpg|bmp|gif");
         Matcher matcher = pattern.matcher(fileSuffix);
+        roundImageView.setImageResource(R.drawable.friends_sends_pictures_no);
         if(!matcher.find()){
-            roundImageView.setImageResource(R.drawable.friends_sends_pictures_no);
+
         }else {
             LocalImageLoader.getInstance().isSampleForViewPager = true;
             LocalImageLoader.getInstance().loadImage(ConstantUrl.basicUrl+filePath,roundImageView,false);
-            initEvent(deleteImageButton,roundImageView);
+
         }
+        initEvent(deleteImageButton,roundImageView);
     }
 
     /* 显示删除按钮 */

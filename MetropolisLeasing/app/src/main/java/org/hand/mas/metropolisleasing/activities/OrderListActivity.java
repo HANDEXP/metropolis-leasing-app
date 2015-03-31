@@ -150,7 +150,8 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                                     projectStatusDesc.setText(item.getProjectStatusDesc());
                                     bpName.setText(item.getBpName());
                                     projectSource.setText(item.getProjectSource());
-                                    bpClass.setText(item.getBpClass().concat("识别号:"));
+                                    String bpStr = item.getBpClass().equals("NP") ? "个人" : "法人";
+                                    bpClass.setText(bpStr.concat("识别号:"));
                                     if (bpClass.equals("ORG")){
                                         identifierCode.setText(item.getOrganizationCode());
                                     }else if (bpClass.equals("NP")){

@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.littlemvc.model.LMModel;
 import com.littlemvc.model.LMModelDelegate;
+import com.littlemvc.model.request.AsHttpRequestModel;
 
 import org.hand.mas.custom_view.Badge;
 import org.hand.mas.metropolisleasing.R;
@@ -28,6 +29,8 @@ import org.hand.mas.metropolisleasing.application.MSApplication;
 import org.hand.mas.metropolisleasing.bean.ImageFolder;
 import org.hand.mas.metropolisleasing.models.UploadAttachmentSvcModel;
 import org.hand.mas.utl.ConstantUtl;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -144,11 +147,27 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
 
     @Override
     public void modelDidFinishLoad(LMModel model) {
-        countForUploadSuccess++;
-        if (countForFailure+countForUploadSuccess == mSelectedList.size()){
-            if (sweetAlertDialog.isShowing()){
-                sweetAlertDialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-                sweetAlertDialog.setTitleText("上传结束")
+        AsHttpRequestModel reponseModel = (AsHttpRequestModel) model;
+        String json = new String(reponseModel.mresponseBody);
+        JSONObject jsonObj = null;
+        String code = null;
+        try {
+            jsonObj = new JSONObject(json);
+            code = ((JSONObject) jsonObj.get("head")).get("code").toString();
+
+            if (code.equals("success")){
+                countForUploadSuccess++;
+            }else if (code.equals("failure")){
+                countForFailure++;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if (countForFailure + countForUploadSuccess == mSelectedList.size()) {
+                if (sweetAlertDialog.isShowing()) {
+                    if (countForFailure == 0) {
+                        sweetAlertDialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                        sweetAlertDialog.setTitleText("上传结束")
                                 .setConfirmText("确定")
                                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                     @Override
@@ -156,8 +175,21 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
                                         finishWithResultCode(RESULT_OK);
                                     }
                                 });
-            }
+                    } else {
+                        sweetAlertDialog.changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                        sweetAlertDialog.setTitleText("上传结束,但有错误发生")
+                                .setConfirmText("确定")
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                        finishWithResultCode(RESULT_OK);
+                                    }
+                                });
+                    }
 
+                }
+
+            }
         }
 
     }
