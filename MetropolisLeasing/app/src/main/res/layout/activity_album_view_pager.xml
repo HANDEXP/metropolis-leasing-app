@@ -69,6 +69,7 @@
             android:layout_toLeftOf="@+id/finish_for_viewpager_textview"
             android:layout_centerVertical="true"
             app:solidColor="@color/theme_color"
+            android:visibility="invisible"
             />
         <TextView
             android:id="@+id/finish_for_viewpager_textview"

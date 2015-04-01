@@ -5,20 +5,25 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import com.nineoldandroids.view.ViewHelper;
 
 import org.hand.mas.metropolisleasing.R;
 
+import java.util.List;
+
 /**
  * Created by gonglixuan on 15/3/23.
  */
-public class SlidingMenu extends HorizontalScrollView {
+public class SlidingMenu extends HorizontalScrollView{
 
     private LinearLayout mWrapper;
     private ViewGroup mMenu;
@@ -31,6 +36,7 @@ public class SlidingMenu extends HorizontalScrollView {
     private boolean isOpen;
     private boolean once;
 
+    private GestureDetector mGestureDetector;
 
     public SlidingMenu(Context context) {
         this(context,null);
@@ -63,6 +69,7 @@ public class SlidingMenu extends HorizontalScrollView {
         DisplayMetrics outMetrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(outMetrics);
         mScreenWidth = outMetrics.widthPixels;
+
     }
 
     @Override
@@ -92,11 +99,14 @@ public class SlidingMenu extends HorizontalScrollView {
     @Override
     public boolean onTouchEvent(MotionEvent ev)
     {
-        /* 禁用水平滑动 */
+
         return false;
     }
 
-
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return super.dispatchTouchEvent(ev);
+    }
 
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
@@ -152,4 +162,5 @@ public class SlidingMenu extends HorizontalScrollView {
     public boolean getIsOpen(){
         return this.isOpen;
     }
+
 }

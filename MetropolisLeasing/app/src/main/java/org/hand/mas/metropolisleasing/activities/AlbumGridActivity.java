@@ -384,7 +384,9 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
         mDirectImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(AlbumGridActivity.this,ChangeDirectActivity.class);
+                intent.putExtra("currencyImageFolder", mImgDir.getAbsolutePath());
                 intent.putExtra("imageFolderList", (java.io.Serializable) imageFolderList);
                 mAdapter.mSelectedList = mSelectedList = null;
                 startActivityForResult(intent,Direct_Changed);
@@ -535,5 +537,15 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
         mPreviewTextView.setAlpha(0.3f);
         mFinishTextView.setAlpha(0.3f);
         mCountBadge.setVisibility(View.INVISIBLE);
+    }
+
+    private boolean isChildRendered(){
+        int count = mGirdView.getChildCount();
+        for (int i = 0; i < count;i++){
+            View convertView = mGirdView.getChildAt(count);
+//            convertView.fin
+
+        }
+        return false;
     }
 }

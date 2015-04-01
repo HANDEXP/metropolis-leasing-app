@@ -196,7 +196,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
         intent4ViewPager.putExtra("bp_name",mDetailList.get(position).getBpName());
         intent4ViewPager.putExtra("description",mDetailList.get(position).getDescription());
         startActivityForResult(intent4ViewPager, 0);
-        overridePendingTransition(R.anim.move_in_right,R.anim.move_out_left);
+        overridePendingTransition(R.anim.move_in_right,R.anim.alpha_out);
     }
 
     private void initializeData(JSONArray jsonArray) throws JSONException {
@@ -226,6 +226,6 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
     * */
     private void finishWithAnim(){
         finish();
-        overridePendingTransition(R.anim.move_in_left,R.anim.move_out_right);
+        overridePendingTransition(R.anim.alpha_in,R.anim.move_out_right);
     }
 }

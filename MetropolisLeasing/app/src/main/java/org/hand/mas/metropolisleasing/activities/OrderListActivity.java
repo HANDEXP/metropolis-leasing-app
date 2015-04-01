@@ -164,8 +164,6 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                         }else{
                             adapter.notifyDataSetChanged();
                         }
-
-
                     } catch (Exception e){
                         e.printStackTrace();
                     }
@@ -254,7 +252,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                     intent.putExtra("project_number",project_number);
                     intent.putExtra("project_source",project_source);
                     startActivity(intent);
-                    overridePendingTransition(R.anim.move_in_right,R.anim.move_out_left);
+                    overridePendingTransition(R.anim.move_in_right,R.anim.alpha_out);
                 }
 
             }

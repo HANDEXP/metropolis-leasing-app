@@ -26,6 +26,7 @@ public class ChangeDirectActivity extends Activity {
     private List<ImageFolder> mImageFolderList;
     private ListView mListView;
     private ImageView mReturnImageView;
+    private String mCurrencyImageFolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,9 @@ public class ChangeDirectActivity extends Activity {
         mReturnImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra("mImgDir",mCurrencyImageFolder);
+                setResult(0,intent);
                 finishWithAnim();
             }
         });
@@ -79,6 +83,7 @@ public class ChangeDirectActivity extends Activity {
     private void generateParam(){
         Intent intent = getIntent();
         mImageFolderList = (List<ImageFolder>) intent.getSerializableExtra("imageFolderList");
+        mCurrencyImageFolder = intent.getStringExtra("currencyImageFolder");
     }
 
     private void finishWithAnim(){

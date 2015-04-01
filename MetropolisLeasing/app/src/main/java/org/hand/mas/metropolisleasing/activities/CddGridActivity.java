@@ -397,7 +397,7 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
     * */
     private void finishWithAnim() {
         finish();
-        overridePendingTransition(R.anim.move_in_left, R.anim.move_out_right);
+        overridePendingTransition(R.anim.alpha_in, R.anim.move_out_right);
     }
 
     private void rotateAddItem(View v, float start, float end, int i) {

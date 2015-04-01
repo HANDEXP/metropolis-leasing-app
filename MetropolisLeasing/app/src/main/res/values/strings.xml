@@ -5,4 +5,5 @@
     <string name="action_settings">Settings</string>
     <item type="id" name="position"></item>
     <item type="id" name="className"></item>
+    <item type="id" name="isRendered"></item>
 </resources>

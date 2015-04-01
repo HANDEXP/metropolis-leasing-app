@@ -61,10 +61,14 @@ public class CustomAlbumAdapter<T> extends CommonAdapter<T> {
     public void convert(ViewHolder helper, T obj, int position) {
         ImageView imageView = (ImageView) helper.getConvertView().findViewById(R.id.album_item_image);
         ImageButton imageButton = (ImageButton) helper.getConvertView().findViewById(R.id.album_item_select_button);
+        helper.getConvertView().setTag(R.id.isRendered,false);
         imageButton.setVisibility(View.VISIBLE);
         imageView.setTag(R.id.position,position);
         imageButton.setTag(R.id.position,position);
 
+        if (mSelectedList == null){
+            mSelectedList = new ArrayList<>();
+        }
         if (!mSelectedList.contains((Object)position)){
             imageButton.setImageResource(R.drawable.icon_for_pic_unselected);
         }else {
