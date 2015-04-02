@@ -84,6 +84,7 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
     private CustomAlbumAdapter mAdapter;
 
     private UploadAttachmentSvcModel mUploadModel;
+    private LinkedList<String> mUploadList;
 
     private HashMap<String,String> param;
 
@@ -201,8 +202,10 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
                     }
 
                 }
-                mSemaphore.release();
+
             }
+            if (!mUploadList.isEmpty())
+                uploadOneItem();
 
         }
 
@@ -223,7 +226,8 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
                 sweetAlertDialog.dismissWithAnimation();
             }
         }
-        mSemaphore.release();
+        if (!mUploadList.isEmpty())
+            uploadOneItem();
     }
 
     @Override
@@ -258,7 +262,7 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
                 break;
         }
         if (resultCode == RESULT_OK &&requestCode != Direct_Changed){
-            List<String> uploadList = (List<String>) data.getSerializableExtra("mUploadList");
+            LinkedList<String> uploadList = (LinkedList<String>) data.getSerializableExtra("mUploadList");
             uploadAttachment(uploadList);
         }
 
@@ -506,7 +510,7 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
         finish();
     }
 
-    private void uploadAttachment(List<String> mUploadList){
+    private void uploadAttachment(List<String> uploadList){
         if (mSelectedList == null){
             mSelectedList = getAdapterList();
         }
@@ -526,14 +530,11 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
         param.put("project_number",projectNumber);
         param.put("cdd_item_id",cddItemId);
         param.put("check_id",checkId);
-        String filePath = null;
-        byte[] bytes = null;
-        String fileName = null;
-        LinkedList<String> uploadList;
-        if (mUploadList == null){
-            uploadList = generateUploadList();
+
+        if (uploadList == null){
+            mUploadList = generateUploadList();
         }else {
-            uploadList = (LinkedList<String>) mUploadList;
+            mUploadList = (LinkedList<String>) uploadList;
         }
         isUploadSuccess = true;
         countForUploadSuccess = 0;
@@ -543,19 +544,7 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
                 .showCancelButton(false);
         sweetAlertDialog.setCancelable(false);
         sweetAlertDialog.getProgressHelper().setBarColor(getResources().getColor(R.color.theme_color));
-
-        for (int i = 0;i<uploadList.size();i++){
-            filePath = uploadList.get(i);
-            bytes = ConstantUtl.getBytes(filePath);
-            fileName = filePath.split("/")[filePath.split("/").length - 1];
-            try {
-                mUploadModel.upload(param, bytes, fileName);
-                Log.d("TEST",String.valueOf(i));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
+        uploadOneItem();
 
         if (!sweetAlertDialog.isShowing()){
             sweetAlertDialog.show();
@@ -568,4 +557,17 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
         mCountBadge.setVisibility(View.INVISIBLE);
     }
 
+    private void uploadOneItem(){
+
+        String filePath = mUploadList.removeFirst();
+        byte[] bytes = ConstantUtl.getBytes(filePath);
+        String fileName = filePath.split("/")[filePath.split("/").length - 1];
+        try {
+            mUploadModel.upload(param, bytes, fileName);
+            Log.d("TEST","TEST");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 }

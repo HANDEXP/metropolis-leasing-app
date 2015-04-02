@@ -16,6 +16,7 @@ import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.adapters.AlbumViewPagerAdapter;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -186,15 +187,15 @@ public class AlbumViewPagerActivity extends Activity {
         /* 需在AlbumViewActivity 中讨论 */
         intent.putExtra("mSelectedList", (java.io.Serializable) mSelectedList);
         if (resultCode == RESULT_CANCEL){
-            List<String> uploadList = generateUploadList();
+            LinkedList<String> uploadList = generateUploadList();
             intent.putExtra("mUploadList", (java.io.Serializable) uploadList);
         }
         setResult(resultCode, intent);
         finish();
     }
 
-    private List<String> generateUploadList(){
-        List<String> uploadList = new ArrayList<String>();
+    private LinkedList<String> generateUploadList(){
+        LinkedList<String> uploadList = new LinkedList<>();
         String filePath;
         int length = mSelectedList.size();
         for (int i = 0;i < length;i++){
@@ -203,6 +204,4 @@ public class AlbumViewPagerActivity extends Activity {
         }
         return uploadList;
     }
-
-
 }
