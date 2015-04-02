@@ -66,7 +66,7 @@ public class CustomCddGridAdapter<T> extends CommonAdapter<T> {
 
         }else {
             LocalImageLoader.getInstance().isSampleForViewPager = true;
-            LocalImageLoader.getInstance().loadImage(ConstantUrl.basicUrl+filePath,roundImageView,false);
+            LocalImageLoader.getInstance(5, LocalImageLoader.Type.LIFO).loadImage(ConstantUrl.basicUrl+filePath,roundImageView,false);
 
         }
         initEvent(deleteImageButton,roundImageView);

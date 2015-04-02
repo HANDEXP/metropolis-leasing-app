@@ -113,7 +113,10 @@ public class Badge extends View {
         this.mCount = count;
         invalidate();
         AnimationSet anim =  (AnimationSet) OptAnimationLoader.loadAnimation(getContext(), R.anim.modal_in);
-        startAnimation(anim);
+        if (!count.equals("0")){
+            startAnimation(anim);
+        }
+
     }
 
     public String setCount(){

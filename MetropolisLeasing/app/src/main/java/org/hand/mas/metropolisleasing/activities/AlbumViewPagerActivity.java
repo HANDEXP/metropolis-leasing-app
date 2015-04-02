@@ -163,12 +163,13 @@ public class AlbumViewPagerActivity extends Activity {
         }else{
             mIsSelectedImageButton.setImageResource(R.drawable.icon_for_pic_unselected);
         }
-        mCountBadge.setCount(String.valueOf(mSelectedList.size()));
+
         if (mSelectedList.isEmpty()){
             mCountBadge.setVisibility(View.INVISIBLE);
         }else {
             mCountBadge.setVisibility(View.VISIBLE);
         }
+        mCountBadge.setCount(String.valueOf(mSelectedList.size()));
     }
 
     private boolean isSelected(List<Object> list,int position){

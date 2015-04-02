@@ -79,7 +79,7 @@ public class CustomAlbumAdapter<T> extends CommonAdapter<T> {
         initEvent(imageView, imageButton,position);
         imageView.setImageResource(R.drawable.friends_sends_pictures_no);
         String filePath = mDirPath.concat("/").concat(obj.toString());
-        LocalImageLoader.getInstance().isSampleForViewPager = true;
+        LocalImageLoader.getInstance(5, LocalImageLoader.Type.LIFO).isSampleForViewPager = true;
         mImageLoader.loadImage(filePath,imageView,true);
     }
 

@@ -330,11 +330,11 @@ public abstract class AsyncHttpResponseHandler implements ResponseHandlerInterfa
     }
 
     protected void sendMessage(Message msg) {
-        if (getUseSynchronousMode() || handler == null) {
-            handleMessage(msg);
-        } else if (!Thread.currentThread().isInterrupted()) { // do not send messages if request has been cancelled
+  //      if (getUseSynchronousMode() || handler == null) {
+    //        handleMessage(msg);
+      //  } else if (!Thread.currentThread().isInterrupted()) { // do not send messages if request has been cancelled
             handler.sendMessage(msg);
-        }
+       // }
     }
 
     /**

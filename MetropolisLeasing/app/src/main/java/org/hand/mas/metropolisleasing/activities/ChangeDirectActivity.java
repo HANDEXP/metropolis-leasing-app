@@ -39,7 +39,11 @@ public class ChangeDirectActivity extends Activity {
 
     @Override
     public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("mImgDir",mCurrencyImageFolder);
+        setResult(0,intent);
         finishWithAnim();
+
     }
 
     private void bindAllViews() {
@@ -68,15 +72,7 @@ public class ChangeDirectActivity extends Activity {
                 finishWithAnim();
             }
         });
-        mReturnImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra("mImgDir",mCurrencyImageFolder);
-                setResult(0,intent);
-                finishWithAnim();
-            }
-        });
+        mReturnImageView.setVisibility(View.GONE);
 
     }
 
@@ -88,6 +84,6 @@ public class ChangeDirectActivity extends Activity {
 
     private void finishWithAnim(){
         finish();
-        overridePendingTransition(R.anim.move_in_right,R.anim.move_out_left);
+        overridePendingTransition(R.anim.alpha_in,R.anim.move_out_left);
     }
 }

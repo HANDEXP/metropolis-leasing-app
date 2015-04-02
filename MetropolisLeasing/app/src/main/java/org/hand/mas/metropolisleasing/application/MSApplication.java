@@ -3,6 +3,7 @@ package org.hand.mas.metropolisleasing.application;
 import android.app.Activity;
 import android.app.Application;
 
+import com.hand.hrms4android.parser.ConfigReader;
 import com.littlemvc.model.request.AsHttpRequestModel;
 import com.littlemvc.utl.AsNetWorkUtl;
 
@@ -17,6 +18,7 @@ import java.util.List;
 public class MSApplication extends Application{
     private static MSApplication application;
     private List<Activity> mList = new LinkedList();
+    public ConfigReader reader;
 
     public static MSApplication getApplication(){
         if (application == null){
@@ -32,7 +34,7 @@ public class MSApplication extends Application{
         application = this;
 
         AsNetWorkUtl.application = this;
-        AsHttpRequestModel.utl = AsNetWorkUtl.getAsNetWorkUtl(ConstantUrl.basicUrl);
+//        AsHttpRequestModel.utl = AsNetWorkUtl.getAsNetWorkUtl(ConstantUrl.basicUrl);
 
     }
 

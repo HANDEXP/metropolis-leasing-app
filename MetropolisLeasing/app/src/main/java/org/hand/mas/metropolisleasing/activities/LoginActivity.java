@@ -47,6 +47,7 @@ public class LoginActivity extends Activity implements LMModelDelegate{
     private RoundImageView mImage;
     private Button mButton;
     private SweetAlertDialog pDialog;
+    private TextView mChangeBasicUrlTextView;
 
     private HashMap<String,String> param;
     private LoginSvcModel mModel;
@@ -62,7 +63,7 @@ public class LoginActivity extends Activity implements LMModelDelegate{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        MSApplication.getApplication().addActivity(this);
         bindAllViews();
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         editor = preferences.edit();
@@ -86,7 +87,8 @@ public class LoginActivity extends Activity implements LMModelDelegate{
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+
+        MSApplication.getApplication().exit();
     }
 
     @Override
@@ -163,6 +165,7 @@ public class LoginActivity extends Activity implements LMModelDelegate{
         mImage = (RoundImageView) findViewById(R.id.img_for_login);
         mButton = (Button) findViewById(R.id.loginBtn);
         LLForEditText = (LinearLayout) findViewById(R.id.linearLayout_for_edittext);
+        mChangeBasicUrlTextView = (TextView) findViewById(R.id.change_basic_url_textview);
 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -207,6 +210,13 @@ public class LoginActivity extends Activity implements LMModelDelegate{
             public void onClick(View v) {
                 generateParam();
                 mModel.load(param);
+            }
+        });
+        mChangeBasicUrlTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this,LoadingActivity.class);
+                startActivity(intent);
             }
         });
 

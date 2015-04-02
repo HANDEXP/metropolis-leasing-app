@@ -9,7 +9,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -38,7 +40,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.ReentrantLock;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -101,6 +106,14 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
 
     private List<ImageFolder> imageFolderList;
 
+    /**
+     * 轮询的线程
+     */
+    private Thread mPoolThread;
+    private Handler mPoolThreadHander;
+
+
+    private volatile Semaphore mSemaphore = new Semaphore(1);
 
     private Handler mHandler = new Handler()
     {
@@ -188,8 +201,9 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
                     }
 
                 }
-
+                mSemaphore.release();
             }
+
         }
 
     }
@@ -204,6 +218,12 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
         isUploadSuccess = false;
         Toast.makeText(getApplicationContext(),"有文件上传失败，请检查网络后再试",Toast.LENGTH_SHORT).show();
         countForFailure++;
+        if (countForFailure + countForUploadSuccess >= mSelectedList.size()){
+            if (sweetAlertDialog.isShowing()){
+                sweetAlertDialog.dismissWithAnimation();
+            }
+        }
+        mSemaphore.release();
     }
 
     @Override
@@ -373,6 +393,7 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
             @Override
             public void onClick(View v) {
                 uploadAttachment(null);
+
             }
         });
         mExitImageView.setOnClickListener(new View.OnClickListener() {
@@ -390,7 +411,7 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
                 intent.putExtra("imageFolderList", (java.io.Serializable) imageFolderList);
                 mAdapter.mSelectedList = mSelectedList = null;
                 startActivityForResult(intent,Direct_Changed);
-                overridePendingTransition(R.anim.move_in_left,R.anim.move_out_right);
+                overridePendingTransition(R.anim.move_in_left,R.anim.alpha_out);
             }
         });
 
@@ -464,8 +485,8 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
      * 创建上传文件的列表
      * @return 上传文件的绝对路径
      */
-    private List<String> generateUploadList(){
-        List<String> uploadList = new ArrayList<String>();
+    private LinkedList<String> generateUploadList(){
+        LinkedList<String> uploadList = new LinkedList<>();
         String filePath;
         int length = mSelectedList.size();
         for (int i = 0;i < length;i++){
@@ -508,11 +529,11 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
         String filePath = null;
         byte[] bytes = null;
         String fileName = null;
-        List<String> uploadList;
+        LinkedList<String> uploadList;
         if (mUploadList == null){
             uploadList = generateUploadList();
         }else {
-            uploadList = mUploadList;
+            uploadList = (LinkedList<String>) mUploadList;
         }
         isUploadSuccess = true;
         countForUploadSuccess = 0;
@@ -522,12 +543,20 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
                 .showCancelButton(false);
         sweetAlertDialog.setCancelable(false);
         sweetAlertDialog.getProgressHelper().setBarColor(getResources().getColor(R.color.theme_color));
+
         for (int i = 0;i<uploadList.size();i++){
             filePath = uploadList.get(i);
             bytes = ConstantUtl.getBytes(filePath);
             fileName = filePath.split("/")[filePath.split("/").length - 1];
-            mUploadModel.upload(param,bytes,fileName);
+            try {
+                mUploadModel.upload(param, bytes, fileName);
+                Log.d("TEST",String.valueOf(i));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
+
         if (!sweetAlertDialog.isShowing()){
             sweetAlertDialog.show();
         }
@@ -539,13 +568,4 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
         mCountBadge.setVisibility(View.INVISIBLE);
     }
 
-    private boolean isChildRendered(){
-        int count = mGirdView.getChildCount();
-        for (int i = 0; i < count;i++){
-            View convertView = mGirdView.getChildAt(count);
-//            convertView.fin
-
-        }
-        return false;
-    }
 }

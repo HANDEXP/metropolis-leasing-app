@@ -7,26 +7,31 @@
     android:paddingLeft="10dp"
     android:paddingBottom="2dp"
     android:paddingRight="0dp">
-    <org.hand.mas.custom_view.ClearEditText
-        android:id="@+id/edittext_for_filter"
+    <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:paddingRight="5dp"
+        android:layout_weight="0.9"
+        android:text="http://"
+        android:gravity="center"/>
+    <EditText
+        android:id="@+id/edittext_for_basic"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:paddingRight="2dp"
         android:paddingLeft="5dp"
         android:layout_weight="4"
         android:background="@drawable/filter_edittext_corners"
         android:layout_marginRight="1dp"
-        android:drawablePadding="10dp"
         android:singleLine="true"
-        android:hint="请输入搜索关键字"
+        android:hint="请输入服务器地址"
         android:textSize="14sp"
         android:textColorHint="#cdcdcd"
         android:textColor="#000000"
         />
     <Button
-        android:id="@+id/confirm_btn_for_filter"
+        android:id="@+id/confirm_btn_for_basic"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"

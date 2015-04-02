@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/basic_url_text_view"
+        android:layout_above="@+id/reload_button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="null"
+        android:gravity="center"
+        android:textSize="20sp"
+        />
+    <Button
+        android:id="@+id/reload_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reload"
+        android:layout_centerInParent="true"/>
+</RelativeLayout>

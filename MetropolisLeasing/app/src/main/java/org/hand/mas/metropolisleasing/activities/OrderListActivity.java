@@ -1,7 +1,5 @@
 package org.hand.mas.metropolisleasing.activities;
 
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,9 +8,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,10 +22,10 @@ import com.littlemvc.model.LMModel;
 import com.littlemvc.model.LMModelDelegate;
 import com.littlemvc.model.request.AsHttpRequestModel;
 import com.orhanobut.dialogplus.DialogPlus;
-import com.orhanobut.dialogplus.ListHolder;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
+import org.hand.mas.custom_view.ClearEditText;
 import org.hand.mas.custom_view.SlidingMenu;
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.application.MSApplication;
@@ -59,6 +54,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
     private SlidingMenu mSlidingMenu;
     private DialogPlus dialog;
     private LinearLayout settingLL;
+    private ClearEditText mFilterEditText;
 
     private List<OrderListModel> mOrderList;
     private OrderListSvcModel mModel;
@@ -261,7 +257,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
         mFilterImageView.setVisibility(View.VISIBLE);
         mFilterImageView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 dialog = new DialogPlus.Builder(OrderListActivity.this)
                         .setContentHolder(new ViewHolder(R.layout.view_filter_dialog))
                         .setGravity(DialogPlus.Gravity.TOP)
@@ -269,18 +265,8 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                             @Override
                             public void onClick(DialogPlus dialogPlus, View view) {
                                 switch (view.getId()) {
-                                    case R.id.filter_btn:
-                                        String project_number = ((EditText) findViewById(R.id.project_number_for_filter)).getText().toString();
-                                        String bp_name = ((EditText) findViewById(R.id.bp_name_for_filter)).getText().toString();
-                                        param.put("project_number", project_number);
-                                        param.put("bp_name",bp_name);
-                                        resetAdapter();
-                                        mModel.load(param);
-                                        dialogPlus.dismiss();
-
-                                        break;
-                                    case R.id.cancel_btn_for_filter:
-                                        dialogPlus.dismiss();
+                                    case R.id.confirm_btn_for_filter:
+                                        startFilterActivity(mFilterEditText);
                                         break;
                                     default:
                                         break;
@@ -289,7 +275,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                         })
                         .create();
                 dialog.show();
-                EditText mFilterEditText = (EditText) findViewById(R.id.edittext_for_filter);
+                mFilterEditText = (ClearEditText) findViewById(R.id.edittext_for_filter);
                 mFilterEditText.requestFocus();
                 mFilterEditText.setOnKeyListener(new View.OnKeyListener() {
                     @Override
@@ -298,16 +284,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                             param = new HashMap<String, String>();
                         }
                         if (KeyEvent.KEYCODE_ENTER == keyCode && event.getAction() == KeyEvent.ACTION_DOWN){
-                            String filter_param = ((EditText)v).getText().toString();
-                            dialog.dismiss();
-                            if (filter_param.isEmpty()){
-
-                            }else{
-                                Intent intentForFilter = new Intent(OrderListActivity.this,FilteredOrderListActivity.class);
-                                intentForFilter.putExtra("filter_param",filter_param);
-                                startActivity(intentForFilter);
-                                overridePendingTransition(R.anim.move_in_right,R.anim.move_out_left);
-                            }
+                            startFilterActivity(v);
                         }
 
                         return false;
@@ -403,6 +380,19 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
         v.startAnimation(anim);
 
 
+    }
+
+    private void startFilterActivity( View v ){
+        String filter_param = ((EditText)v).getText().toString();
+        dialog.dismiss();
+        if (filter_param.isEmpty()){
+
+        }else{
+            Intent intentForFilter = new Intent(OrderListActivity.this,FilteredOrderListActivity.class);
+            intentForFilter.putExtra("filter_param",filter_param);
+            startActivity(intentForFilter);
+            overridePendingTransition(R.anim.move_in_right,R.anim.move_out_left);
+        }
     }
 
  }
