@@ -64,7 +64,8 @@
 
     <View style="@style/SettingDivider" />
 
-    <LinearLayout style="@style/SettingActivityLL">
+    <LinearLayout style="@style/SettingActivityLL"
+        android:id="@+id/user_info_LL">
 
         <ImageView
             style="@style/SettingActivityIcon"
@@ -79,7 +80,8 @@
 
     <View style="@style/SettingDivider" />
 
-    <LinearLayout style="@style/SettingActivityLL">
+    <LinearLayout style="@style/SettingActivityLL"
+        android:id="@+id/change_character_LL">
 
         <ImageView
             style="@style/SettingActivityIcon"
@@ -96,7 +98,8 @@
 
     <View style="@style/SettingDivider" />
 
-    <LinearLayout style="@style/SettingActivityLL">
+    <LinearLayout style="@style/SettingActivityLL"
+        android:id="@+id/change_password_LL">
 
         <ImageView
             style="@style/SettingActivityIcon"
@@ -121,7 +124,8 @@
 
     <View style="@style/SettingDivider" />
 
-    <LinearLayout style="@style/SettingActivityLL">
+    <LinearLayout style="@style/SettingActivityLL"
+        android:id="@+id/question_LL">
 
 
         <ImageView
@@ -138,7 +142,8 @@
 
     <View style="@style/SettingDivider" />
 
-    <LinearLayout style="@style/SettingActivityLL">
+    <LinearLayout style="@style/SettingActivityLL"
+        android:id="@+id/discuss_LL">
 
         <ImageView
             style="@style/SettingActivityIcon"
@@ -154,7 +159,8 @@
 
     <View style="@style/SettingDivider" />
 
-    <LinearLayout style="@style/SettingActivityLL">
+    <LinearLayout style="@style/SettingActivityLL"
+        android:id="@+id/version_update_LL">
 
         <ImageView
             style="@style/SettingActivityIcon"

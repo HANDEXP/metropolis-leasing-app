@@ -167,12 +167,6 @@ public class LoginActivity extends Activity implements LMModelDelegate{
         LLForEditText = (LinearLayout) findViewById(R.id.linearLayout_for_edittext);
         mChangeBasicUrlTextView = (TextView) findViewById(R.id.change_basic_url_textview);
 
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
         mLoginEditText.addTextChangedListener(new TextWatcher() {
             @Override

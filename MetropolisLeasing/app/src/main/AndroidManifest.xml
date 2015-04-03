@@ -56,6 +56,10 @@
         <activity android:name=".activities.SettingActivity"
             android:label="设置">
         </activity>
+        <activity android:name=".activities.HtmlBaseActivity"
+            android:label="WebView页面"
+            android:theme="@style/AppTheme">
+        </activity>
         <supports-screens
             android:largeScreens="true"
             android:normalScreens="true"

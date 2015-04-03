@@ -1,83 +1,58 @@
 package org.hand.mas.metropolisleasing.activities;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.littlemvc.utl.AsNetWorkUtl;
 
 import org.hand.mas.metropolisleasing.R;
-import org.hand.mas.utl.ConstantUrl;
 
 /**
- * Created by gonglixuan on 15/4/2.
+ * Created by gonglixuan on 15/4/3.
  */
-public class HtmlBaseActivity extends ActionBarActivity {
-
-    private WebView contentWebView;
-    private String url;
+public class HtmlFragment extends Fragment {
+    private  WebView contentWebView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
+    public android.view.View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                          Bundle savedInstanceState) {
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_html_base);
-
-
-
-        bindAllViews();
-
-        url = getIntent().getStringExtra("url");
+        View root = inflater.inflate(R.layout.activity_html_fragment, container,false);
+        bindAllViews(root);
+        return root;
     }
 
-
-
-    private void bindAllViews() {
-        contentWebView = (WebView)findViewById(R.id.activity_html_base_webview);
+    private void bindAllViews(View root) {
+        contentWebView = (WebView) root.findViewById(R.id.activity_html_base_webview);
         contentWebView.setWebChromeClient(new AlertWebChromeClient());
         contentWebView.setWebViewClient(new ContentWebClient());
-//		contentWebView.getSettings().setRenderPriority(RenderPriority.HIGH);
-        contentWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-//		if (Build.VERSION.SDK_INT >= 19) {
-//			contentWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-//		}
-//		else {
-//			contentWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-//		}
         WebSettings webSettings = contentWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
-//		webSettings.setJavaScriptEnabled(true);
-//		// 设置可以支持缩放
-//		webSettings.setSupportZoom(true);
-//		// 设置出现缩放工具
-//		webSettings.setBuiltInZoomControls(true);
-//		//扩大比例的缩放
-//		webSettings.setUseWideViewPort(true);
-//		//自适应屏幕
-//		webSettings.setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
-//		webSettings.setLoadWithOverviewMode(true);
     }
 
 
-
     @Override
-    protected void onResume() {
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        String url = getArguments().getString("url");
+        String title =  getArguments().getString("title");
         load(url);
-        super.onResume();
     }
 
     /**
@@ -87,15 +62,14 @@ public class HtmlBaseActivity extends ActionBarActivity {
         //System.out.println(AsNetWorkUtl.getAsNetWorkUtl(null).getAbsoluteUrl(url.replace("${base_url}", "")));
         String  _url   = AsNetWorkUtl.getAsNetWorkUtl(null).getAbsoluteUrl(url.replace("${base_url}", ""));
 
-        contentWebView.loadUrl(ConstantUrl.basicUrl+_url);
-//    	contentWebView.loadUrl("http://www.baidu.com/");
+        contentWebView.loadUrl(AsNetWorkUtl.getAsNetWorkUtl(null).getAbsoluteUrl(url.replace("${base_url}", "")));
     }
 
     private class AlertWebChromeClient extends WebChromeClient {
         @Override
         public boolean onJsAlert(WebView view, String url, String message, final android.webkit.JsResult result)
         {
-            new AlertDialog.Builder(HtmlBaseActivity.this)
+            new AlertDialog.Builder(HtmlFragment.this.getActivity())
                     .setTitle("")
                     .setMessage(message)
                     .setPositiveButton(android.R.string.ok,
@@ -115,7 +89,7 @@ public class HtmlBaseActivity extends ActionBarActivity {
 
         @Override
         public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
-            new AlertDialog.Builder(HtmlBaseActivity.this)
+            new AlertDialog.Builder(HtmlFragment.this.getActivity())
                     .setTitle("")
                     .setMessage(message)
                     .setPositiveButton(android.R.string.ok,
@@ -141,6 +115,7 @@ public class HtmlBaseActivity extends ActionBarActivity {
         }
 
     }
+
 
     private class ContentWebClient extends WebViewClient {
         @Override
@@ -179,22 +154,16 @@ public class HtmlBaseActivity extends ActionBarActivity {
                 try {
                     startActivity(sendIntent);
                 } catch (ActivityNotFoundException e) {
-                    Toast.makeText(HtmlBaseActivity.this, "没有找到邮件客户端", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HtmlFragment.this.getActivity(), "没有找到邮件客户端", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }
             return false;
         }
 
-        @Override
-        public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            // TODO Auto-generated method stub
-            super.onPageStarted(view, url, favicon);
-
-        }
 
         @Override
-        public void onPageFinished(WebView view, String url) {
+        public void onPageFinished	(WebView view, String url) {
             super.onPageFinished(view, url);
             //每次网络请求初始化 timer;
 

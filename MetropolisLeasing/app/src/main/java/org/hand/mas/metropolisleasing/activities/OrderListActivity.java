@@ -53,7 +53,8 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
     private ImageView mSlideMenuImageView;
     private SlidingMenu mSlidingMenu;
     private DialogPlus dialog;
-    private LinearLayout settingLL;
+    private LinearLayout TakePhotoAndUploadLL;
+    private LinearLayout SettingLL;
     private ClearEditText mFilterEditText;
 
     private List<OrderListModel> mOrderList;
@@ -73,6 +74,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
         bindAllViews();
         pageNum = 1;
         mModel.load();
+
     }
 
     @Override
@@ -200,15 +202,16 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
         mSlideMenuImageView = (ImageView) findViewById(R.id.slide_menu);
         mSlidingMenu = (SlidingMenu) findViewById(R.id.sliding_menu_and_content);
         /* Sliding Menu */
-        settingLL = (LinearLayout) mSlidingMenu.findViewById(R.id.settingLL);
+        TakePhotoAndUploadLL = (LinearLayout) mSlidingMenu.findViewById(R.id.take_photo_and_upload);
+        SettingLL = (LinearLayout) mSlidingMenu.findViewById(R.id.settingLL);
 
         mSlideMenuImageView.setVisibility(View.VISIBLE);
         mSlideMenuImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!mSlidingMenu.getIsOpen()){
+                if (!mSlidingMenu.getIsOpen()) {
                     mSlideMenuImageView.setImageDrawable(getResources().getDrawable(R.drawable.cross));
-                }else{
+                } else {
                     mSlideMenuImageView.setImageDrawable(getResources().getDrawable(R.drawable.icon_for_slide_menu));
                 }
                 mSlidingMenu.toggle();
@@ -220,7 +223,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 /* 重置适配器和数据 */
                 resetAdapter();
-                if (param == null){
+                if (param == null) {
                     param = new HashMap<String, String>();
                 }
 
@@ -229,10 +232,10 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                if (param == null){
+                if (param == null) {
                     param = new HashMap<String, String>();
                 }
-                param.put("page_num",String.valueOf(++pageNum));
+                param.put("page_num", String.valueOf(++pageNum));
                 mModel.load(param);
 
             }
@@ -283,7 +286,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                         if (param == null) {
                             param = new HashMap<String, String>();
                         }
-                        if (KeyEvent.KEYCODE_ENTER == keyCode && event.getAction() == KeyEvent.ACTION_DOWN){
+                        if (KeyEvent.KEYCODE_ENTER == keyCode && event.getAction() == KeyEvent.ACTION_DOWN) {
                             startFilterActivity(v);
                         }
 
@@ -293,8 +296,15 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
 
             }
         });
-
-        settingLL.setOnClickListener(new View.OnClickListener() {
+        TakePhotoAndUploadLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mSlidingMenu.getIsOpen()){
+                    mSlidingMenu.closeMenu();
+                }
+            }
+        });
+        SettingLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(OrderListActivity.this,SettingActivity.class);

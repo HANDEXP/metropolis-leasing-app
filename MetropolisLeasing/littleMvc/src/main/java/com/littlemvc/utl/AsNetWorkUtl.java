@@ -35,11 +35,11 @@ public class AsNetWorkUtl extends ILMAsNetworkUtl {
 
 
 	public static AsNetWorkUtl getAsNetWorkUtl(String url) {
-//		if (utl != null) {
+		if (utl == null) {
 
 			utl = new AsNetWorkUtl(url);
 
-//		}
+		}
 
 		return utl;
 
