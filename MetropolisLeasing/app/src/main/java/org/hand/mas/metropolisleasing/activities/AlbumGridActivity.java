@@ -366,12 +366,10 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
                     if (List.isEmpty()){
                         mPreviewTextView.setAlpha(0.3f);
                         mFinishTextView.setAlpha(0.3f);
-//                        mCountTextView.setVisibility(View.INVISIBLE);
                         mCountBadge.setVisibility(View.INVISIBLE);
                     }else {
                         mPreviewTextView.setAlpha(1.0f);
                         mFinishTextView.setAlpha(1.0f);
-//                        mCountTextView.setText(String.valueOf(List.size()));
                         mCountBadge.setCount(String.valueOf(List.size()));
                         mCountBadge.setVisibility(View.VISIBLE);
                     }

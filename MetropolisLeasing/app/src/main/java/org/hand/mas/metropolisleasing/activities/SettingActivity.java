@@ -80,6 +80,7 @@ public class SettingActivity extends Activity implements View.OnClickListener{
                     e.printStackTrace();
                 }
                 intent.putExtra("url",url);
+                intent.putExtra("title","用户信息");
                 startActivity(intent);
                 break;
             case R.id.change_password_LL:
@@ -92,6 +93,7 @@ public class SettingActivity extends Activity implements View.OnClickListener{
                     e.printStackTrace();
                 }
                 intent.putExtra("url",url);
+                intent.putExtra("title","更换密码");
                 startActivity(intent);
                 break;
             case R.id.question_LL:
@@ -104,6 +106,7 @@ public class SettingActivity extends Activity implements View.OnClickListener{
                     e.printStackTrace();
                 }
                 intent.putExtra("url",url);
+                intent.putExtra("title","常见问题");
                 startActivity(intent);
                 break;
             case R.id.discuss_LL:
@@ -116,6 +119,7 @@ public class SettingActivity extends Activity implements View.OnClickListener{
                     e.printStackTrace();
                 }
                 intent.putExtra("url",url);
+                intent.putExtra("title","欢迎吐槽");
                 startActivity(intent);
                 break;
             case R.id.version_update_LL:
@@ -128,6 +132,7 @@ public class SettingActivity extends Activity implements View.OnClickListener{
                     e.printStackTrace();
                 }
                 intent.putExtra("url",url);
+                intent.putExtra("title","版本升级");
                 startActivity(intent);
                 break;
             case R.id.change_character_LL:
@@ -140,6 +145,7 @@ public class SettingActivity extends Activity implements View.OnClickListener{
                     e.printStackTrace();
                 }
                 intent.putExtra("url",url);
+                intent.putExtra("title","更换角色");
                 startActivity(intent);
                 break;
 

@@ -76,7 +76,6 @@ public class FilteredOrderListActivity extends Activity implements LMModelDelega
                 JSONObject jsonObj = new JSONObject(json);
                 String code = ((JSONObject)jsonObj.get("head")).get("code").toString();
                 if(code.equals("success")){
-
                     JSONArray bodyArr = (JSONArray) ((JSONObject)jsonObj.get("body")).get("lists");
                     try {
                         initializeData(bodyArr);
@@ -103,15 +102,12 @@ public class FilteredOrderListActivity extends Activity implements LMModelDelega
                                     }else if (bpClass.equals("NP")){
                                         identifierCode.setText(item.getIdCardNo());
                                     }
-
                                 }
                             };
                             mPullRefreshListView.setAdapter(adapter);
                         }else{
                             adapter.notifyDataSetChanged();
                         }
-
-
                     } catch (Exception e){
                         e.printStackTrace();
                     }
@@ -195,7 +191,6 @@ public class FilteredOrderListActivity extends Activity implements LMModelDelega
             }
         });
         resetFilterParam();
-
     }
 
     /*

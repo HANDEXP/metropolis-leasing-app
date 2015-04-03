@@ -19,10 +19,10 @@ public class FunctionListSvcModel extends AsHttpRequestModel {
         super(delegate);
     }
 
-    public void load(HashMap param){
+    public void load(){
         try {
             String url = "modules/app/function_query.svc";
-            this.post(url,param);
+            this.post(url,null);
         }catch (Exception e){
             e.printStackTrace();
         }

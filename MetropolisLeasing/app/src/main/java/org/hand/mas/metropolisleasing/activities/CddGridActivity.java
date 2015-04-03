@@ -115,10 +115,6 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
         mAddItemImageView.setVisibility(View.VISIBLE);
         if (mModel == null) {
             resetParam();
-//            param = new HashMap<String, String>();
-//            param.put("project_number", mProjectNumber);
-//            param.put("cdd_item_id", mCddItemId);
-//            param.put("check_id", mCheckId);
             mModel = new CddGridSvcModel(this);
             mModel.load(param);
         }
@@ -128,11 +124,15 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
     @Override
     public void modelDidFinishLoad(LMModel model) {
         if (model instanceof UploadAttachmentSvcModel){
+            /* 上传操作 */
             mCddGridList = null;
             mCddAdapter = null;
             mModel.load(param);
+            return;
         }else if(model instanceof DeleteAttachmentSvcModel){
+            /* 删除操作 */
             mModel.load(param);
+            return;
         }
         AsHttpRequestModel reponseModel = (AsHttpRequestModel) model;
         String json = new String(reponseModel.mresponseBody);
@@ -140,7 +140,6 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
             JSONObject jsonObj = new JSONObject(json);
             String code = ((JSONObject) jsonObj.get("head")).get("code").toString();
             if (code.equals("success")) {
-
                 JSONArray bodyArr = (JSONArray) ((JSONObject) jsonObj.get("body")).get("grid");
                 try {
                     initializeData(bodyArr);
@@ -148,7 +147,12 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
                         @Override
                         public void onClick(View v) {
                             mDeletedCurrencyPosition = (int) v.getTag(R.id.position);
-                            CddGridModel item = mCddGridList.get(mDeletedCurrencyPosition);
+                            CddGridModel item = null;
+                            try {
+                                item = mCddGridList.get(mDeletedCurrencyPosition);
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
                             mDeletedAttachmentId = item.getAttachmentId();
                                     /* Swal */
                             mSwal = new SweetAlertDialog(CddGridActivity.this, SweetAlertDialog.WARNING_TYPE)
@@ -218,12 +222,10 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
             if (requestCode == VIEW_PAGER){
                 return;
             }
-
         }
         Uri originalUri;
         String filePath;
         String fileName;
-        String fileSuffix;
         switch (requestCode) {
             case IMAGE_CAPTURE:
                 originalUri = photoUri;
@@ -235,7 +237,6 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
                 cursor.moveToFirst();
                 filePath = cursor.getString(column_index);
                 fileName = filePath.split("/")[filePath.split("/").length - 1];
-                fileSuffix = filePath.split("\\.")[filePath.split("\\.").length - 1];
                 try {
                     byte[] bytes = ConstantUtl.getBytes(filePath);
                     if (mUploadModel == null){
@@ -407,11 +408,10 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
         v.startAnimation(anim);
     }
 
-    /*
-    *
-    * startViewPagerActivity
-    *
-    * */
+    /**
+     * 打开ViewpagerActivity
+     * @param position
+     */
     private void startViewpagerActivity(int position) {
         if (mCddGridList == null) {
             mCddGridList = new ArrayList<CddGridModel>();
@@ -441,6 +441,10 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
         mDeleteModel.load(paramFordelete);
     }
 
+    /**
+     * 重置参数
+     *
+     */
     private void resetParam(){
         mCddAdapter = null;
         mCddGridList = null;

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -28,6 +29,7 @@ public class HtmlBaseActivity extends ActionBarActivity {
 
     private WebView contentWebView;
     private String url;
+    private String title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,40 +38,47 @@ public class HtmlBaseActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_html_base);
 
-
+        url = getIntent().getStringExtra("url");
+        title = getIntent().getStringExtra("title");
 
         bindAllViews();
 
-        url = getIntent().getStringExtra("url");
+
     }
 
-
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.alpha_in, R.anim.move_out_bottm);
+    }
 
     private void bindAllViews() {
         contentWebView = (WebView)findViewById(R.id.activity_html_base_webview);
+        getSupportActionBar().setTitle(title);
+
         contentWebView.setWebChromeClient(new AlertWebChromeClient());
         contentWebView.setWebViewClient(new ContentWebClient());
 //		contentWebView.getSettings().setRenderPriority(RenderPriority.HIGH);
         contentWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-//		if (Build.VERSION.SDK_INT >= 19) {
-//			contentWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-//		}
-//		else {
-//			contentWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-//		}
+		if (Build.VERSION.SDK_INT >= 19) {
+			contentWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+		}
+		else {
+			contentWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+		}
         WebSettings webSettings = contentWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
-//		webSettings.setJavaScriptEnabled(true);
-//		// 设置可以支持缩放
+		webSettings.setJavaScriptEnabled(true);
+		// 设置可以支持缩放
 //		webSettings.setSupportZoom(true);
-//		// 设置出现缩放工具
+		// 设置出现缩放工具
 //		webSettings.setBuiltInZoomControls(true);
-//		//扩大比例的缩放
+		//扩大比例的缩放
 //		webSettings.setUseWideViewPort(true);
-//		//自适应屏幕
-//		webSettings.setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
-//		webSettings.setLoadWithOverviewMode(true);
+		//自适应屏幕
+		webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+		webSettings.setLoadWithOverviewMode(true);
     }
 
 
@@ -84,7 +93,6 @@ public class HtmlBaseActivity extends ActionBarActivity {
      * @param url
      */
     protected void load(String url) {
-        //System.out.println(AsNetWorkUtl.getAsNetWorkUtl(null).getAbsoluteUrl(url.replace("${base_url}", "")));
         String  _url   = AsNetWorkUtl.getAsNetWorkUtl(null).getAbsoluteUrl(url.replace("${base_url}", ""));
 
         contentWebView.loadUrl(ConstantUrl.basicUrl+_url);
@@ -145,9 +153,6 @@ public class HtmlBaseActivity extends ActionBarActivity {
     private class ContentWebClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-
-
-
             Uri query_string = Uri.parse(url);
             String query_scheme = query_string.getScheme();
             String query_host = query_string.getHost();
@@ -196,7 +201,6 @@ public class HtmlBaseActivity extends ActionBarActivity {
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            //每次网络请求初始化 timer;
 
         }
     }

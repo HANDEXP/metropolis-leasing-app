@@ -2,11 +2,15 @@ package org.hand.mas.metropolisleasing.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -29,6 +33,7 @@ import org.hand.mas.custom_view.ClearEditText;
 import org.hand.mas.custom_view.SlidingMenu;
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.application.MSApplication;
+import org.hand.mas.metropolisleasing.models.FunctionListSvcModel;
 import org.hand.mas.metropolisleasing.models.OrderListModel;
 import org.hand.mas.metropolisleasing.models.OrderListSvcModel;
 import org.hand.mas.utl.CommonAdapter;
@@ -59,6 +64,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
 
     private List<OrderListModel> mOrderList;
     private OrderListSvcModel mModel;
+    private FunctionListSvcModel mFunctionListModel;
     private CommonAdapter adapter;
     private HashMap<String,String> param;
     private static int pageNum;
@@ -90,6 +96,10 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
     @Override
     protected void onResume() {
         super.onResume();
+        if (mFunctionListModel == null){
+            mFunctionListModel = new FunctionListSvcModel(this);
+        }
+        mFunctionListModel.load();
     }
 
     @Override
@@ -173,6 +183,21 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                 if (mPullRefreshListView.isRefreshing()) {
                     mPullRefreshListView.onRefreshComplete();
                 }
+            }
+
+        }else if (model.equals(this.mFunctionListModel)){
+            String json = new String(reponseModel.mresponseBody);
+            JSONObject jsonObj = null;
+            try {
+                jsonObj = new JSONObject(json);
+                String code = ((JSONObject)jsonObj.get("head")).get("code").toString();
+                if (code.equals("ok")){
+                    JSONArray bodyArr = (JSONArray) ((JSONObject)jsonObj.get("body")).get("list");
+                    JSONArray itemsArr = (JSONArray) bodyArr.getJSONObject(0).get("items");
+                    addMenuItems(itemsArr);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
 
         }
@@ -302,21 +327,13 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                 if(mSlidingMenu.getIsOpen()){
                     mSlidingMenu.closeMenu();
                 }
+
             }
         });
         SettingLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(OrderListActivity.this,SettingActivity.class);
-                if (mSlidingMenu.getIsOpen()){
-                    mSlideMenuImageView.setImageDrawable(getResources().getDrawable(R.drawable.icon_for_slide_menu));
-                    mSlidingMenu.closeMenu();
-                }
-                while (mSlidingMenu.getIsOpen()){
-                    continue;
-                }
-                startActivity(intent);
-                overridePendingTransition(R.anim.move_in_bottm,R.anim.alpha_out);
+                startSettingActivity();
             }
         });
     }
@@ -392,6 +409,27 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
 
     }
 
+    /**
+     * 打开SettingActivity
+     *
+     */
+    private void startSettingActivity(){
+        Intent intent = new Intent(OrderListActivity.this,SettingActivity.class);
+        if (mSlidingMenu.getIsOpen()){
+            mSlideMenuImageView.setImageDrawable(getResources().getDrawable(R.drawable.icon_for_slide_menu));
+            mSlidingMenu.closeMenu();
+        }
+        while (mSlidingMenu.getIsOpen()){
+            continue;
+        }
+        startActivity(intent);
+        overridePendingTransition(R.anim.move_in_bottm,R.anim.alpha_out);
+    }
+
+    /**
+     * 打开FilterActivity
+     * @param v
+     */
     private void startFilterActivity( View v ){
         String filter_param = ((EditText)v).getText().toString();
         dialog.dismiss();
@@ -404,5 +442,48 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
             overridePendingTransition(R.anim.move_in_right,R.anim.move_out_left);
         }
     }
+
+    /**
+     *
+     * 打开HtmlBaseActivity
+     * @param url
+     */
+    private void startWebViewActivity(String url,String title){
+        Intent intent = new Intent(OrderListActivity.this,HtmlBaseActivity.class);
+        intent.putExtra("url",url);
+        intent.putExtra("title",title);
+        startActivity(intent);
+        overridePendingTransition(R.anim.move_in_bottm,R.anim.alpha_out);
+    }
+
+    private void addMenuItems(JSONArray itemsArr){
+        LinearLayout functionListLL = (LinearLayout) findViewById(R.id.function_list_ll);
+        functionListLL.removeAllViews();
+        int count = itemsArr.length();
+        for (int i = 0;i < count;i++){
+            try {
+                TextView ItemTextView = new TextView(getApplicationContext());
+                ItemTextView.setTextColor(Color.WHITE);
+                ItemTextView.setPadding(0,5,0,5);
+                ItemTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
+                JSONObject item = (JSONObject) itemsArr.get(i);
+                final String url = (String) item.get("url");
+                final String title = (String) item.get("title");
+                ItemTextView.setText(title);
+                ItemTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startWebViewActivity(url,title);
+                    }
+                });
+                functionListLL.addView(ItemTextView, ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
 
  }

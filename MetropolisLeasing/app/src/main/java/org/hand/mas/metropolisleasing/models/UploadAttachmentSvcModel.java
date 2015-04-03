@@ -26,7 +26,7 @@ public class UploadAttachmentSvcModel extends AsHttpRequestModel {
         try {
             String url = configReader
                     .getAttr(new Expression(
-                            "/backend-config/url[@name='uploadAttachment']",
+                            "/backend-config/url[@name='upload_url']",
                             "value"));
             uploadBytes(url,param,myBytes,fileName);
         }catch (Exception e){

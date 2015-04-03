@@ -119,36 +119,20 @@ public class LoadingActivity extends ActionBarActivity implements LMModelDelegat
 
     @Override
     public void modelDidFinishLoad(LMModel model) {
-        // TODO Auto-generated method stub
-
-        //
-        // startLoginActivity();
         if (model.equals(this.model)) {
-
             File dir = MSApplication.getApplication().getDir(
                     ConstantUtl.SYS_PREFRENCES_CONFIG_FILE_DIR_NAME,
                     Context.MODE_PRIVATE);
-
             File configFile = new File(dir, ConstantUtl.configFile);
-
             FileOutputStream fileOutputStream = null;
-
             try {
                 fileOutputStream = new FileOutputStream(configFile);
-
                 fileOutputStream.write(this.model.mresponseBody);
-
                 MSApplication.getApplication().reader = XmlConfigReader.getInstance();
                 MSApplication.getApplication().reader.getAttr(new Expression("/backend-config", ""));
-
-
-
                 fileOutputStream.close();
-
             } catch (Exception ex) {
-
                 Toast.makeText(this, "读写配置文件出现错误", Toast.LENGTH_SHORT).show();
-
                 return;
 
             }finally {

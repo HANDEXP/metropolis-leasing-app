@@ -55,8 +55,6 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
         super.onCreate(savedInstanceState);
         param = new HashMap<String, String>();
         setContentView(R.layout.activity_order_details_list);
-
-
     }
 
 
@@ -122,7 +120,6 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
                     JSONArray bodyArr = (JSONArray) ((JSONObject)jsonObj.get("body")).get("details");
                     try {
                         initializeData(bodyArr);
-//                        detailListView.setAdapter(new CustomDetailListAdapter(mDetailList,getApplicationContext()));
                         detailListView.setAdapter(new CommonAdapter<DetailListModel>(getApplicationContext(),mDetailList,R.layout.activity_order_details_list_child) {
                             @Override
                             public void convert(ViewHolder helper, DetailListModel obj,int position) {
@@ -199,6 +196,11 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
         overridePendingTransition(R.anim.move_in_right,R.anim.alpha_out);
     }
 
+    /**
+     * 增加mDetailList数据
+     * @param jsonArray
+     * @throws JSONException
+     */
     private void initializeData(JSONArray jsonArray) throws JSONException {
         mDetailList = new ArrayList<DetailListModel>();
         int length = jsonArray.length();
