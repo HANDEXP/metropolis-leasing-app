@@ -20,6 +20,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hand.hrms4android.exception.ParseExpressionException;
+import com.hand.hrms4android.parser.Expression;
+import com.hand.hrms4android.parser.xml.XmlConfigReader;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.littlemvc.model.LMModel;
@@ -60,6 +63,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
     private DialogPlus dialog;
     private LinearLayout TakePhotoAndUploadLL;
     private LinearLayout SettingLL;
+    private LinearLayout CalculatorLL;
     private ClearEditText mFilterEditText;
 
     private List<OrderListModel> mOrderList;
@@ -228,6 +232,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
         mSlidingMenu = (SlidingMenu) findViewById(R.id.sliding_menu_and_content);
         /* Sliding Menu */
         TakePhotoAndUploadLL = (LinearLayout) mSlidingMenu.findViewById(R.id.take_photo_and_upload);
+        CalculatorLL = (LinearLayout) mSlidingMenu.findViewById(R.id.calculatorLL);
         SettingLL = (LinearLayout) mSlidingMenu.findViewById(R.id.settingLL);
 
         mSlideMenuImageView.setVisibility(View.VISIBLE);
@@ -334,6 +339,23 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
             @Override
             public void onClick(View v) {
                 startSettingActivity();
+            }
+        });
+        CalculatorLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                XmlConfigReader configReader = null;
+                String url = null;
+                configReader = XmlConfigReader.getInstance();
+                try {
+                    url = configReader
+                            .getAttr(new Expression(
+                                    "/backend-config/url[@name='calculate_url']",
+                                    "value"));
+                } catch (ParseExpressionException e) {
+                    e.printStackTrace();
+                }
+                startWebViewActivity(url,"计算器");
             }
         });
     }

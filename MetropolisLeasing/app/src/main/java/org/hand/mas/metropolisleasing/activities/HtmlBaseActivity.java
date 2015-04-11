@@ -93,9 +93,9 @@ public class HtmlBaseActivity extends ActionBarActivity {
      * @param url
      */
     protected void load(String url) {
-        String  _url   = AsNetWorkUtl.getAsNetWorkUtl(null).getAbsoluteUrl(url.replace("${base_url}", ""));
+        String  _url   = AsNetWorkUtl.getAsNetWorkUtl().getAbsoluteUrl(url.replace("${base_url}", ""));
 
-        contentWebView.loadUrl(ConstantUrl.basicUrl+_url);
+        contentWebView.loadUrl(_url);
 //    	contentWebView.loadUrl("http://www.baidu.com/");
     }
 

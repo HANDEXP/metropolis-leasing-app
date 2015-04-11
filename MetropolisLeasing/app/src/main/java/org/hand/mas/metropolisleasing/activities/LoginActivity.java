@@ -211,6 +211,7 @@ public class LoginActivity extends Activity implements LMModelDelegate{
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this,LoadingActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 

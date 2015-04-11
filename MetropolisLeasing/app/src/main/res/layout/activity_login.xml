@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="30dp"
 
-        android:background="@drawable/login_frame_background">
+        android:background="#f8f8f8">
 
 
         <LinearLayout

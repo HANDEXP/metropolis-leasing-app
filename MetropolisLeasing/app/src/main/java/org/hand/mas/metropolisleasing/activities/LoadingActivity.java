@@ -137,6 +137,7 @@ public class LoadingActivity extends ActionBarActivity implements LMModelDelegat
 
             }finally {
                 ConstantUrl.basicUrl = baseUrl;
+//                AsHttpRequestModel.utl = AsNetWorkUtl.getAsNetWorkUtl(baseUrl);
                 mEditor.putString("sys_basic_url",baseUrl);
                 mEditor.commit();
                 Intent intent = new Intent(LoadingActivity.this,LoginActivity.class);

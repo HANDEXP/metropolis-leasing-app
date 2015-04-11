@@ -15,6 +15,8 @@ import com.hand.hrms4android.parser.xml.XmlConfigReader;
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.application.MSApplication;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 /**
  * Created by gonglixuan on 15/3/30.
  */
@@ -52,7 +54,18 @@ public class SettingActivity extends Activity implements View.OnClickListener{
         quitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MSApplication.getApplication().exit();
+                new SweetAlertDialog(SettingActivity.this,SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("确定要退出吗？")
+                        .setConfirmText("确定")
+                        .setCancelText("取消")
+                        .showCancelButton(true)
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                MSApplication.getApplication().exit();
+                            }
+                        })
+                        .show();
             }
         });
     }

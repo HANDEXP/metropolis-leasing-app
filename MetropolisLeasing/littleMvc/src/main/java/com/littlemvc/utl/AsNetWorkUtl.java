@@ -35,15 +35,19 @@ public class AsNetWorkUtl extends ILMAsNetworkUtl {
 
 
 	public static AsNetWorkUtl getAsNetWorkUtl(String url) {
-		if (utl == null) {
 
 			utl = new AsNetWorkUtl(url);
-
-		}
 
 		return utl;
 
 	}
+
+    public static AsNetWorkUtl getAsNetWorkUtl() {
+
+        return utl;
+
+    }
+
 	
 	public AsNetWorkUtl(String url) {
 		setBaseUrl(url);

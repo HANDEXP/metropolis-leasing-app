@@ -1,6 +1,7 @@
 package org.hand.mas.metropolisleasing.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -194,6 +195,7 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
         } finally {
             if (mSwal != null&&mSwal.isShowing()) {
                 mSwal.dismiss();
+
             }
         }
     }
@@ -204,10 +206,11 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
             return;
         }
         if (mSwal == null) {
-            mSwal = new SweetAlertDialog(getApplicationContext(), SweetAlertDialog.PROGRESS_TYPE)
+            mSwal = new SweetAlertDialog(CddGridActivity.this, SweetAlertDialog.PROGRESS_TYPE)
                     .setTitleText("请稍后")
                     .setContentText("正在更新影像数据")
                     .showCancelButton(false);
+            mSwal.show();
         }
     }
 
@@ -244,6 +247,8 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
                     }
                     resetParam();
                     mUploadModel.upload(param,bytes,fileName);
+                    //缓一秒终避免SocketError
+                    Thread.sleep(1000);
                     mModel.load(param);
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), "IMAGE_CAPTURE FAILED!", Toast.LENGTH_LONG).show();

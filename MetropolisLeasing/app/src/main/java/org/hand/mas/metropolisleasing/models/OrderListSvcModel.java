@@ -23,7 +23,10 @@ public class OrderListSvcModel extends AsHttpRequestModel {
 
     public void load() {
         try {
-            String url = ConstantUrl.orderListUrl;
+            String url = configReader
+                    .getAttr(new Expression(
+                            "/backend-config/url[@name='order_list_url']",
+                            "value"));
             this.post(url,null);
         } catch (Exception e){
             e.printStackTrace();

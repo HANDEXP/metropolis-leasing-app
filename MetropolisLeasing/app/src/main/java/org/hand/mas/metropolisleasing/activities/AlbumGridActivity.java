@@ -174,6 +174,7 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
             }else if (code.equals("failure")){
                 countForFailure++;
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         } finally {
