@@ -3,10 +3,13 @@ package org.hand.mas.metropolisleasing.activities;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.hand.hrms4android.exception.ParseExpressionException;
 import com.hand.hrms4android.parser.Expression;
@@ -23,6 +26,8 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class SettingActivity extends Activity implements View.OnClickListener{
 
     private XmlConfigReader configReader;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
 
 
     @Override
@@ -31,12 +36,15 @@ public class SettingActivity extends Activity implements View.OnClickListener{
         MSApplication.getApplication().addActivity(this);
         setContentView(R.layout.activity_setting);
         configReader = XmlConfigReader.getInstance();
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
         bindAllViews();
+
 
     }
 
     private void bindAllViews() {
         Button quitButton = (Button) findViewById(R.id.quitBtn);
+
         LinearLayout userInfoLL = (LinearLayout) findViewById(R.id.user_info_LL);
         LinearLayout changeCharacterLL = (LinearLayout) findViewById(R.id.change_character_LL);
         LinearLayout changePasswordLL = (LinearLayout) findViewById(R.id.change_password_LL);
@@ -44,7 +52,7 @@ public class SettingActivity extends Activity implements View.OnClickListener{
         LinearLayout discussLL = (LinearLayout) findViewById(R.id.discuss_LL);
         LinearLayout versionUpdateLL = (LinearLayout) findViewById(R.id.version_update_LL);
 
-
+        setDefaultUserData();
         userInfoLL.setOnClickListener(this);
         changeCharacterLL.setOnClickListener(this);
         changePasswordLL.setOnClickListener(this);
@@ -163,5 +171,14 @@ public class SettingActivity extends Activity implements View.OnClickListener{
                 break;
 
         }
+    }
+    /*
+ * 取出缓存的用户资料
+ */
+    private void setDefaultUserData(){
+        TextView usernameTextView = (TextView) findViewById(R.id.username_textview_in_setting);
+        SharedPreferences preferences = getSharedPreferences("userInfo",MODE_APPEND);
+        String userName = preferences.getString("userName","");
+        usernameTextView.setText(userName);
     }
 }

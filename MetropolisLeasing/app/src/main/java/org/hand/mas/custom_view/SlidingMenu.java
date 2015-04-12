@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -29,12 +31,18 @@ public class SlidingMenu extends HorizontalScrollView{
     private ViewGroup mMenu;
     private ViewGroup mContent;
 
+    private ImageView mIcon;
+
     private int mScreenWidth;
     private int mMenuWidth;
     private int mMenuRightPadding = 50;
 
-    private boolean isOpen;
+    private boolean isOpen = false;
     private boolean once;
+    /**
+     * 触点坐标
+     */
+    private float x1,x2,y1,y2;
 
     private GestureDetector mGestureDetector;
 
@@ -87,6 +95,8 @@ public class SlidingMenu extends HorizontalScrollView{
             mWrapper = (LinearLayout) getChildAt(0);
             mMenu = (ViewGroup) mWrapper.getChildAt(0);
             mContent = (ViewGroup) mWrapper.getChildAt(1);
+            mIcon = (ImageView) mContent.findViewById(R.id.slide_menu);
+
             mMenuWidth = mScreenWidth - mMenuRightPadding;
             mMenu.getLayoutParams().width = mMenuWidth;
             mContent.getLayoutParams().width = mScreenWidth;
@@ -99,8 +109,43 @@ public class SlidingMenu extends HorizontalScrollView{
     @Override
     public boolean onTouchEvent(MotionEvent ev)
     {
+        if (ev.getAction() == MotionEvent.ACTION_UP){
+            x1 = -1;
+            x2 = -1;
+            y1 = -1;
+            y2 = -1;
+            int scrollX = getScrollX();
+            Log.d("Tag","scrollX:"+String.valueOf(scrollX)+" mMenuWidth:"+String.valueOf(mMenuWidth));
+            if (scrollX >= mMenuWidth / 2){
+                this.smoothScrollTo(mMenuWidth, 0);
+                isOpen = false;
+            }else {
+                this.smoothScrollTo(0, 0);
+                isOpen = true;
+            }
+            getIsOpen();
+        }else if (ev.getAction() == MotionEvent.ACTION_MOVE){
+            if (x1 == -1){
+                x1 = ev.getX();
+            }else{
+                x2 = ev.getX();
+            }
+            if (y1 == -1){
+                y1 = ev.getY();
+            }else{
+                y2 = ev.getY();
+            }
 
-        return false;
+        }
+        if (x1 != -1 && x2 != -1 && y1 != -1 && y2 != -1){
+            float deltaX = Math.abs(x2 - x1);
+            float deltaY = Math.abs(y2 - y1);
+//            Log.d("delta","deltaX:"+String.valueOf(deltaX)+" deltaY:"+String.valueOf(deltaY));
+            if (deltaX > deltaY){
+                return super.onTouchEvent(ev);
+            }
+        }
+        return true;
     }
 
     @Override
@@ -135,6 +180,7 @@ public class SlidingMenu extends HorizontalScrollView{
             return;
         this.smoothScrollTo(0, 0);
         isOpen = true;
+
     }
 
     public void closeMenu()
@@ -157,9 +203,19 @@ public class SlidingMenu extends HorizontalScrollView{
         {
             openMenu();
         }
+        getIsOpen();
     }
 
+    /**
+     * 返回菜单状态，顺便改图标
+     * @return
+     */
     public boolean getIsOpen(){
+        if (this.isOpen){
+            mIcon.setImageDrawable(getResources().getDrawable(R.drawable.cross));
+        }else {
+            mIcon.setImageDrawable(getResources().getDrawable(R.drawable.icon_for_slide_menu));
+        }
         return this.isOpen;
     }
 

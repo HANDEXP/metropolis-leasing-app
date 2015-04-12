@@ -16,6 +16,7 @@ import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.adapters.CddViewPagerAdapter;
 import org.hand.mas.metropolisleasing.models.CddGridModel;
 import org.hand.mas.metropolisleasing.models.DeleteAttachmentSvcModel;
+import org.hand.mas.utl.DepthPageTransformer;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -144,7 +145,8 @@ public class CddViewPagerActivity extends Activity implements LMModelDelegate{
         mViewPagerAdapter = new CddViewPagerAdapter(getApplicationContext(), mCddGridList);
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.setCurrentItem(mCurrencyPosition);
-
+        mViewPager.setOffscreenPageLimit(3);
+        mViewPager.setPageTransformer(true, new DepthPageTransformer());
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

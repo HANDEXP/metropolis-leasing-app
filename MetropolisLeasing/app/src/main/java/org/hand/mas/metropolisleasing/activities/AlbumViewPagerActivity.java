@@ -14,6 +14,7 @@ import android.widget.Toast;
 import org.hand.mas.custom_view.Badge;
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.adapters.AlbumViewPagerAdapter;
+import org.hand.mas.utl.DepthPageTransformer;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -98,6 +99,8 @@ public class AlbumViewPagerActivity extends Activity {
 
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(mCurrencyPosition, true);
+        mViewPager.setOffscreenPageLimit(3);
+        mViewPager.setPageTransformer(true, new DepthPageTransformer());
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

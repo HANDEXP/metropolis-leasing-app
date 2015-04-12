@@ -239,11 +239,6 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
         mSlideMenuImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mSlidingMenu.getIsOpen()) {
-                    mSlideMenuImageView.setImageDrawable(getResources().getDrawable(R.drawable.cross));
-                } else {
-                    mSlideMenuImageView.setImageDrawable(getResources().getDrawable(R.drawable.icon_for_slide_menu));
-                }
                 mSlidingMenu.toggle();
             }
         });

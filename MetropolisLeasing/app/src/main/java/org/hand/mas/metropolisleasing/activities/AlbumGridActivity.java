@@ -71,6 +71,7 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
     private List<Object> mSelectedList = null;
     private View.OnClickListener mOnClickListener;
 
+
     private GridView mGirdView;
     private TextView mPreviewTextView;
     private TextView mFinishTextView;
@@ -469,8 +470,9 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
     private void updateUIs(){
         mAdapter.mSelectedList = mSelectedList;
 //                mAdapter = new CustomAlbumAdapter(getApplicationContext(),mImgs,mSelectedList,mImgDir.getAbsolutePath(),mOnClickListener);
-        mGirdView.setAdapter(mAdapter);
-//        mCountTextView.setText(String.valueOf(mSelectedList.size()));
+        mAdapter.notifyDataSetChanged();
+//        mGirdView.setAdapter(mAdapter);
+
         mCountBadge.setCount(String.valueOf(mSelectedList.size()));
         if (mSelectedList.isEmpty()){
             mPreviewTextView.setAlpha(0.3f);

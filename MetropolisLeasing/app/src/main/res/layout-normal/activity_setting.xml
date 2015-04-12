@@ -32,6 +32,7 @@
                 android:layout_marginLeft="10dp"
                 >
                 <TextView
+                    android:id="@+id/username_textview_in_setting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Benson"
@@ -39,9 +40,10 @@
                     android:textColor="@color/white"
                     android:textSize="18sp"/>
                 <TextView
+                    android:id="@+id/description_textview_in_setting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="乘用车租赁专家"
+                    android:text=""
                     android:textStyle="normal"
                     android:textColor="@color/white"
                     android:textSize="12sp"
