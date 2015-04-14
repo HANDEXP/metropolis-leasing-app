@@ -51,7 +51,7 @@ public class LoadingActivity extends ActionBarActivity implements LMModelDelegat
     private String baseUrl;
 
     private LoadingModel model;
-    private RemoteModel remoteModel;
+
 
     private DialogPlus dialogPlus;
     private TextView mBasicUrlTextView;
