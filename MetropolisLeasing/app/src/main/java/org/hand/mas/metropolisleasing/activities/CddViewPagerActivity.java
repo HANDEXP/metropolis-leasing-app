@@ -12,6 +12,7 @@ import com.littlemvc.model.LMModel;
 import com.littlemvc.model.LMModelDelegate;
 import com.littlemvc.model.request.AsHttpRequestModel;
 
+import org.hand.mas.custom_view.CustomCirclePageIndicator;
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.adapters.CddViewPagerAdapter;
 import org.hand.mas.metropolisleasing.models.CddGridModel;
@@ -45,6 +46,8 @@ public class CddViewPagerActivity extends Activity implements LMModelDelegate{
     private int mCurrencyPosition;
     private String mCurrencyAttachmentId;
     private boolean mCurrencyIsRemote;
+
+    private CustomCirclePageIndicator mIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,7 +150,10 @@ public class CddViewPagerActivity extends Activity implements LMModelDelegate{
         mViewPager.setCurrentItem(mCurrencyPosition);
         mViewPager.setOffscreenPageLimit(3);
         mViewPager.setPageTransformer(true, new DepthPageTransformer());
-        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+        mIndicator = (CustomCirclePageIndicator)findViewById(R.id.indicator);
+        mIndicator.setViewPager(mViewPager);
+        mIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 

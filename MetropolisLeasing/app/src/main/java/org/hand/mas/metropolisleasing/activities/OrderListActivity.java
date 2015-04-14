@@ -272,7 +272,10 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                 if (mSlidingMenu.getIsOpen() == false){
                     String project_number = (String) ((TextView)view.findViewById(R.id.project_number_for_order)).getText();
                     String project_source = (String) ((TextView)view.findViewById(R.id.project_source_for_order)).getText();
+                    String project_id = mOrderList.get(position).getProjectId();
+
                     Intent intent = new Intent(getApplicationContext(),DetailListActivity.class);
+                    intent.putExtra("project_id",project_id);
                     intent.putExtra("project_number",project_number);
                     intent.putExtra("project_source",project_source);
                     startActivity(intent);
@@ -368,6 +371,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
             JSONObject data = (JSONObject)jsonArray.get(i);
             try {
                 OrderListModel item = new OrderListModel(
+                        data.getString("project_id"),
                         data.getString("project_number"),
                         data.getString("project_status_desc"),
                         data.getString("bp_class"),

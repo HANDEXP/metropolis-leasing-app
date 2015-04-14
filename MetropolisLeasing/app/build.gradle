@@ -26,7 +26,6 @@ dependencies {
     compile project(':library-swal')
     compile project(':littleMvc')
     compile 'com.orhanobut:dialogplus:1.3@aar'
-//    compile 'cn.pedant.sweetalert:library:1.3'
     compile 'com.nineoldandroids:library:2.4.0+'
-    //compile 'com.github.chrisbanes.actionbarpulltorefresh:library:+'
+
 }

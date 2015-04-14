@@ -74,7 +74,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
         super.onResume();
         bindAllViews();
         Intent intent = getIntent();
-
+        project_id = intent.getStringExtra("project_id");
         project_number = intent.getStringExtra("project_number");
         String project_source = intent.getStringExtra("project_source");
 
@@ -82,6 +82,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
         projectSourceTextView.setText(project_source);
 
         param.put("project_number",project_number);
+        param.put("project_id",project_id);
 
         mModel.load(param);
 
@@ -188,6 +189,8 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
 
     private void showAlbum(int position){
         Intent intent4ViewPager = new Intent(this, CddGridActivity.class);
+
+        intent4ViewPager.putExtra("project_id",project_id);
         intent4ViewPager.putExtra("project_number",project_number);
         intent4ViewPager.putExtra("cdd_item_id",mDetailList.get(position).getCddItemId());
         intent4ViewPager.putExtra("check_id",mDetailList.get(position).getCheckId());
