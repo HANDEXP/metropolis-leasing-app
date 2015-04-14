@@ -428,13 +428,11 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
      */
     private void startViewpagerActivity(int position) {
 
-
         Intent intent = new Intent(getApplicationContext(), AlbumViewPagerActivity.class);
         intent.putExtra("position",position);
         intent.putExtra("mImgDirPath", mImgDir.getAbsolutePath());
         intent.putExtra("mImgs", (java.io.Serializable) mImgs);
         intent.putExtra("mSelectedList", (java.io.Serializable) getAdapterList());
-
 
         startActivityForResult(intent, View_Pager_All);
     }

@@ -46,6 +46,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
     private DetailListSvcModel mModel;
     private HashMap<String, String> param;
 
+    private String project_id;
     private String project_number;
     // 照片列表数据
     private ArrayList<ImageItem> imageList = new ArrayList<ImageItem>();
@@ -208,6 +209,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
             JSONObject data = (JSONObject)jsonArray.get(i);
             try {
                 DetailListModel item = new DetailListModel(
+                        data.getString("project_id"),
                         data.getString("project_number"),
                         data.getString("bp_name"),
                         data.getString("check_id"),
