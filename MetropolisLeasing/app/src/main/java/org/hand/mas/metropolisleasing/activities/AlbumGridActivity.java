@@ -178,6 +178,8 @@ public class AlbumGridActivity extends Activity implements LMModelDelegate{
 
         } catch (JSONException e) {
             e.printStackTrace();
+            Toast.makeText(AlbumGridActivity.this,"Error！",Toast.LENGTH_SHORT).show();
+            finish();
         } finally {
             if (countForFailure + countForUploadSuccess == mSelectedList.size()) {
                 if (sweetAlertDialog.isShowing()) {

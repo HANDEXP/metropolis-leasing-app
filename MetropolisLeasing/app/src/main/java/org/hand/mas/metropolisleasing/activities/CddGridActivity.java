@@ -65,6 +65,7 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
     private List<CddGridModel> mCddGridList;
     private String mTitle;
     private String mDescription;
+    private String mProjectId;
     private String mProjectNumber;
     private String mCddItemId;
     private String mCheckId;
@@ -107,6 +108,7 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
         super.onResume();
 
         Intent intentFromDetail = getIntent();
+        mProjectId = intentFromDetail.getStringExtra("project_id");
         mProjectNumber = intentFromDetail.getStringExtra("project_number");
         mCddItemId = intentFromDetail.getStringExtra("cdd_item_id");
         mCheckId = intentFromDetail.getStringExtra("check_id");
@@ -248,8 +250,8 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
                     resetParam();
                     mUploadModel.upload(param,bytes,fileName);
                     //缓一秒终避免SocketError
-                    Thread.sleep(1000);
-                    mModel.load(param);
+//                    Thread.sleep(2000);
+//                    mModel.load(param);
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), "IMAGE_CAPTURE FAILED!", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
@@ -354,6 +356,7 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
                                         break;
                                     case R.id.mPhoto:
                                         Intent getImageIntent = new Intent(getApplicationContext(), AlbumGridActivity.class);
+                                        getImageIntent.putExtra("project_id",mProjectId);
                                         getImageIntent.putExtra("project_number", mProjectNumber);
                                         getImageIntent.putExtra("cdd_item_id",mCddItemId);
                                         getImageIntent.putExtra("check_id",mCheckId);
@@ -457,5 +460,6 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
         param.put("project_number", mProjectNumber);
         param.put("cdd_item_id", mCddItemId);
         param.put("check_id", mCheckId);
+        param.put("project_id",mProjectId);
     }
 }

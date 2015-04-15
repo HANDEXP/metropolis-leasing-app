@@ -16,10 +16,12 @@ import org.hand.mas.metropolisleasing.R;
 /**
  * Created by gonglixuan on 15/4/2.
  */
-public class ClearEditText extends EditText implements View.OnFocusChangeListener {
+public class ClearEditText extends EditText implements View.OnFocusChangeListener,OnClearIconClickListener {
 
     private Drawable mDeleteDrawable;
     private Context mContext;
+    private OnClickListener mListener;
+
 
     public ClearEditText(Context context) {
         this(context, null);
@@ -43,8 +45,8 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
                 boolean isInnerWidth = x > (getWidth() - getTotalPaddingRight()) && x < (getWidth() - getPaddingRight()) ? true : false;
 //                boolean isInnerHeight = y > TopBound && y < BottomBound ? true : false;
                 if (isInnerWidth){
-                    Toast.makeText(mContext,"Oh! You Touch me!",Toast.LENGTH_SHORT).show();
-                    setText("");
+
+                    onClearIconClick();
                 }
 
             }
@@ -97,4 +99,22 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
             setClearDrawable(false);
         }
     }
+
+    @Override
+    public void onClearIconClick() {
+        Toast.makeText(mContext,"Oh! You Touch me!",Toast.LENGTH_SHORT).show();
+        if (mListener == null){
+            setText("");
+        }else {
+            mListener.onClick(this);
+        }
+
+    }
+
+    @Override
+    public void setCustomClearIconClickListener(OnClickListener onClickListener) {
+        mListener = onClickListener;
+    }
+
+
 }

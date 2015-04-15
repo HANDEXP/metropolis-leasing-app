@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:text="身份证明"
             android:textColor="@color/theme_color"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold"/>
         <TextView
             android:layout_width="wrap_content"
@@ -34,14 +34,28 @@
             android:text="/"
             android:textSize="20sp"/>
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/description_for_detail"
-        android:layout_width="250dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@color/listview_font_color"
-        android:text="身份证正面照"/>
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/description_for_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/listview_font_color"
+            android:text="身份证正面照"
+            android:layout_marginRight="5dp"/>
+        <TextView
+            android:id="@+id/ccd_count_for_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#999999"
+            android:layout_gravity="center_vertical"
+            android:text="(1)"/>
+
+    </LinearLayout>
 
     </LinearLayout>
     <LinearLayout
@@ -51,18 +65,9 @@
         android:gravity="end"
         android:orientation="horizontal"
         >
-        <TextView
-            android:id="@+id/ccd_count_for_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:textSize="20sp"
-            android:textColor="#000000"
-            android:layout_gravity="center_vertical"
-            android:text="1"/>
-
         <ImageView
             android:layout_width="20dp"
-            android:layout_height="30dp"
+            android:layout_height="20dp"
             android:src="@drawable/right_bow"/>
         </LinearLayout>
 </LinearLayout>

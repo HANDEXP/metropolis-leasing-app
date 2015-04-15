@@ -1,47 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mas="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
 
     >
     <include layout="@layout/view_head_bar"></include>
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#60ffffff"
-        android:paddingBottom="20dp">
-
+        android:layout_height="150dp"
+        android:orientation="horizontal"
+        android:paddingBottom="20dp"
+        android:paddingLeft="10dp">
+        <org.hand.mas.custom_view.RoundImageView
+            android:id="@+id/detail_icon"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="15dp"
+            android:layout_gravity="center"
+            android:src="@drawable/login_icon"
+            android:layout_centerVertical="true"
+            mas:type="round"
+            mas:borderRadius="10dp"/>
         <LinearLayout
+            android:id="@+id/detail_info"
+            android:layout_toRightOf="@+id/detail_icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_alignTop="@+id/detail_icon"
+            >
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:text="项目编号"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/project_number_for_detail"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:background="#20ffffff"
-                android:paddingBottom="3dp"
-                android:paddingLeft="10dp"
-                android:paddingTop="3dp"
-                android:text="R23123124123"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="20dp"
+
+                    android:text="项目编号:"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/project_number_for_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="20dp"
+                    android:background="#20ffffff"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="3dp"
+                    android:text="R23123124123"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -49,7 +70,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="5dp"
-                android:text="备注"
+                android:text="备注:"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -61,27 +82,29 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:background="#20ffffff"
+                android:background="#30ffffff"
                 android:paddingBottom="3dp"
                 android:paddingLeft="10dp"
                 android:paddingTop="3dp"
                 android:text="汉得员工购车10辆，走大客户通道"
-                android:textSize="16sp" />
+                android:textColor="@color/white"
+                android:textSize="12sp" />
 
 
 
         </LinearLayout>
-    </FrameLayout>
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#f2f2f2">
         <TextView
             android:id="@+id/hint_for_details_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="载入中，请稍后"
-            android:textColor="@color/white"
+            android:textColor="@color/theme_color"
             android:textSize="20sp"
             android:visibility="invisible"/>
         <ListView

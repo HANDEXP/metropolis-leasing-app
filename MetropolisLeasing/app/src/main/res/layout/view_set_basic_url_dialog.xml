@@ -1,43 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#c9c9ce"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:paddingTop="2dp"
-    android:paddingLeft="10dp"
+    android:paddingLeft="15dp"
     android:paddingBottom="2dp"
-    android:paddingRight="0dp">
+    android:paddingRight="10dp">
     <TextView
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.9"
-        android:text="http://"
-        android:gravity="center"/>
-    <EditText
+        android:singleLine="false"
+        android:layout_marginBottom="10dp"
+        android:text="Warning,modify the address will cause the program to empty all cache infomation and exit the account!"/>
+    <org.hand.mas.custom_view.ClearEditText
         android:id="@+id/edittext_for_basic"
-        android:layout_width="0dp"
+        android:background="@color/white"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="3dp"
         android:paddingBottom="3dp"
         android:paddingRight="2dp"
         android:paddingLeft="5dp"
-        android:layout_weight="4"
-        android:background="@drawable/filter_edittext_corners"
         android:layout_marginRight="1dp"
         android:singleLine="true"
         android:hint="请输入服务器地址"
         android:textSize="14sp"
         android:textColorHint="#cdcdcd"
         android:textColor="#000000"
-        />
-    <Button
-        android:id="@+id/confirm_btn_for_basic"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="确定"
-        android:textSize="17sp"
-        android:textColor="#787b84"
-        android:background="#00000000"
         />
 </LinearLayout>

@@ -133,7 +133,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
 
                                 bpNameTextView.setText(item.getBpName());
                                 descriptionTextView.setText(item.getDescription());
-                                ccdCountTextView.setText(item.getCddCount());
+                                ccdCountTextView.setText("("+item.getCddCount()+")");
                             }
                         });
                     } catch (Exception e){

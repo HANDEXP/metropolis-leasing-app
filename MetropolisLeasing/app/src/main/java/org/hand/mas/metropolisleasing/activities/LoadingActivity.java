@@ -1,6 +1,8 @@
 package org.hand.mas.metropolisleasing.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +31,7 @@ import com.littlemvc.utl.AsNetWorkUtl;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 
+import org.hand.mas.custom_view.ClearEditText;
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.application.MSApplication;
 import org.hand.mas.metropolisleasing.models.LoadingModel;
@@ -55,7 +59,7 @@ public class LoadingActivity extends ActionBarActivity implements LMModelDelegat
 
     private DialogPlus dialogPlus;
     private TextView mBasicUrlTextView;
-    private EditText mBasicUrlEditText;
+    private ClearEditText mBasicUrlEditText;
     private Button mConfirmButton;
     private Button mReloadButton;
 
@@ -222,41 +226,25 @@ public class LoadingActivity extends ActionBarActivity implements LMModelDelegat
     }
 
     public void buildBasicUrlDialog(){
-        dialogPlus = new DialogPlus.Builder(LoadingActivity.this)
-                .setContentHolder(new ViewHolder(R.layout.view_set_basic_url_dialog))
-                .setGravity(DialogPlus.Gravity.TOP)
-                .setMargins(30,200,30,0)
-                .create();
-        dialogPlus.show();
-
-        mBasicUrlEditText = (EditText) findViewById(R.id.edittext_for_basic);
-        mConfirmButton = (Button) findViewById(R.id.confirm_btn_for_basic);
-
-
-        mBasicUrlEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                mBasicUrlTextView.setText("http://".concat(s.toString()));
-            }
-        });
-        mConfirmButton.setOnClickListener(new View.OnClickListener() {
+        View contentView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.view_set_basic_url_dialog, null);
+        mBasicUrlEditText = (ClearEditText) contentView.findViewById(R.id.edittext_for_basic);
+        mBasicUrlEditText.setText(mBasicUrlTextView.getText());
+        mBasicUrlEditText.setCustomClearIconClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BasicUrlFormation();
-                dialogPlus.dismiss();
-
+                ((ClearEditText) v).setText("http://");
             }
         });
+        new AlertDialog.Builder(LoadingActivity.this)
+                .setTitle("Server Address")
+                .setView(contentView)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mBasicUrlTextView.setText(BasicUrlFormation(mBasicUrlEditText.getText().toString()));
+                    }
+                })
+                .setNegativeButton("取消", null).show();
     }
 
     private void bindAllViews(){
@@ -267,6 +255,12 @@ public class LoadingActivity extends ActionBarActivity implements LMModelDelegat
             buildBasicUrlDialog();
         }
         mBasicUrlTextView.setText(baseUrl);
+        mBasicUrlTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buildBasicUrlDialog();
+            }
+        });
         mReloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -282,13 +276,13 @@ public class LoadingActivity extends ActionBarActivity implements LMModelDelegat
      * 检查basicUrl是否符合格式
      *
      */
-    private void BasicUrlFormation(){
-        String basicUrlStr = (String) mBasicUrlTextView.getText();
+    private String BasicUrlFormation(String string){
+        String basicUrlStr = string;
         if (!basicUrlStr.endsWith("/")){
             basicUrlStr = basicUrlStr.concat("/");
 
         }
-        mBasicUrlTextView.setText(basicUrlStr);
+        return basicUrlStr;
     }
 
 
