@@ -1,73 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/setting_view_selector"
+    android:orientation="horizontal"
+    android:paddingBottom="10dp"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
-    >
+    android:paddingTop="10dp">
+
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_weight="9"
         android:layout_gravity="center_vertical"
-        >
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="3dp">
-        <TextView
-            android:id="@+id/bp_name_for_detail"
+        android:orientation="vertical">
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="身份证明"
-            android:textColor="@color/theme_color"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
-        <TextView
+            android:layout_marginBottom="3dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/bp_name_for_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="身份证明"
+                android:textColor="@color/theme_color"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:text="/"
+                android:textSize="20sp" />
+            <TextView
+                android:id="@+id/ccd_count_for_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="(1)"
+                android:textColor="#999999"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:text="/"
-            android:textSize="20sp"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:id="@+id/description_for_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/listview_font_color"
-            android:text="身份证正面照"
-            android:layout_marginRight="5dp"/>
-        <TextView
-            android:id="@+id/ccd_count_for_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="#999999"
-            android:layout_gravity="center_vertical"
-            android:text="(1)"/>
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/description_for_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="身份证正面照"
+                android:textColor="@color/listview_font_color"
+                android:textSize="16sp" />
+
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    </LinearLayout>
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="30dp"
+        android:layout_weight="1"
         android:layout_gravity="center_vertical"
         android:gravity="end"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
+
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/right_bow"/>
-        </LinearLayout>
+            android:src="@drawable/right_bow" />
+    </LinearLayout>
 </LinearLayout>

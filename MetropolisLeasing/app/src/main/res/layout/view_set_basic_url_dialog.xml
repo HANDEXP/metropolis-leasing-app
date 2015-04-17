@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         android:singleLine="false"
         android:layout_marginBottom="10dp"
-        android:text="Warning,modify the address will cause the program to empty all cache infomation and exit the account!"/>
+        android:textColor="@color/red_btn_bg_color"
+        android:text="警告，修改此地址会导致程序清空所有缓存信息！"/>
     <org.hand.mas.custom_view.ClearEditText
         android:id="@+id/edittext_for_basic"
         android:background="@color/white"

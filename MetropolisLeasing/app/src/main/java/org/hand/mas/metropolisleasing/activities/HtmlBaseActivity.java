@@ -49,7 +49,6 @@ public class HtmlBaseActivity extends ActionBarActivity {
     @Override
     public void onBackPressed() {
         finish();
-        overridePendingTransition(R.anim.alpha_in, R.anim.move_out_bottm);
     }
 
     private void bindAllViews() {

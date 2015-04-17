@@ -1,10 +1,13 @@
 package org.hand.mas.metropolisleasing.activities;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
@@ -28,8 +31,6 @@ import com.littlemvc.model.LMModel;
 import com.littlemvc.model.LMModelDelegate;
 import com.littlemvc.model.request.AsHttpRequestModel;
 import com.littlemvc.utl.AsNetWorkUtl;
-import com.orhanobut.dialogplus.DialogPlus;
-import com.orhanobut.dialogplus.ViewHolder;
 
 import org.hand.mas.custom_view.ClearEditText;
 import org.hand.mas.metropolisleasing.R;
@@ -42,6 +43,8 @@ import org.hand.mas.utl.ConstantUtl;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,11 +60,12 @@ public class LoadingActivity extends ActionBarActivity implements LMModelDelegat
     private LoadingModel model;
 
 
-    private DialogPlus dialogPlus;
     private TextView mBasicUrlTextView;
     private ClearEditText mBasicUrlEditText;
     private Button mConfirmButton;
     private Button mReloadButton;
+
+    private SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +75,7 @@ public class LoadingActivity extends ActionBarActivity implements LMModelDelegat
 
         setOverflowButtonAlways();
         getSupportActionBar().setDisplayShowHomeEnabled(false);
+        getSupportActionBar().setIcon(getResources().getDrawable(R.drawable.icon_for_app));
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mEditor = mPreferences.edit();
 
@@ -78,9 +83,8 @@ public class LoadingActivity extends ActionBarActivity implements LMModelDelegat
         model = new LoadingModel(this);
         baseUrl = mPreferences.getString("sys_basic_url","");
 
+        initDB();
         bindAllViews();
-
-
     }
 
     @Override
@@ -97,9 +101,7 @@ public class LoadingActivity extends ActionBarActivity implements LMModelDelegat
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_set:
-                if (dialogPlus == null || ( dialogPlus != null || !dialogPlus.isShowing())){
-                    buildBasicUrlDialog();
-                }
+                buildBasicUrlDialog();
                 break;
             case R.id.action_exit:
                 MSApplication.getApplication().exit();
@@ -135,6 +137,13 @@ public class LoadingActivity extends ActionBarActivity implements LMModelDelegat
                 MSApplication.getApplication().reader = XmlConfigReader.getInstance();
                 MSApplication.getApplication().reader.getAttr(new Expression("/backend-config", ""));
                 fileOutputStream.close();
+                /* 插入成功记录 */
+                if (db != null){
+                    ContentValues cv = new ContentValues();
+                    cv.put("basicUrl",baseUrl);
+                    db.replace("historyBasicUrl",null,cv);
+                }
+
             } catch (Exception ex) {
                 Toast.makeText(this, "读写配置文件出现错误", Toast.LENGTH_SHORT).show();
                 return;
@@ -236,7 +245,7 @@ public class LoadingActivity extends ActionBarActivity implements LMModelDelegat
             }
         });
         new AlertDialog.Builder(LoadingActivity.this)
-                .setTitle("Server Address")
+                .setTitle("服务器地址")
                 .setView(contentView)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
@@ -285,5 +294,21 @@ public class LoadingActivity extends ActionBarActivity implements LMModelDelegat
         return basicUrlStr;
     }
 
+    /**
+     * 初始化SqlLite Database
+     */
+    private void initDB(){
+        db = openOrCreateDatabase("app.db",Context.MODE_PRIVATE,null);
+        db.execSQL("CREATE TABLE IF NOT EXISTS historyBasicUrl(_id INTEGER PRIMARY KEY AUTOINCREMENT, basicUrl VARCHAR UNIQUE)");
+
+
+        List<String> urlList = new ArrayList<String>();
+        Cursor c = db.rawQuery("SELECT * FROM historyBasicUrl",null);
+        while (c.moveToNext()){
+            String basicUrl = c.getString(c.getColumnIndex("basicUrl"));
+            urlList.add(basicUrl);
+        }
+
+    }
 
 }
