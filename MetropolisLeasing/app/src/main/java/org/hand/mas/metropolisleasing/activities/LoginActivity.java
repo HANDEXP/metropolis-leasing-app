@@ -137,7 +137,7 @@ public class LoginActivity extends Activity implements LMModelDelegate{
         }catch (Exception e){
             e.printStackTrace();
         }finally {
-
+            mButton.setClickable(true);
         }
     }
 
@@ -156,6 +156,7 @@ public class LoginActivity extends Activity implements LMModelDelegate{
         pDialog.setTitleText("网络错误，请稍后再试")
                .setConfirmText("OK")
                .changeAlertType(SweetAlertDialog.ERROR_TYPE);
+        mButton.setClickable(true);
     }
 
     /* Private Methods */
@@ -202,6 +203,7 @@ public class LoginActivity extends Activity implements LMModelDelegate{
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mButton.setClickable(false);
                 generateParam();
                 mModel.load(param);
             }

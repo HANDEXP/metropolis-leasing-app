@@ -44,7 +44,7 @@
         />
     <TextView
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_centerInParent="true"
         android:textSize="20dp"
         android:textColor="#fff"
@@ -52,8 +52,11 @@
         android:text="TEST"
         android:layout_marginBottom="10dp"
         android:id="@+id/titleTextView"
+        android:singleLine="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:ellipsize="marquee"
         />
-
     <ImageView
         android:layout_height="42dp"
         android:layout_width="wrap_content"
@@ -66,6 +69,4 @@
         android:background="@drawable/add_item_selector"
         android:visibility="invisible"
         />
-
-
 </RelativeLayout>

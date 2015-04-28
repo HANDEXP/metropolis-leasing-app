@@ -17,7 +17,8 @@
         <activity
             android:name=".activities.LoadingActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:theme="@style/Theme.AppCompat.Light"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,38 +27,49 @@
         </activity>
         <activity
             android:name=".activities.LoginActivity"
-            android:label="登录页面">
+            android:label="登录页面"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activities.DetailListActivity"
-            android:label="详情">
+            android:label="详情"
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name=".activities.CddGridActivity"
-                  android:label="影像资料">
+                  android:label="影像资料"
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name=".activities.CddViewPagerActivity"
-                  android:label="影像资料详情">
+                  android:label="影像资料详情"
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name=".activities.OrderListActivity"
-                  android:label="租赁申请查询页面">
+                  android:label="租赁申请查询页面"
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name=".activities.FilteredOrderListActivity"
-                  android:label="筛选结果页面">
+                  android:label="筛选结果页面"
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name=".activities.AlbumGridActivity"
-            android:label="相册">
+            android:label="相册"
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name=".activities.AlbumViewPagerActivity"
-            android:label="相册浏览">
+            android:label="相册浏览"
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name=".activities.ChangeDirectActivity"
-            android:label="更改相册路径">
+            android:label="更改相册路径"
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name=".activities.SettingActivity"
-            android:label="设置">
+            android:label="设置"
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name=".activities.HtmlBaseActivity"
             android:label="WebView页面"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
         </activity>
 

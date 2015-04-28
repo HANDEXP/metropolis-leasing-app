@@ -1,8 +1,10 @@
 package org.hand.mas.metropolisleasing.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,13 +16,14 @@ import com.littlemvc.model.request.AsHttpRequestModel;
 
 import org.hand.mas.custom_view.CustomCirclePageIndicator;
 import org.hand.mas.metropolisleasing.R;
-import org.hand.mas.metropolisleasing.adapters.CddViewPagerAdapter;
+import org.hand.mas.metropolisleasing.fragments.PhotoViewFragment;
 import org.hand.mas.metropolisleasing.models.CddGridModel;
 import org.hand.mas.metropolisleasing.models.DeleteAttachmentSvcModel;
 import org.hand.mas.utl.DepthPageTransformer;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -28,7 +31,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 /**
  * Created by gonglixuan on 15/3/17.
  */
-public class CddViewPagerActivity extends Activity implements LMModelDelegate{
+public class CddViewPagerActivity extends FragmentActivity implements LMModelDelegate{
 
     private ViewPager mViewPager;
     private List<CddGridModel> mCddGridList;
@@ -37,7 +40,8 @@ public class CddViewPagerActivity extends Activity implements LMModelDelegate{
     private ImageView mTrashImageView;
     private SweetAlertDialog mDialogPlus;
 
-    private CddViewPagerAdapter mViewPagerAdapter;
+    private FragmentPagerAdapter mPhotoViewAdapter;
+    private List<PhotoViewFragment> mFragmentList;
 
     private DeleteAttachmentSvcModel mDeleteModel;
 
@@ -145,11 +149,35 @@ public class CddViewPagerActivity extends Activity implements LMModelDelegate{
         mCurrencyIsRemote = intent.getBooleanExtra("isRemote",false);
 
         mCurrencyPositionTextView.setText(String.valueOf(mCurrencyPosition + 1).concat("/").concat(String.valueOf(mCddGridList.size())));
-        mViewPagerAdapter = new CddViewPagerAdapter(getApplicationContext(), mCddGridList);
-        mViewPager.setAdapter(mViewPagerAdapter);
+        /* Fragment */
+        if (mFragmentList == null){
+            mFragmentList = new LinkedList<PhotoViewFragment>();
+        }
+        for (int i = 0; i< mCddGridList.size();i++){
+            PhotoViewFragment fragment = new PhotoViewFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("path",mCddGridList.get(i).getFilePath());
+            fragment.setArguments(bundle);
+            mFragmentList.add(fragment);
+        }
+        mPhotoViewAdapter = new FragmentPagerAdapter(getSupportFragmentManager()){
+
+            @Override
+            public int getCount() {
+                return mCddGridList.size();
+            }
+
+            @Override
+            public Fragment getItem(int position) {
+                return mFragmentList.get(position);
+            }
+        };
+        mViewPager.setAdapter(mPhotoViewAdapter);
         mViewPager.setCurrentItem(mCurrencyPosition);
         mViewPager.setOffscreenPageLimit(3);
         mViewPager.setPageTransformer(true, new DepthPageTransformer());
+        /* 加载首张照片 */
+        mFragmentList.get(mCurrencyPosition).setImageWithDelay(10);
 
         mIndicator = (CustomCirclePageIndicator)findViewById(R.id.indicator);
         mIndicator.setViewPager(mViewPager);
@@ -162,6 +190,13 @@ public class CddViewPagerActivity extends Activity implements LMModelDelegate{
             @Override
             public void onPageSelected(int position) {
 
+                /*************/
+                for(int i = 0;i< mFragmentList.size();i++){
+                    mFragmentList.get(i).resetImage();
+                }
+                PhotoViewFragment fragment = mFragmentList.get(position);
+                fragment.setImageWithDelay(500);
+                /*************/
                 CddGridModel item = mCddGridList.get(position);
                 mCurrencyPosition = position;
                 mCurrencyAttachmentId = item.getAttachmentId();

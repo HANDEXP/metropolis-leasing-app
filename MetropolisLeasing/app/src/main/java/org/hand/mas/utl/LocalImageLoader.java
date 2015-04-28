@@ -60,7 +60,7 @@ public class LocalImageLoader {
      * 轮询的线程
      */
     private Thread mPoolThread;
-    private Handler mPoolThreadHander;
+    private Handler mPoolThreadHandler;
 
     /**
      * 运行在UI线程的handler，用于给ImageView设置图片
@@ -147,7 +147,7 @@ public class LocalImageLoader {
             @Override
             public void run() {
                 Looper.prepare();
-                mPoolThreadHander = new Handler(){
+                mPoolThreadHandler = new Handler(){
                     @Override
                     public void handleMessage(Message msg) {
                         mThreadPool.execute(getTask());
@@ -268,14 +268,14 @@ public class LocalImageLoader {
         try
         {
             // 请求信号量，防止mPoolThreadHander为null
-            if (mPoolThreadHander == null)
+            if (mPoolThreadHandler == null)
                 mSemaphore.acquire();
         } catch (InterruptedException e)
         {
         }
         mTasks.add(runnable);
 
-        mPoolThreadHander.sendEmptyMessage(0x110);
+        mPoolThreadHandler.sendEmptyMessage(0x110);
     }
 
     /**

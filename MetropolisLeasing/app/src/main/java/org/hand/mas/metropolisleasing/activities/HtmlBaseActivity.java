@@ -43,6 +43,7 @@ public class HtmlBaseActivity extends ActionBarActivity {
 
         bindAllViews();
 
+        load(url);
 
     }
 
@@ -84,7 +85,7 @@ public class HtmlBaseActivity extends ActionBarActivity {
 
     @Override
     protected void onResume() {
-        load(url);
+
         super.onResume();
     }
 

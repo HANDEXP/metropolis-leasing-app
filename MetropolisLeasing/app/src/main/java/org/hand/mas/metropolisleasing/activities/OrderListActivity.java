@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -74,6 +77,9 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
     private static int pageNum;
     private boolean mFlag;
 
+    private int visibleLastIndex;
+    private Handler mHandler = new Handler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +106,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
     @Override
     protected void onResume() {
         super.onResume();
+        resetClickable(CalculatorLL);
         if (mFunctionListModel == null){
             mFunctionListModel = new FunctionListSvcModel(this);
         }
@@ -174,6 +181,13 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                             };
                             mPullRefreshListView.setAdapter(adapter);
                         }else{
+                            int count4newData = bodyArr.length();
+
+                            if (count4newData > 0){
+                                Toast.makeText(OrderListActivity.this,"加载了"+ String.valueOf(count4newData+"条新数据"),Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(OrderListActivity.this,"没有更多的数据了",Toast.LENGTH_SHORT).show();
+                            }
                             adapter.notifyDataSetChanged();
                         }
                     } catch (Exception e){
@@ -242,7 +256,8 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                 mSlidingMenu.toggle();
             }
         });
-        mPullRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);
+        mPullRefreshListView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        mPullRefreshListView.setFilterTouchEvents(true);
         mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -266,6 +281,31 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
             }
         });
         mOrderListView = mPullRefreshListView.getRefreshableView();
+        mOrderListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                int itemsLastIndex = adapter.getCount() + 2;
+                Log.d("","itemsLastIndex: "+String.valueOf(itemsLastIndex)+" visibleLastIndex: " + String.valueOf(visibleLastIndex));
+                if (itemsLastIndex == visibleLastIndex){
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (param == null) {
+                                param = new HashMap<String, String>();
+                            }
+                            param.put("page_num", String.valueOf(++pageNum));
+                            mModel.load(param);
+                        }
+                    },500);
+
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                visibleLastIndex = firstVisibleItem + visibleItemCount;
+            }
+        });
         mOrderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -355,6 +395,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                     e.printStackTrace();
                 }
                 startWebViewActivity(url,"计算器");
+                v.setClickable(false);
             }
         });
     }
@@ -507,5 +548,13 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
 
     }
 
+    /**
+     * 重置clickable
+     */
+    private void resetClickable(View view){
+        if (view != null && !view.isClickable()){
+            view.setClickable(true);
+        }
+    }
 
  }

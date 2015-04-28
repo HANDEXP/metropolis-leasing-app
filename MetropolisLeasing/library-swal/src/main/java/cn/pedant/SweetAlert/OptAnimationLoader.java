@@ -12,7 +12,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 
 public class OptAnimationLoader {
-
     public static Animation loadAnimation(Context context, int id)
             throws Resources.NotFoundException {
 

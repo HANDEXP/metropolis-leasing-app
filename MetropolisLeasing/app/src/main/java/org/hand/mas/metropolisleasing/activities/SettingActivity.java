@@ -28,7 +28,12 @@ public class SettingActivity extends Activity implements View.OnClickListener{
     private XmlConfigReader configReader;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
-
+    LinearLayout userInfoLL;
+    LinearLayout changeCharacterLL;
+    LinearLayout changePasswordLL;
+    LinearLayout questionLL;
+    LinearLayout discussLL;
+    LinearLayout versionUpdateLL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,15 +47,26 @@ public class SettingActivity extends Activity implements View.OnClickListener{
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        resetClickable(userInfoLL);
+        resetClickable(changeCharacterLL);
+        resetClickable(changePasswordLL);
+        resetClickable(questionLL);
+        resetClickable(discussLL);
+        resetClickable(versionUpdateLL);
+    }
+
     private void bindAllViews() {
         Button quitButton = (Button) findViewById(R.id.quitBtn);
 
-        LinearLayout userInfoLL = (LinearLayout) findViewById(R.id.user_info_LL);
-        LinearLayout changeCharacterLL = (LinearLayout) findViewById(R.id.change_character_LL);
-        LinearLayout changePasswordLL = (LinearLayout) findViewById(R.id.change_password_LL);
-        LinearLayout questionLL = (LinearLayout) findViewById(R.id.question_LL);
-        LinearLayout discussLL = (LinearLayout) findViewById(R.id.discuss_LL);
-        LinearLayout versionUpdateLL = (LinearLayout) findViewById(R.id.version_update_LL);
+        userInfoLL = (LinearLayout) findViewById(R.id.user_info_LL);
+        changeCharacterLL = (LinearLayout) findViewById(R.id.change_character_LL);
+        changePasswordLL = (LinearLayout) findViewById(R.id.change_password_LL);
+        questionLL = (LinearLayout) findViewById(R.id.question_LL);
+        discussLL = (LinearLayout) findViewById(R.id.discuss_LL);
+        versionUpdateLL = (LinearLayout) findViewById(R.id.version_update_LL);
 
         setDefaultUserData();
         userInfoLL.setOnClickListener(this);
@@ -87,6 +103,7 @@ public class SettingActivity extends Activity implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        v.setClickable(false);
         Intent intent = new Intent(SettingActivity.this,HtmlBaseActivity.class);
         String url = null;
         switch (v.getId()){
@@ -180,5 +197,14 @@ public class SettingActivity extends Activity implements View.OnClickListener{
         SharedPreferences preferences = getSharedPreferences("userInfo",MODE_APPEND);
         String userName = preferences.getString("userName","");
         usernameTextView.setText(userName);
+    }
+
+    /**
+     * 重置clickable
+     */
+    private void resetClickable(View view){
+        if (view != null && !view.isClickable()){
+            view.setClickable(true);
+        }
     }
 }
