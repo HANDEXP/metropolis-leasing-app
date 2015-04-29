@@ -21,10 +21,7 @@
                 android:orientation="vertical"
                 >
                 <include layout="@layout/view_head_bar"></include>
-                <com.handmark.pulltorefresh.library.PullToRefreshListView
-                    xmlns:ptr="http://schemas.android.com/apk/res-auto"
-                    ptr:ptrHeaderBackground="@android:color/darker_gray"
-                    ptr:ptrHeaderTextColor="@android:color/white"
+                <ListView
                     android:id="@+id/order_list"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -33,7 +30,7 @@
                     android:background="@color/white"
                     android:scrollbars="none">
 
-                </com.handmark.pulltorefresh.library.PullToRefreshListView>
+                </ListView>
             </LinearLayout>
         </LinearLayout>
     </org.hand.mas.custom_view.SlidingMenu>

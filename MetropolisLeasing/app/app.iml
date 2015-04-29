@@ -93,7 +93,6 @@
     <orderEntry type="module" module-name="littleMvc" exported="" />
     <orderEntry type="module" module-name="library-album" exported="" />
     <orderEntry type="module" module-name="library-swal" exported="" />
-    <orderEntry type="module" module-name="library-pull" exported="" />
   </component>
 </module>
 

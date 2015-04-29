@@ -26,8 +26,8 @@ import android.widget.Toast;
 import com.hand.hrms4android.exception.ParseExpressionException;
 import com.hand.hrms4android.parser.Expression;
 import com.hand.hrms4android.parser.xml.XmlConfigReader;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
+
 import com.littlemvc.model.LMModel;
 import com.littlemvc.model.LMModelDelegate;
 import com.littlemvc.model.request.AsHttpRequestModel;
@@ -57,8 +57,9 @@ import java.util.List;
  */
 public class OrderListActivity extends Activity implements LMModelDelegate{
 
-    private PullToRefreshListView mPullRefreshListView;
+
     private ListView mOrderListView;
+    private View mFooterView;
     private TextView mTitleTextView;
     private ImageView mFilterImageView;
     private ImageView mSlideMenuImageView;
@@ -77,9 +78,23 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
     private static int pageNum;
     private boolean mFlag;
 
+    private boolean mOrderListFlag = false;
+
     private int visibleLastIndex;
     private Handler mHandler = new Handler();
-
+    private Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (param == null) {
+                param = new HashMap<String, String>();
+            }
+            if (mOrderListFlag == true)
+                return;
+            param.put("page_num", String.valueOf(++pageNum));
+            mModel.load(param);
+            mOrderListFlag = true;
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,7 +194,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
 
                                 }
                             };
-                            mPullRefreshListView.setAdapter(adapter);
+                            mOrderListView.setAdapter(adapter);
                         }else{
                             int count4newData = bodyArr.length();
 
@@ -187,7 +202,9 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                                 Toast.makeText(OrderListActivity.this,"加载了"+ String.valueOf(count4newData+"条新数据"),Toast.LENGTH_SHORT).show();
                             }else{
                                 Toast.makeText(OrderListActivity.this,"没有更多的数据了",Toast.LENGTH_SHORT).show();
+                                mRunnable = null;
                             }
+                            mOrderListView.removeFooterView(mFooterView);
                             adapter.notifyDataSetChanged();
                         }
                     } catch (Exception e){
@@ -198,8 +215,8 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
             } catch (JSONException e) {
                 e.printStackTrace();
             } finally {
-                if (mPullRefreshListView.isRefreshing()) {
-                    mPullRefreshListView.onRefreshComplete();
+                if (mOrderListFlag == true){
+                    mOrderListFlag = false;
                 }
             }
 
@@ -239,7 +256,10 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
         pageNum = 1;
         mModel = new OrderListSvcModel(this);
 
-        mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.order_list);
+        LayoutInflater layoutInflater =
+                (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        mOrderListView = (ListView) findViewById(R.id.order_list);
+        mFooterView = layoutInflater.inflate(R.layout.listview_footer, null);
         mTitleTextView = (TextView) findViewById(R.id.titleTextView);
         mFilterImageView = (ImageView) findViewById(R.id.filter_for_orderList);
         mSlideMenuImageView = (ImageView) findViewById(R.id.slide_menu);
@@ -256,48 +276,22 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                 mSlidingMenu.toggle();
             }
         });
-        mPullRefreshListView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
-        mPullRefreshListView.setFilterTouchEvents(true);
-        mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
-            @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                /* 重置适配器和数据 */
-                resetAdapter();
-                if (param == null) {
-                    param = new HashMap<String, String>();
-                }
 
-                mModel.load();
-            }
-
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                if (param == null) {
-                    param = new HashMap<String, String>();
-                }
-                param.put("page_num", String.valueOf(++pageNum));
-                mModel.load(param);
-
-            }
-        });
-        mOrderListView = mPullRefreshListView.getRefreshableView();
         mOrderListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-                int itemsLastIndex = adapter.getCount() + 2;
+                int itemsLastIndex;
+                itemsLastIndex = mOrderListView.getFooterViewsCount() == 0 ? adapter.getCount() : adapter.getCount() + 1;
                 Log.d("","itemsLastIndex: "+String.valueOf(itemsLastIndex)+" visibleLastIndex: " + String.valueOf(visibleLastIndex));
-                if (itemsLastIndex == visibleLastIndex){
-                    mHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (param == null) {
-                                param = new HashMap<String, String>();
-                            }
-                            param.put("page_num", String.valueOf(++pageNum));
-                            mModel.load(param);
-                        }
-                    },500);
-
+                    if (itemsLastIndex == visibleLastIndex && mRunnable != null){
+                        mHandler.postDelayed(mRunnable,2000);
+                    if (mOrderListView.getFooterViewsCount() != 0){
+                        mOrderListView.removeFooterView(mFooterView);
+                    }
+                    if (mOrderListView.getFooterViewsCount() == 0){
+                        mOrderListView.addFooterView(mFooterView);
+                        mOrderListView.setSelection(mOrderListView.getAdapter().getCount() - 1);
+                    }
                 }
             }
 
@@ -325,6 +319,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
 
             }
         });
+        mOrderListView.addFooterView(mFooterView);
         mTitleTextView.setText("租赁申请查询");
         mFilterImageView.setVisibility(View.VISIBLE);
         mFilterImageView.setOnClickListener(new View.OnClickListener() {
@@ -545,7 +540,6 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                 e.printStackTrace();
             }
         }
-
     }
 
     /**

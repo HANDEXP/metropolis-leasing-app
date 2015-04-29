@@ -11,8 +11,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.littlemvc.model.LMModel;
 import com.littlemvc.model.LMModelDelegate;
 import com.littlemvc.model.request.AsHttpRequestModel;
@@ -35,7 +33,6 @@ import java.util.List;
  */
 public class FilteredOrderListActivity extends Activity implements LMModelDelegate{
 
-    private PullToRefreshListView mPullRefreshListView;
     private ListView mOrderListView;
     private TextView mTitleTextView;
     private ImageView mReturnImageView;
@@ -104,7 +101,7 @@ public class FilteredOrderListActivity extends Activity implements LMModelDelega
                                     }
                                 }
                             };
-                            mPullRefreshListView.setAdapter(adapter);
+                            mOrderListView.setAdapter(adapter);
                         }else{
                             adapter.notifyDataSetChanged();
                         }
@@ -116,9 +113,9 @@ public class FilteredOrderListActivity extends Activity implements LMModelDelega
             } catch (JSONException e) {
                 e.printStackTrace();
             } finally {
-                if (mPullRefreshListView.isRefreshing()) {
-                    mPullRefreshListView.onRefreshComplete();
-                }
+//                if (mPullRefreshListView.isRefreshing()) {
+//                    mPullRefreshListView.onRefreshComplete();
+//                }
             }
         }
     }
@@ -138,7 +135,7 @@ public class FilteredOrderListActivity extends Activity implements LMModelDelega
         pageNum = 1;
         mModel = new OrderListSvcModel(this);
 
-        mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.order_list);
+        mOrderListView = (ListView) findViewById(R.id.order_list);
         mTitleTextView = (TextView) findViewById(R.id.titleTextView);
         mReturnImageView = (ImageView) findViewById(R.id.return_to_detailList);
         SlidingMenu slidingMenu = (SlidingMenu) findViewById(R.id.sliding_menu_and_content);
@@ -154,30 +151,30 @@ public class FilteredOrderListActivity extends Activity implements LMModelDelega
                 finishWithAnim();
             }
         });
-        mPullRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);
-        mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
-            @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                /* 重置适配器和数据 */
-                resetAdapter();
-                if (param == null){
-                    param = new HashMap<String, String>();
-                }
-                resetFilterParam();
-                mModel.load(param);
-            }
-
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                if (param == null){
-                    param = new HashMap<String, String>();
-                }
-                param.put("page_num",String.valueOf(++pageNum));
-                resetFilterParam();
-                mModel.load(param);
-            }
-        });
-        mOrderListView = mPullRefreshListView.getRefreshableView();
+//        mPullRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);
+//        mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+//            @Override
+//            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+//                /* 重置适配器和数据 */
+//                resetAdapter();
+//                if (param == null){
+//                    param = new HashMap<String, String>();
+//                }
+//                resetFilterParam();
+//                mModel.load(param);
+//            }
+//
+//            @Override
+//            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+//                if (param == null){
+//                    param = new HashMap<String, String>();
+//                }
+//                param.put("page_num",String.valueOf(++pageNum));
+//                resetFilterParam();
+//                mModel.load(param);
+//            }
+//        });
+//        mOrderListView = mPullRefreshListView.getRefreshableView();
         mOrderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
