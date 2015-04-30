@@ -36,6 +36,7 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 
 import org.hand.mas.custom_view.ClearEditText;
+import org.hand.mas.custom_view.CustomPullToRefreshListView;
 import org.hand.mas.custom_view.SlidingMenu;
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.application.MSApplication;
@@ -43,6 +44,7 @@ import org.hand.mas.metropolisleasing.models.FunctionListSvcModel;
 import org.hand.mas.metropolisleasing.models.OrderListModel;
 import org.hand.mas.metropolisleasing.models.OrderListSvcModel;
 import org.hand.mas.utl.CommonAdapter;
+import org.hand.mas.utl.OnScrollToBottomListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,7 +60,7 @@ import java.util.List;
 public class OrderListActivity extends Activity implements LMModelDelegate{
 
 
-    private ListView mOrderListView;
+    private CustomPullToRefreshListView mOrderListView;
     private View mFooterView;
     private TextView mTitleTextView;
     private ImageView mFilterImageView;
@@ -202,9 +204,9 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                                 Toast.makeText(OrderListActivity.this,"加载了"+ String.valueOf(count4newData+"条新数据"),Toast.LENGTH_SHORT).show();
                             }else{
                                 Toast.makeText(OrderListActivity.this,"没有更多的数据了",Toast.LENGTH_SHORT).show();
-                                mRunnable = null;
+                                mOrderListView.setFooterEnable(false);
                             }
-                            mOrderListView.removeFooterView(mFooterView);
+                            mOrderListView.removeExtraView(CustomPullToRefreshListView.FOOTER_VIEW);
                             adapter.notifyDataSetChanged();
                         }
                     } catch (Exception e){
@@ -258,7 +260,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
 
         LayoutInflater layoutInflater =
                 (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        mOrderListView = (ListView) findViewById(R.id.order_list);
+        mOrderListView = (CustomPullToRefreshListView) findViewById(R.id.order_list);
         mFooterView = layoutInflater.inflate(R.layout.listview_footer, null);
         mTitleTextView = (TextView) findViewById(R.id.titleTextView);
         mFilterImageView = (ImageView) findViewById(R.id.filter_for_orderList);
@@ -277,30 +279,14 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
             }
         });
 
-        mOrderListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+        OnScrollToBottomListener onScrollToBottomListener = new OnScrollToBottomListener() {
             @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                int itemsLastIndex;
-                itemsLastIndex = mOrderListView.getFooterViewsCount() == 0 ? adapter.getCount() : adapter.getCount() + 1;
-                Log.d("","itemsLastIndex: "+String.valueOf(itemsLastIndex)+" visibleLastIndex: " + String.valueOf(visibleLastIndex));
-                    if (itemsLastIndex == visibleLastIndex && mRunnable != null){
-                        mHandler.postDelayed(mRunnable,2000);
-                    if (mOrderListView.getFooterViewsCount() != 0){
-                        mOrderListView.removeFooterView(mFooterView);
-                    }
-                    if (mOrderListView.getFooterViewsCount() == 0){
-                        mOrderListView.addFooterView(mFooterView);
-                        mOrderListView.setSelection(mOrderListView.getAdapter().getCount() - 1);
-                    }
-                }
+            public void onBottomListener(AbsListView view, int scrollState) {
+                mHandler.postDelayed(mRunnable,2000);
             }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                visibleLastIndex = firstVisibleItem + visibleItemCount;
-            }
-        });
-        mOrderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        };
+        mOrderListView.setScrollToBottomListener(onScrollToBottomListener);
+        AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (mSlidingMenu.getIsOpen() == false){
@@ -316,10 +302,10 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                     startActivity(intent);
                     overridePendingTransition(R.anim.move_in_right,R.anim.alpha_out);
                 }
-
             }
-        });
-        mOrderListView.addFooterView(mFooterView);
+        };
+        mOrderListView.setItemClickListener(onItemClickListener);
+//        mOrderListView.addFooterView(mFooterView);
         mTitleTextView.setText("租赁申请查询");
         mFilterImageView.setVisibility(View.VISIBLE);
         mFilterImageView.setOnClickListener(new View.OnClickListener() {
