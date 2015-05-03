@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -19,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +42,7 @@ import org.hand.mas.metropolisleasing.models.FunctionListSvcModel;
 import org.hand.mas.metropolisleasing.models.OrderListModel;
 import org.hand.mas.metropolisleasing.models.OrderListSvcModel;
 import org.hand.mas.utl.CommonAdapter;
-import org.hand.mas.utl.OnScrollToBottomListener;
+import org.hand.mas.utl.OnScrollToRefreshListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,11 +55,11 @@ import java.util.List;
 /**
  * Created by gonglixuan on 15/3/10.
  */
-public class OrderListActivity extends Activity implements LMModelDelegate{
+public class OrderListActivity extends Activity implements LMModelDelegate {
 
 
     private CustomPullToRefreshListView mOrderListView;
-    private View mFooterView;
+
     private TextView mTitleTextView;
     private ImageView mFilterImageView;
     private ImageView mSlideMenuImageView;
@@ -76,7 +74,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
     private OrderListSvcModel mModel;
     private FunctionListSvcModel mFunctionListModel;
     private CommonAdapter adapter;
-    private HashMap<String,String> param;
+    private HashMap<String, String> param;
     private static int pageNum;
     private boolean mFlag;
 
@@ -97,6 +95,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
             mOrderListFlag = true;
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,7 +123,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
     protected void onResume() {
         super.onResume();
         resetClickable(CalculatorLL);
-        if (mFunctionListModel == null){
+        if (mFunctionListModel == null) {
             mFunctionListModel = new FunctionListSvcModel(this);
         }
         mFunctionListModel.load();
@@ -147,9 +146,9 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
 
     @Override
     public void onBackPressed() {
-        if (dialog != null&& dialog.isShowing()){
+        if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
-        }else{
+        } else {
             exitWithTwiceBackPressed();
         }
 
@@ -159,20 +158,20 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
     public void modelDidFinishLoad(LMModel model) {
 
         AsHttpRequestModel reponseModel = (AsHttpRequestModel) model;
-        if(model instanceof OrderListSvcModel){
+        if (model instanceof OrderListSvcModel) {
             String json = new String(reponseModel.mresponseBody);
             try {
                 JSONObject jsonObj = new JSONObject(json);
-                String code = ((JSONObject)jsonObj.get("head")).get("code").toString();
-                if(code.equals("success")){
+                String code = ((JSONObject) jsonObj.get("head")).get("code").toString();
+                if (code.equals("success")) {
 
-                    JSONArray bodyArr = (JSONArray) ((JSONObject)jsonObj.get("body")).get("lists");
+                    JSONArray bodyArr = (JSONArray) ((JSONObject) jsonObj.get("body")).get("lists");
                     try {
                         initializeData(bodyArr);
-                        if (adapter == null){
+                        if (adapter == null) {
                             adapter = new CommonAdapter<OrderListModel>(getApplicationContext(), mOrderList, R.layout.activity_orders_list_child) {
                                 @Override
-                                public void convert(org.hand.mas.utl.ViewHolder helper, OrderListModel obj,int position) {
+                                public void convert(org.hand.mas.utl.ViewHolder helper, OrderListModel obj, int position) {
                                     TextView projectNumberTextView = helper.getView(R.id.project_number_for_order);
                                     TextView projectStatusDesc = helper.getView(R.id.project_status_desc_for_order);
                                     TextView bpName = helper.getView(R.id.bp_name_for_order);
@@ -180,7 +179,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                                     TextView bpClass = helper.getView(R.id.bp_class_for_order);
                                     TextView identifierCode = helper.getView(R.id.identifier_code_for_order);
 
-                                    OrderListModel item = (OrderListModel)obj;
+                                    OrderListModel item = (OrderListModel) obj;
 
                                     projectNumberTextView.setText(item.getProjectNumber());
                                     projectStatusDesc.setText(item.getProjectStatusDesc());
@@ -188,28 +187,29 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                                     projectSource.setText(item.getProjectSource());
                                     String bpStr = item.getBpClass().equals("NP") ? "个人" : "法人";
                                     bpClass.setText(bpStr.concat("识别号:"));
-                                    if (bpClass.equals("ORG")){
+                                    if (bpClass.equals("ORG")) {
                                         identifierCode.setText(item.getOrganizationCode());
-                                    }else if (bpClass.equals("NP")){
+                                    } else if (bpClass.equals("NP")) {
                                         identifierCode.setText(item.getIdCardNo());
                                     }
 
                                 }
                             };
                             mOrderListView.setAdapter(adapter);
-                        }else{
+                        } else {
                             int count4newData = bodyArr.length();
 
-                            if (count4newData > 0){
-                                Toast.makeText(OrderListActivity.this,"加载了"+ String.valueOf(count4newData+"条新数据"),Toast.LENGTH_SHORT).show();
-                            }else{
-                                Toast.makeText(OrderListActivity.this,"没有更多的数据了",Toast.LENGTH_SHORT).show();
+                            if (count4newData > 0) {
+                                Toast.makeText(OrderListActivity.this, "加载了" + String.valueOf(count4newData + "条新数据"), Toast.LENGTH_SHORT).show();
+                                mOrderListView.setFooterEnable(true);
+                            } else {
+                                Toast.makeText(OrderListActivity.this, "没有更多的数据了", Toast.LENGTH_SHORT).show();
                                 mOrderListView.setFooterEnable(false);
                             }
                             mOrderListView.removeExtraView(CustomPullToRefreshListView.FOOTER_VIEW);
                             adapter.notifyDataSetChanged();
                         }
-                    } catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -217,19 +217,19 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
             } catch (JSONException e) {
                 e.printStackTrace();
             } finally {
-                if (mOrderListFlag == true){
+                if (mOrderListFlag == true) {
                     mOrderListFlag = false;
                 }
             }
 
-        }else if (model.equals(this.mFunctionListModel)){
+        } else if (model.equals(this.mFunctionListModel)) {
             String json = new String(reponseModel.mresponseBody);
             JSONObject jsonObj = null;
             try {
                 jsonObj = new JSONObject(json);
-                String code = ((JSONObject)jsonObj.get("head")).get("code").toString();
-                if (code.equals("ok")){
-                    JSONArray bodyArr = (JSONArray) ((JSONObject)jsonObj.get("body")).get("list");
+                String code = ((JSONObject) jsonObj.get("head")).get("code").toString();
+                if (code.equals("ok")) {
+                    JSONArray bodyArr = (JSONArray) ((JSONObject) jsonObj.get("body")).get("list");
                     JSONArray itemsArr = (JSONArray) bodyArr.getJSONObject(0).get("items");
                     addMenuItems(itemsArr);
                 }
@@ -238,30 +238,39 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
             }
 
         }
+        if (mOrderListView.isRefresh()){
+            mOrderListView.setTipContent("请求数据成功");
+            mOrderListView.completeTheRefreshing();
+        }
     }
 
     @Override
     public void modelDidStartLoad(LMModel model) {
 
-        Log.d("StartLoad","modelDidStartLoad");
+        Log.d("StartLoad", "modelDidStartLoad");
 //        fadeAnim(mSlideMenuImageView,0.0f,90.0f,1000);
 
     }
 
     @Override
     public void modelDidFailedLoadWithError(LMModel model) {
-        Log.d("LoadWithError","modelDidFailedLoadWithError");
+        Log.d("LoadWithError", "modelDidFailedLoadWithError");
+        mOrderListView.removeExtraView(CustomPullToRefreshListView.FOOTER_VIEW);
+        if (mOrderListView.isRefresh()){
+            mOrderListView.setTipContent("请求数据失败");
+            mOrderListView.completeTheRefreshing();
+        }
     }
 
     /*私有方法*/
-    private void bindAllViews(){
+    private void bindAllViews() {
         pageNum = 1;
         mModel = new OrderListSvcModel(this);
 
         LayoutInflater layoutInflater =
                 (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         mOrderListView = (CustomPullToRefreshListView) findViewById(R.id.order_list);
-        mFooterView = layoutInflater.inflate(R.layout.listview_footer, null);
+
         mTitleTextView = (TextView) findViewById(R.id.titleTextView);
         mFilterImageView = (ImageView) findViewById(R.id.filter_for_orderList);
         mSlideMenuImageView = (ImageView) findViewById(R.id.slide_menu);
@@ -279,28 +288,36 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
             }
         });
 
-        OnScrollToBottomListener onScrollToBottomListener = new OnScrollToBottomListener() {
+        OnScrollToRefreshListener onScrollToRefreshListener = new OnScrollToRefreshListener() {
             @Override
             public void onBottomListener(AbsListView view, int scrollState) {
-                mHandler.postDelayed(mRunnable,2000);
+                mOrderListView.setFooterEnable(false);
+                mHandler.postDelayed(mRunnable, 2000);
+            }
+
+            @Override
+            public void onRefreshListener() {
+                /* 重置适配器和数据 */
+                resetAdapter();
+                mModel.load();
             }
         };
-        mOrderListView.setScrollToBottomListener(onScrollToBottomListener);
+        mOrderListView.setScrollToBottomListener(onScrollToRefreshListener);
         AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (mSlidingMenu.getIsOpen() == false){
-                    String project_number = (String) ((TextView)view.findViewById(R.id.project_number_for_order)).getText();
-                    String project_source = (String) ((TextView)view.findViewById(R.id.project_source_for_order)).getText();
+                if (mSlidingMenu.getIsOpen() == false) {
+                    String project_number = (String) ((TextView) view.findViewById(R.id.project_number_for_order)).getText();
+                    String project_source = (String) ((TextView) view.findViewById(R.id.project_source_for_order)).getText();
 
                     String project_id = ((OrderListModel) parent.getAdapter().getItem(position)).getProjectId();
 
-                    Intent intent = new Intent(getApplicationContext(),DetailListActivity.class);
-                    intent.putExtra("project_id",project_id);
-                    intent.putExtra("project_number",project_number);
-                    intent.putExtra("project_source",project_source);
+                    Intent intent = new Intent(getApplicationContext(), DetailListActivity.class);
+                    intent.putExtra("project_id", project_id);
+                    intent.putExtra("project_number", project_number);
+                    intent.putExtra("project_source", project_source);
                     startActivity(intent);
-                    overridePendingTransition(R.anim.move_in_right,R.anim.alpha_out);
+                    overridePendingTransition(R.anim.move_in_right, R.anim.alpha_out);
                 }
             }
         };
@@ -349,7 +366,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
         TakePhotoAndUploadLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mSlidingMenu.getIsOpen()){
+                if (mSlidingMenu.getIsOpen()) {
                     mSlidingMenu.closeMenu();
                 }
 
@@ -375,7 +392,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                 } catch (ParseExpressionException e) {
                     e.printStackTrace();
                 }
-                startWebViewActivity(url,"计算器");
+                startWebViewActivity(url, "计算器");
                 v.setClickable(false);
             }
         });
@@ -386,12 +403,12 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
     *
     * */
     private void initializeData(JSONArray jsonArray) throws JSONException {
-        if(mOrderList == null){
+        if (mOrderList == null) {
             mOrderList = new ArrayList<OrderListModel>();
         }
         int length = jsonArray.length();
-        for (int i = 0; i < length; i++){
-            JSONObject data = (JSONObject)jsonArray.get(i);
+        for (int i = 0; i < length; i++) {
+            JSONObject data = (JSONObject) jsonArray.get(i);
             try {
                 OrderListModel item = new OrderListModel(
                         data.getString("project_id"),
@@ -404,28 +421,28 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                         data.getString("project_source")
                 );
                 mOrderList.add(item);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 continue;
-            }finally {
+            } finally {
 
             }
         }
     }
 
     /* 重置适配器和数据 */
-    private void resetAdapter(){
+    private void resetAdapter() {
         mOrderList = null;
         adapter = null;
         pageNum = 1;
     }
 
     /* 两次后退退出 */
-    private void exitWithTwiceBackPressed(){
-        if(mFlag == false){
+    private void exitWithTwiceBackPressed() {
+        if (mFlag == false) {
             mFlag = true;
-            Toast.makeText(getApplicationContext(),"再按一次退出",Toast.LENGTH_LONG).show();
-            new CountDownTimer(5*1000,1000){
+            Toast.makeText(getApplicationContext(), "再按一次退出", Toast.LENGTH_LONG).show();
+            new CountDownTimer(5 * 1000, 1000) {
 
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -437,7 +454,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                     mFlag = false;
                 }
             }.start();
-        }else{
+        } else {
             finish();
             return;
         }
@@ -445,7 +462,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
 
     private void fadeAnim(View v, float start, float end, int i) {
 //        RotateAnimation anim = new RotateAnimation(start,end, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
-        AlphaAnimation anim = new AlphaAnimation(start,end);
+        AlphaAnimation anim = new AlphaAnimation(start, end);
         anim.setDuration(i);
         anim.setFillAfter(true);
         v.startAnimation(anim);
@@ -455,61 +472,61 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
 
     /**
      * 打开SettingActivity
-     *
      */
-    private void startSettingActivity(){
-        Intent intent = new Intent(OrderListActivity.this,SettingActivity.class);
-        if (mSlidingMenu.getIsOpen()){
+    private void startSettingActivity() {
+        Intent intent = new Intent(OrderListActivity.this, SettingActivity.class);
+        if (mSlidingMenu.getIsOpen()) {
             mSlideMenuImageView.setImageDrawable(getResources().getDrawable(R.drawable.icon_for_slide_menu));
             mSlidingMenu.closeMenu();
         }
-        while (mSlidingMenu.getIsOpen()){
+        while (mSlidingMenu.getIsOpen()) {
             continue;
         }
         startActivity(intent);
-        overridePendingTransition(R.anim.move_in_bottm,R.anim.alpha_out);
+        overridePendingTransition(R.anim.move_in_bottm, R.anim.alpha_out);
     }
 
     /**
      * 打开FilterActivity
+     *
      * @param v
      */
-    private void startFilterActivity( View v ){
-        String filter_param = ((EditText)v).getText().toString();
+    private void startFilterActivity(View v) {
+        String filter_param = ((EditText) v).getText().toString();
         dialog.dismiss();
-        if (filter_param.isEmpty()){
+        if (filter_param.isEmpty()) {
 
-        }else{
-            Intent intentForFilter = new Intent(OrderListActivity.this,FilteredOrderListActivity.class);
-            intentForFilter.putExtra("filter_param",filter_param);
+        } else {
+            Intent intentForFilter = new Intent(OrderListActivity.this, FilteredOrderListActivity.class);
+            intentForFilter.putExtra("filter_param", filter_param);
             startActivity(intentForFilter);
-            overridePendingTransition(R.anim.move_in_right,R.anim.move_out_left);
+            overridePendingTransition(R.anim.move_in_right, R.anim.move_out_left);
         }
     }
 
     /**
-     *
      * 打开HtmlBaseActivity
+     *
      * @param url
      */
-    private void startWebViewActivity(String url,String title){
-        Intent intent = new Intent(OrderListActivity.this,HtmlBaseActivity.class);
-        intent.putExtra("url",url);
-        intent.putExtra("title",title);
+    private void startWebViewActivity(String url, String title) {
+        Intent intent = new Intent(OrderListActivity.this, HtmlBaseActivity.class);
+        intent.putExtra("url", url);
+        intent.putExtra("title", title);
         startActivity(intent);
-        overridePendingTransition(R.anim.move_in_bottm,R.anim.alpha_out);
+        overridePendingTransition(R.anim.move_in_bottm, R.anim.alpha_out);
     }
 
-    private void addMenuItems(JSONArray itemsArr){
+    private void addMenuItems(JSONArray itemsArr) {
         LinearLayout functionListLL = (LinearLayout) findViewById(R.id.function_list_ll);
         functionListLL.removeAllViews();
         int count = itemsArr.length();
-        for (int i = 0;i < count;i++){
+        for (int i = 0; i < count; i++) {
             try {
                 TextView ItemTextView = new TextView(getApplicationContext());
                 ItemTextView.setTextColor(Color.WHITE);
-                ItemTextView.setPadding(0,5,0,5);
-                ItemTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
+                ItemTextView.setPadding(0, 5, 0, 5);
+                ItemTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                 JSONObject item = (JSONObject) itemsArr.get(i);
                 final String url = (String) item.get("url");
                 final String title = (String) item.get("title");
@@ -517,7 +534,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
                 ItemTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startWebViewActivity(url,title);
+                        startWebViewActivity(url, title);
                     }
                 });
                 functionListLL.addView(ItemTextView, ViewGroup.LayoutParams.MATCH_PARENT,
@@ -531,10 +548,10 @@ public class OrderListActivity extends Activity implements LMModelDelegate{
     /**
      * 重置clickable
      */
-    private void resetClickable(View view){
-        if (view != null && !view.isClickable()){
+    private void resetClickable(View view) {
+        if (view != null && !view.isClickable()) {
             view.setClickable(true);
         }
     }
 
- }
+}

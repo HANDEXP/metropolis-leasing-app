@@ -15,6 +15,7 @@ import com.littlemvc.model.LMModel;
 import com.littlemvc.model.LMModelDelegate;
 import com.littlemvc.model.request.AsHttpRequestModel;
 
+import org.hand.mas.custom_view.CustomPullToRefreshListView;
 import org.hand.mas.custom_view.SlidingMenu;
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.models.OrderListModel;
@@ -33,7 +34,7 @@ import java.util.List;
  */
 public class FilteredOrderListActivity extends Activity implements LMModelDelegate{
 
-    private ListView mOrderListView;
+    private CustomPullToRefreshListView mOrderListView;
     private TextView mTitleTextView;
     private ImageView mReturnImageView;
 
@@ -135,12 +136,14 @@ public class FilteredOrderListActivity extends Activity implements LMModelDelega
         pageNum = 1;
         mModel = new OrderListSvcModel(this);
 
-        mOrderListView = (ListView) findViewById(R.id.order_list);
+        mOrderListView = (CustomPullToRefreshListView) findViewById(R.id.order_list);
         mTitleTextView = (TextView) findViewById(R.id.titleTextView);
         mReturnImageView = (ImageView) findViewById(R.id.return_to_detailList);
         SlidingMenu slidingMenu = (SlidingMenu) findViewById(R.id.sliding_menu_and_content);
         RelativeLayout slidingMenuContent = (RelativeLayout) findViewById(R.id.slide_menu_content);
 
+        mOrderListView.setType(-1);
+        mOrderListView.setFooterEnable(false);
         slidingMenu.setBackgroundColor(Color.WHITE);
         slidingMenuContent.setVisibility(View.GONE);
         mTitleTextView.setText("筛选结果");

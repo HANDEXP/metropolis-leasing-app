@@ -28,7 +28,9 @@
                     android:divider="#f2f2f2"
                     android:dividerHeight="2px"
                     android:background="@color/white"
-                    android:scrollbars="none">
+                    android:scrollbars="vertical"
+                    android:fadeScrollbars="false"
+                    >
 
                 </org.hand.mas.custom_view.CustomPullToRefreshListView>
             </LinearLayout>

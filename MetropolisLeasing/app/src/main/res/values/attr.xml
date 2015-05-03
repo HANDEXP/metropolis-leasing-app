@@ -64,4 +64,10 @@
         <!-- View background -->
         <attr name="android:background"/>
     </declare-styleable>
+
+    <!-- CustomPullToRefreshListView -->
+    <attr name="pullType" format="dimension"/>
+    <declare-styleable name="CustomPullToRefreshListView">
+        <attr name="pullType"></attr>
+    </declare-styleable>
 </resources>
