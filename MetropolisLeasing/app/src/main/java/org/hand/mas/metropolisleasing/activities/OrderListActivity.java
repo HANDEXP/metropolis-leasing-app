@@ -2,6 +2,7 @@ package org.hand.mas.metropolisleasing.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -238,7 +239,8 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
             }
 
         }
-        if (mOrderListView.isRefresh()){
+        /* 考虑并发 */
+        if (mOrderListView.getState() != 0){
             mOrderListView.setTipContent("请求数据成功");
             mOrderListView.completeTheRefreshing();
         }
@@ -367,6 +369,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
             @Override
             public void onClick(View v) {
                 if (mSlidingMenu.getIsOpen()) {
+                    mSlideMenuImageView.setImageDrawable(getResources().getDrawable(R.drawable.icon_for_slide_menu));
                     mSlidingMenu.closeMenu();
                 }
 
@@ -396,6 +399,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
                 v.setClickable(false);
             }
         });
+        setDefaultUserData();
     }
 
     /*
@@ -552,6 +556,15 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
         if (view != null && !view.isClickable()) {
             view.setClickable(true);
         }
+    }
+    /*
+* 取出缓存的用户资料
+*/
+    private void setDefaultUserData(){
+        TextView usernameTextView = (TextView) findViewById(R.id.username_textview_in_menu);
+        SharedPreferences preferences = getSharedPreferences("userInfo",MODE_APPEND);
+        String userName = preferences.getString("userName","");
+        usernameTextView.setText(userName);
     }
 
 }

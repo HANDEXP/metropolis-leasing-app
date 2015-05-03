@@ -164,6 +164,10 @@ public class CustomPullToRefreshListView extends ListView implements AdapterView
         this.isRefresh = isRefresh;
     }
 
+    public int getState() {
+        return state;
+    }
+
     private void measureView(View view){
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
         if (layoutParams== null){
@@ -266,6 +270,9 @@ public class CustomPullToRefreshListView extends ListView implements AdapterView
                     isRefresh = false;
                     refreshViewByState();
                 }
+                break;
+            case REFRESH:
+                Log.d("SSSSS","SSSSS");
                 break;
         }
     }

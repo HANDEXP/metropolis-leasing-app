@@ -3,12 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/img_frame_background">
     <org.hand.mas.custom_view.SlidingMenu
         android:id="@+id/sliding_menu_and_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/img_frame_background"
+        android:background="@color/menu_color_transparent"
         app:rightPadding="100dp">
         <LinearLayout
             android:layout_width="wrap_content"

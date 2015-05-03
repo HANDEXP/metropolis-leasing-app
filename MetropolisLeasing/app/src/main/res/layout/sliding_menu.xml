@@ -1,20 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mas="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#00000000"
     android:id="@+id/slide_menu_content">
-
     <LinearLayout
+        android:id="@+id/top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:orientation="vertical"
-        android:paddingLeft="15dp">
+        android:paddingTop="30dp"
+        android:paddingBottom="30dp"
+        >
+        <org.hand.mas.custom_view.RoundImageView
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/login_frame"
+            mas:type="circle"/>
+        <TextView
+            android:id="@+id/username_textview_in_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            />
+    </LinearLayout>
+    <View
+        android:id="@+id/center"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+
+        android:layout_centerInParent="true"/>
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top"
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
         <LinearLayout
             android:id="@+id/take_photo_and_upload"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -23,10 +60,13 @@
                 android:textSize="20sp"
                 />
         </LinearLayout>
+        <View style="@style/SettingDivider" />
         <LinearLayout
             android:id="@+id/calculatorLL"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -37,11 +77,14 @@
         </LinearLayout>
         <View style="@style/SettingDivider" />
         <include layout="@layout/view_function_list" />
-        <View style="@style/SettingDivider" />
+        <View style="@style/SettingDivider"
+            />
         <LinearLayout
             android:id="@+id/settingLL"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -49,6 +92,7 @@
                 android:textColor="@color/white"
                 android:textSize="20sp" />
         </LinearLayout>
+        <View style="@style/SettingDivider" />
     </LinearLayout>
 
     <LinearLayout
