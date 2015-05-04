@@ -31,6 +31,7 @@
                     android:background="@color/white"
                     android:scrollbars="vertical"
                     android:fadeScrollbars="false"
+                    app:pullType="both"
                     >
 
                 </org.hand.mas.custom_view.CustomPullToRefreshListView>

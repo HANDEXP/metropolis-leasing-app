@@ -66,7 +66,12 @@
     </declare-styleable>
 
     <!-- CustomPullToRefreshListView -->
-    <attr name="pullType" format="dimension"/>
+    <attr name="pullType">
+        <enum name="normal" value="-1" />
+        <enum name="only_header" value="0" />
+        <enum name="only_footer" value="1" />
+        <enum name="both" value="2" />
+    </attr>
     <declare-styleable name="CustomPullToRefreshListView">
         <attr name="pullType"></attr>
     </declare-styleable>

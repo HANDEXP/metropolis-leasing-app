@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -92,9 +93,26 @@ public class CustomPullToRefreshListView extends ListView implements AdapterView
     public CustomPullToRefreshListView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomPullToRefreshListView);
+        type = typedArray.getInt(R.styleable.CustomPullToRefreshListView_pullType,BOTH);
+
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        this.setHeaderView(layoutInflater.inflate(R.layout.listview_header,null));
-        this.setFooterView(layoutInflater.inflate(R.layout.listview_footer,null));
+        switch (type){
+            case NORMAL:
+                setFooterEnable(false);
+                break;
+            case ONLY_HEADER:
+                setFooterEnable(false);
+                this.setHeaderView(layoutInflater.inflate(R.layout.listview_header,null));
+                break;
+            case ONLY_FOOTER:
+                this.setFooterView(layoutInflater.inflate(R.layout.listview_footer,null));
+                break;
+            case BOTH:
+                this.setHeaderView(layoutInflater.inflate(R.layout.listview_header,null));
+                this.setFooterView(layoutInflater.inflate(R.layout.listview_footer,null));
+                break;
+        }
 
 
         measureView(mHeaderView);
@@ -106,6 +124,7 @@ public class CustomPullToRefreshListView extends ListView implements AdapterView
         topPadding(-headerHeight);
         setOnItemClickListener(this);
         setOnScrollListener(this);
+        typedArray.recycle();
     }
 
 
@@ -231,7 +250,7 @@ public class CustomPullToRefreshListView extends ListView implements AdapterView
      * @param ev
      */
     private void onMove(MotionEvent ev){
-        if (!isRefresh() || type == NORMAL){
+        if (!isRefresh() || type == NORMAL || type == ONLY_FOOTER){
             return;
         }
         int tempY = (int) ev.getY();
@@ -320,6 +339,8 @@ public class CustomPullToRefreshListView extends ListView implements AdapterView
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+        if (type == NORMAL)
+            return super.onTouchEvent(ev);
         switch (ev.getAction()){
             case MotionEvent.ACTION_DOWN:
                 if (firstVisibleItem == 0){
