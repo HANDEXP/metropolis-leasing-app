@@ -224,7 +224,7 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null) {
-            if (requestCode == VIEW_PAGER){
+            if (requestCode == VIEW_PAGER ){
                 return;
             }
         }
@@ -233,6 +233,10 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
         String fileName;
         switch (requestCode) {
             case IMAGE_CAPTURE:
+                /* 取消照片返回0;保存照片返回－1 */
+                if (resultCode == 0){
+                    return;
+                }
                 originalUri = photoUri;
                 String[] proj = { MediaStore.Images.Media.DATA };
                 Cursor cursor = this.getContentResolver().query(originalUri, proj, null,
