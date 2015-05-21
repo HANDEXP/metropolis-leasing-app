@@ -177,7 +177,7 @@ public class CddViewPagerActivity extends FragmentActivity implements LMModelDel
         mViewPager.setOffscreenPageLimit(3);
         mViewPager.setPageTransformer(true, new DepthPageTransformer());
         /* 加载首张照片 */
-        mFragmentList.get(mCurrencyPosition).setImageWithDelay(10);
+//        mFragmentList.get(mCurrencyPosition).setImageWithDelay(10);
 
         mIndicator = (CustomCirclePageIndicator)findViewById(R.id.indicator);
         mIndicator.setViewPager(mViewPager);
@@ -195,7 +195,7 @@ public class CddViewPagerActivity extends FragmentActivity implements LMModelDel
                     mFragmentList.get(i).resetImage();
                 }
                 PhotoViewFragment fragment = mFragmentList.get(position);
-                fragment.setImageWithDelay(500);
+                
                 /*************/
                 CddGridModel item = mCddGridList.get(position);
                 mCurrencyPosition = position;

@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.hand.mas.custom_view.CustomProgressBar;
+import org.hand.mas.custom_view.OnProgressingListener;
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.utl.ConstantUrl;
 import org.hand.mas.utl.LocalImageLoader;
@@ -24,6 +26,8 @@ public class PhotoViewFragment extends Fragment {
 
     private String mPath = "foo";
     private PhotoView photoView;
+    private CustomProgressBar customProgressBar;
+    private boolean isViewShown = false;
     private Handler mHandler = new Handler();
     private Runnable mRunnable = new Runnable() {
         @Override
@@ -36,27 +40,73 @@ public class PhotoViewFragment extends Fragment {
         }
     };
 
+    private Runnable mThreadStart = new Runnable() {
+        @Override
+        public void run() {
+            customProgressBar.startThread();
+        }
+    };
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser){
+            if (getView() != null){
+                isViewShown = true;
+//                customProgressBar.startThread();
+//                mHandler.post(mThreadStart);
+                mHandler.postDelayed(mRunnable, 500);
+            }else{
+                isViewShown = false;
+
+            }
+
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         if (getArguments() != null) {
             mPath = getArguments().getString("path");
         }
-
-        photoView = new PhotoView(container.getContext());
+        View fragment =  inflater.inflate(R.layout.fragment_photoview, container, false);
+        photoView = (PhotoView) fragment.findViewById(R.id.photo_view);
         photoView.setImageResource(R.drawable.friends_sends_pictures_no);
-
-
-        return photoView;
+//        customProgressBar = (CustomProgressBar) fragment.findViewById(R.id.progress_bar);
+//        customProgressBar.setProgressingListener(new OnProgressingListener() {
+//            @Override
+//            public void onStart(View view) {
+//
+//            }
+//
+//            @Override
+//            public void onProgress(View view) {
+//                ((CustomProgressBar) view).increasedProgress(5);
+//            }
+//
+//            @Override
+//            public void onComplete(View view) {
+//                mHandler.postDelayed(mRunnable, 50);
+//            }
+//        });
+        if (!isViewShown){
+//            customProgressBar.startThread();
+//            mHandler.post(mThreadStart);
+            mHandler.postDelayed(mRunnable, 500);
+        }
+        return fragment;
     }
 
     public void setImageWithDelay(long delayMillis){
-        mHandler.postDelayed(mRunnable,delayMillis);
+
+//        mHandler.postDelayed(mRunnable,delayMillis);
     }
 
     public void resetImage(){
         if (photoView !=null)
             photoView.setImageResource(R.drawable.friends_sends_pictures_no);
         mHandler.removeCallbacks(mRunnable);
+        mHandler.removeCallbacks(mThreadStart);
     }
 }

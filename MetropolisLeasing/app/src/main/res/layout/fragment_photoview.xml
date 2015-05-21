@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mas="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <uk.co.senab.photoview.PhotoView
+        android:id="@+id/photo_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <!--<org.hand.mas.custom_view.CustomProgressBar-->
+        <!--android:id="@+id/progress_bar"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="100dp"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--mas:circleWidth="5dp"-->
+        <!--mas:backgroundColor="#ffffff"-->
+        <!--mas:thickColor="#90000000"-->
+        <!--mas:speed="10"-->
+        <!--android:visibility="gone"/>-->
+
+</RelativeLayout>

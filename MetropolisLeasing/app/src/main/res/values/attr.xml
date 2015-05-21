@@ -75,4 +75,16 @@
     <declare-styleable name="CustomPullToRefreshListView">
         <attr name="pullType"></attr>
     </declare-styleable>
+
+    <!-- CustomProgressBar-->
+    <attr name="backgroundColor" format="color"/>
+    <attr name="thickColor" format="color"/>
+    <attr name="circleWidth" format="dimension"/>
+    <attr name="speed" format="integer"/>
+    <declare-styleable name="CustomProgressBar">
+        <attr name="backgroundColor"/>
+        <attr name="thickColor"/>
+        <attr name="circleWidth"/>
+        <attr name="speed"/>
+    </declare-styleable>
 </resources>

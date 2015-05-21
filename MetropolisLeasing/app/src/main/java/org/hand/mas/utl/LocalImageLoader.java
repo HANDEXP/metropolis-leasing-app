@@ -103,11 +103,8 @@ public class LocalImageLoader {
         FIFO, LIFO
     }
 
-    /**
-     * 对ViewPager的处理
-     *
-     *
-     */
+    private static double percentage;
+
     /* 是否再ViewPager中显示缩略图 */
     public boolean isSampleForViewPager = true;
 
@@ -437,13 +434,20 @@ public class LocalImageLoader {
         {
             URL url = new URL(urlStr);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            int contentLength = conn.getContentLength();
 
             is = conn.getInputStream();
             fos = new FileOutputStream(file);
             byte[] buf = new byte[512];
             int len = 0;
+            int writedLength = 0;
+            percentage = 0;
             while ((len = is.read(buf)) != -1)
             {
+                writedLength += len;
+                percentage = 1.0 * writedLength / contentLength;
+                Log.d("percentage", String.valueOf(percentage));
+
                 fos.write(buf, 0, len);
             }
             fos.flush();
@@ -644,5 +648,9 @@ public class LocalImageLoader {
     public void setRatios(double widthRatio,double heightRatio){
         this.widthRatio = widthRatio;
         this.heightRatio = heightRatio;
+    }
+
+    public double getPercentage(){
+        return percentage;
     }
 }
