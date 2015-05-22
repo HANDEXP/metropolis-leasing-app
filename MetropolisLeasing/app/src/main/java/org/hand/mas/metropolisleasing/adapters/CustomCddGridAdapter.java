@@ -2,6 +2,7 @@ package org.hand.mas.metropolisleasing.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import org.hand.mas.custom_view.CustomProgressBar;
+import org.hand.mas.custom_view.OnProgressingListener;
 import org.hand.mas.custom_view.RoundImageView;
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.models.CddGridModel;
@@ -48,6 +51,7 @@ public class CustomCddGridAdapter<T> extends CommonAdapter<T> {
         final ImageButton deleteImageButton = helper.getView(R.id.deleteImageButton);
 
 
+
         CddGridModel item = (CddGridModel) obj;
         String cddItemId = item.getCddItemId();
         String description = item.getDescription();
@@ -57,7 +61,7 @@ public class CustomCddGridAdapter<T> extends CommonAdapter<T> {
         boolean remote = item.getRemote();
 
         roundImageView.setTag(R.id.position,position);
-        deleteImageButton.setTag(R.id.position,position);
+        deleteImageButton.setTag(R.id.position, position);
 
         Pattern pattern = Pattern.compile("png|jpeg|jpg|bmp|gif");
         Matcher matcher = pattern.matcher(fileSuffix);
@@ -65,8 +69,9 @@ public class CustomCddGridAdapter<T> extends CommonAdapter<T> {
         if(!matcher.find()){
 
         }else {
+
             LocalImageLoader.getInstance().isSampleForViewPager = true;
-            LocalImageLoader.getInstance(5, LocalImageLoader.Type.LIFO).loadImage(ConstantUrl.basicUrl+filePath,roundImageView,false);
+            LocalImageLoader.getInstance(5, LocalImageLoader.Type.LIFO).loadImage(ConstantUrl.basicUrl + filePath, roundImageView, false);
 
         }
         initEvent(deleteImageButton,roundImageView);

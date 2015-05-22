@@ -48,8 +48,24 @@
     <org.hand.mas.custom_view.CustomCirclePageIndicator
         android:id="@+id/indicator"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:padding="10dip"
+        android:layout_marginBottom="10dp"
         android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
+        android:layout_width="250dp"
         />
+    <TextView
+        android:id="@+id/sourceImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/source_image_background"
+        android:text="原图"
+        android:textSize="12sp"
+        android:textColor="@color/white"
+        android:layout_marginLeft="15dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:layout_alignBottom="@+id/indicator"/>
 </RelativeLayout>

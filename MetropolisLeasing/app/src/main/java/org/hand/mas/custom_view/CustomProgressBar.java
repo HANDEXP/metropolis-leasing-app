@@ -23,7 +23,7 @@ public class CustomProgressBar extends View implements OnProgressingListener{
     private int mThickColor;
     private int mCircleWidth;
     private int mSpeed;
-    private int mProgress = 0;
+    private float mProgress = 0;
     private Paint mPaint;
 
     /* listeners */
@@ -110,19 +110,21 @@ public class CustomProgressBar extends View implements OnProgressingListener{
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
-        RectF oval = new RectF(center - radius, center - radius, center + radius, center + radius);
+        float start = (float) (center - radius * 0.9);
+        float end = (float) (center + radius * 0.9);
+        RectF oval = new RectF(start, start, end, end);
         mPaint.setColor(mBackgroundColor);
         canvas.drawCircle(center, center, radius, mPaint);
 
         mPaint.setColor(mThickColor);
-        mPaint.setStyle(Paint.Style.FILL);
-        canvas.drawArc(oval, -90, mProgress, true, mPaint);
+        mPaint.setStyle(Paint.Style.STROKE);
+        canvas.drawArc(oval, -90, mProgress, false, mPaint);
         if (mProgress >= 360){
             onComplete(mView);
         }
     }
 
-    public void setProgress(int mProgress) {
+    public void setProgress(float mProgress) {
         this.mProgress = mProgress;
     }
 

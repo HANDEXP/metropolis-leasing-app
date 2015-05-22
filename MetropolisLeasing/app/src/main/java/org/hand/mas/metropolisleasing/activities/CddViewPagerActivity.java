@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.littlemvc.model.LMModel;
 import com.littlemvc.model.LMModelDelegate;
@@ -191,11 +192,11 @@ public class CddViewPagerActivity extends FragmentActivity implements LMModelDel
             public void onPageSelected(int position) {
 
                 /*************/
-                for(int i = 0;i< mFragmentList.size();i++){
+                for (int i = 0; i < mFragmentList.size(); i++) {
                     mFragmentList.get(i).resetImage();
                 }
                 PhotoViewFragment fragment = mFragmentList.get(position);
-                
+
                 /*************/
                 CddGridModel item = mCddGridList.get(position);
                 mCurrencyPosition = position;
@@ -257,6 +258,13 @@ public class CddViewPagerActivity extends FragmentActivity implements LMModelDel
                             }
                         });
                 mDialogPlus.show();
+            }
+        });
+        TextView sourceImgTextView = (TextView) findViewById(R.id.sourceImg);
+        sourceImgTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFragmentList.get(mCurrencyPosition).setImageWithDelay(10);
             }
         });
     }

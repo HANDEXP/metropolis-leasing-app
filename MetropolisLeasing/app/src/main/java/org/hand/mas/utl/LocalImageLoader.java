@@ -103,7 +103,8 @@ public class LocalImageLoader {
         FIFO, LIFO
     }
 
-    private static double percentage;
+    private double percentage;
+    private boolean isShowProgressBar = false;
 
     /* 是否再ViewPager中显示缩略图 */
     public boolean isSampleForViewPager = true;
@@ -223,8 +224,10 @@ public class LocalImageLoader {
                     if (!isLocal) {
                         File file = getDiskCacheDir(imageView.getContext(), md5(path));
                         if (file.exists()) {
+                            isShowProgressBar =false;
                             bm = loadImageFromLocal(file.getAbsolutePath(), imageView);
                         } else {
+                            isShowProgressBar =true;
                             boolean downloadState = downloadImgByUrl(path, file);
                             if (downloadState) {
                                 Log.d("downFileCachePath", file.getAbsolutePath());
@@ -233,6 +236,7 @@ public class LocalImageLoader {
                         }
                     } else {
                     /*本地获取*/
+                        isShowProgressBar =false;
                         bm = loadImageFromLocal(path, imageView);
 
                     }
@@ -441,12 +445,12 @@ public class LocalImageLoader {
             byte[] buf = new byte[512];
             int len = 0;
             int writedLength = 0;
-            percentage = 0;
+            mInstance.percentage = 0;
             while ((len = is.read(buf)) != -1)
             {
                 writedLength += len;
-                percentage = 1.0 * writedLength / contentLength;
-                Log.d("percentage", String.valueOf(percentage));
+                mInstance.percentage = 1.0 * writedLength / contentLength;
+                Log.d("percentage", String.valueOf(mInstance.percentage));
 
                 fos.write(buf, 0, len);
             }
@@ -652,5 +656,9 @@ public class LocalImageLoader {
 
     public double getPercentage(){
         return percentage;
+    }
+
+    public boolean isShowProgressBar(){
+        return isShowProgressBar;
     }
 }

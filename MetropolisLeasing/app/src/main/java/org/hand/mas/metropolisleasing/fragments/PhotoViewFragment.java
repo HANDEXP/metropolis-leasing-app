@@ -10,10 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.hand.mas.custom_view.CustomProgressBar;
 import org.hand.mas.custom_view.OnProgressingListener;
 import org.hand.mas.metropolisleasing.R;
+import org.hand.mas.metropolisleasing.application.MSApplication;
 import org.hand.mas.utl.ConstantUrl;
 import org.hand.mas.utl.LocalImageLoader;
 
@@ -34,7 +36,7 @@ public class PhotoViewFragment extends Fragment {
         public void run() {
             if (photoView != null){
                 LocalImageLoader.getInstance().isSampleForViewPager = false;
-                LocalImageLoader.getInstance().setRatios(0.7f, 0.7f);
+                LocalImageLoader.getInstance().setRatios(0.5f, 0.5f);
                 LocalImageLoader.getInstance().loadImage(ConstantUrl.basicUrl + mPath, photoView, false);
             }
         }
@@ -73,23 +75,25 @@ public class PhotoViewFragment extends Fragment {
         View fragment =  inflater.inflate(R.layout.fragment_photoview, container, false);
         photoView = (PhotoView) fragment.findViewById(R.id.photo_view);
         photoView.setImageResource(R.drawable.friends_sends_pictures_no);
-//        customProgressBar = (CustomProgressBar) fragment.findViewById(R.id.progress_bar);
-//        customProgressBar.setProgressingListener(new OnProgressingListener() {
-//            @Override
-//            public void onStart(View view) {
-//
-//            }
-//
-//            @Override
-//            public void onProgress(View view) {
-//                ((CustomProgressBar) view).increasedProgress(5);
-//            }
-//
-//            @Override
-//            public void onComplete(View view) {
-//                mHandler.postDelayed(mRunnable, 50);
-//            }
-//        });
+        customProgressBar = (CustomProgressBar) fragment.findViewById(R.id.progress_bar);
+        customProgressBar.setProgressingListener(new OnProgressingListener() {
+            @Override
+            public void onStart(View view) {
+
+            }
+
+            @Override
+            public void onProgress(View view) {
+                ((CustomProgressBar) view).increasedProgress(5);
+            }
+
+            @Override
+            public void onComplete(View view) {
+                LocalImageLoader.getInstance().isSampleForViewPager = false;
+                LocalImageLoader.getInstance().setRatios(1.0f, 1.0f);
+                LocalImageLoader.getInstance().loadImage(ConstantUrl.basicUrl + mPath, photoView, true);
+            }
+        });
         if (!isViewShown){
 //            customProgressBar.startThread();
 //            mHandler.post(mThreadStart);
@@ -99,8 +103,8 @@ public class PhotoViewFragment extends Fragment {
     }
 
     public void setImageWithDelay(long delayMillis){
+        mHandler.post(mThreadStart);
 
-//        mHandler.postDelayed(mRunnable,delayMillis);
     }
 
     public void resetImage(){
