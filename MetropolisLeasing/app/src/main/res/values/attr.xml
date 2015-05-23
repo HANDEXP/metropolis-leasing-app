@@ -87,4 +87,11 @@
         <attr name="circleWidth"/>
         <attr name="speed"/>
     </declare-styleable>
+    <!-- CustomDotsTextView -->
+    <declare-styleable name="CustomDotsTextView">
+        <attr name="dotsColor" format="color"/>
+        <attr name="period" format="integer"/>
+        <attr name="jumpHeight" format="integer"/>
+        <attr name="autoPlay" format="boolean"/>
+    </declare-styleable>
 </resources>

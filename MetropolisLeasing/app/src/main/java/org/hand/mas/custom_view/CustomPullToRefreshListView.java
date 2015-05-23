@@ -291,7 +291,7 @@ public class CustomPullToRefreshListView extends ListView implements AdapterView
                 }
                 break;
             case REFRESH:
-                Log.d("SSSSS","SSSSS");
+
                 break;
         }
     }
@@ -390,6 +390,7 @@ public class CustomPullToRefreshListView extends ListView implements AdapterView
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         int itemsLastIndex;
         itemsLastIndex = getAdapter().getCount();
+
         Log.d("HARU", "itemsLastIndex: " + String.valueOf(itemsLastIndex) + " visibleLastIndex: " + String.valueOf(visibleLastIndex) + " FooterViewsCount: " + String.valueOf(getFooterViewsCount()));
         if (itemsLastIndex == visibleLastIndex  && isFooterEnable() == true){
 
