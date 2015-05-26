@@ -1,8 +1,11 @@
 package org.hand.mas.metropolisleasing.activities;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +22,7 @@ import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.models.DetailListModel;
 import org.hand.mas.metropolisleasing.models.DetailListSvcModel;
 import org.hand.mas.utl.CommonAdapter;
+import org.hand.mas.utl.ConstantAnim;
 import org.hand.mas.utl.ViewHolder;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,6 +52,15 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
 
     private String project_id;
     private String project_number;
+
+    private Handler mHandler = new Handler();
+    private Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mModel.load(param);
+        }
+    };
+
     // 照片列表数据
     private ArrayList<ImageItem> imageList = new ArrayList<ImageItem>();
 
@@ -81,10 +94,15 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
         projectNumberTextView.setText(project_number);
         projectSourceTextView.setText(project_source);
 
-        param.put("project_number",project_number);
-        param.put("project_id",project_id);
+        param.put("project_number", project_number);
+        param.put("project_id", project_id);
+        mHintTextView.setVisibility(View.VISIBLE);
+        if (mDetailList != null && !mDetailList.isEmpty()){
 
-        mModel.load(param);
+            detailListView.setAdapter(null);
+        }
+        mHandler.postDelayed(mRunnable,1500);
+//        mModel.load(param);
 
     }
 
@@ -110,7 +128,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
 
     @Override
     public void modelDidFinishLoad(LMModel model) {
-        Log.d("FinishLoad","modelDidFinishLoad");
+        Log.d("FinishLoad", "modelDidFinishLoad");
         AsHttpRequestModel reponseModel = (AsHttpRequestModel) model;
         if (model instanceof DetailListSvcModel){
             String json = new String(reponseModel.mresponseBody);
@@ -144,6 +162,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
                 e.printStackTrace();
             }finally {
                 mHintTextView.setVisibility(View.INVISIBLE);
+                ConstantAnim.fadeInView(detailListView,500);
             }
         }
     }
@@ -151,12 +170,13 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
     @Override
     public void modelDidStartLoad(LMModel model) {
         Log.d("StartLoad", "modelDidStartLoad");
-        mHintTextView.setVisibility(View.VISIBLE);
+
+
     }
 
     @Override
     public void modelDidFailedLoadWithError(LMModel model) {
-        Log.d("FailedLoadWithError","modelDidFailedLoadWithError");
+        Log.d("FailedLoadWithError", "modelDidFailedLoadWithError");
     }
 
     /* 私有方法 */
@@ -194,10 +214,10 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
         intent4ViewPager.putExtra("project_number",project_number);
         intent4ViewPager.putExtra("cdd_item_id",mDetailList.get(position).getCddItemId());
         intent4ViewPager.putExtra("check_id",mDetailList.get(position).getCheckId());
-        intent4ViewPager.putExtra("bp_name",mDetailList.get(position).getBpName());
-        intent4ViewPager.putExtra("description",mDetailList.get(position).getDescription());
+        intent4ViewPager.putExtra("bp_name", mDetailList.get(position).getBpName());
+        intent4ViewPager.putExtra("description", mDetailList.get(position).getDescription());
         startActivityForResult(intent4ViewPager, 0);
-        overridePendingTransition(R.anim.move_in_right,R.anim.alpha_out);
+        overridePendingTransition(R.anim.move_in_right, R.anim.alpha_out);
     }
 
     /**
@@ -235,4 +255,6 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
         finish();
         overridePendingTransition(R.anim.alpha_in,R.anim.move_out_right);
     }
+
+
 }

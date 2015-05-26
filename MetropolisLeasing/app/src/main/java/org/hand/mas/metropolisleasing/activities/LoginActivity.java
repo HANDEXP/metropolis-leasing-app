@@ -29,12 +29,15 @@ import org.hand.mas.custom_view.RoundImageView;
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.application.MSApplication;
 import org.hand.mas.metropolisleasing.models.LoginSvcModel;
+import org.hand.mas.utl.ConstantAnim;
 import org.hand.mas.utl.ConstantUtl;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+
+import static org.hand.mas.utl.ConstantAnim.fadeInView;
 
 /**
  * Created by gonglixuan on 15/3/19.
@@ -219,9 +222,9 @@ public class LoginActivity extends Activity implements LMModelDelegate{
 
         mModel = new LoginSvcModel(this);
         setDefaultUserData();
-        fadeInView(mImage);
+        fadeInView(mImage,1500);
 //        translateYView(LLForEditText,800);
-        fadeInAndTranslateView(LLForEditText);
+        ConstantAnim.fadeInAndTranslateView(LLForEditText);
 
 
     }
@@ -280,13 +283,13 @@ public class LoginActivity extends Activity implements LMModelDelegate{
         }finally {
 //            editor.commit();
         }
-        String token = preferences.getString(ConstantUtl.SYS_PREFRENCES_PUSH_TOKEN,"");
+        String token = preferences.getString(ConstantUtl.SYS_PREFRENCES_PUSH_TOKEN, "");
         if(token.length() != 0){
             param.put("push_token",token);
         }else{
             param.put("push_token","-1");
         }
-        param.put("device_id",((TelephonyManager) getSystemService(TELEPHONY_SERVICE)).getDeviceId());
+        param.put("device_id", ((TelephonyManager) getSystemService(TELEPHONY_SERVICE)).getDeviceId());
     }
 
     /*
@@ -312,28 +315,8 @@ public class LoginActivity extends Activity implements LMModelDelegate{
         mPasswordEditText.setText(userPassword);
     }
 
-    private void fadeInView(View v){
-        AlphaAnimation animation = new AlphaAnimation(0.0f,1.0f);
-        animation.setDuration(1500);
-        animation.setFillAfter(true);
-        v.setAnimation(animation);
-        v.startAnimation(animation);
-    }
 
 
-    private void fadeInAndTranslateView(final View view){
-        ObjectAnimator animator = ObjectAnimator
-                .ofFloat(view,"foobar",1.0f,0.0f)
-                .setDuration(1500);
-        animator.start();
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float currencyValue = (float) animation.getAnimatedValue();
-                view.setAlpha(1.0f - currencyValue);
-                view.setTranslationY(currencyValue * 300.0f);
 
-            }
-        });
-    }
+
   }

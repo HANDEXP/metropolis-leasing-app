@@ -43,6 +43,8 @@ import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
+import static org.hand.mas.utl.ConstantAnim.rotateAddItem;
+
 /**
  * Created by gonglixuan on 15/3/16.
  */
@@ -413,12 +415,7 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
         overridePendingTransition(R.anim.alpha_in, R.anim.move_out_right);
     }
 
-    private void rotateAddItem(View v, float start, float end, int i) {
-        RotateAnimation anim = new RotateAnimation(start, end, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        anim.setDuration(i);
-        anim.setFillAfter(true);
-        v.startAnimation(anim);
-    }
+
 
     /**
      * 打开ViewpagerActivity
