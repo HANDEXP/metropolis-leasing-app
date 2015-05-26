@@ -109,6 +109,7 @@
             android:textSize="20sp"
             />
         <org.hand.mas.custom_view.CustomDotsTextView
+            android:id="@+id/dotsTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"

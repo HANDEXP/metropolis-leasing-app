@@ -3,12 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    <com.mas.album.WrapViewPager
+    <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/viewPager_for_cdd_item"
+        >
+    </android.support.v4.view.ViewPager>
 
-        />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

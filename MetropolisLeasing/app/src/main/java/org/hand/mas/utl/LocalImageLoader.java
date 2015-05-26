@@ -120,7 +120,6 @@ public class LocalImageLoader {
                 }
             }
         }
-
         return mInstance;
     }
 

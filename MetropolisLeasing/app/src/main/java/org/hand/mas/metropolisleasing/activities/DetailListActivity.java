@@ -18,6 +18,7 @@ import com.littlemvc.model.LMModelDelegate;
 import com.littlemvc.model.request.AsHttpRequestModel;
 import com.mas.album.items.ImageItem;
 
+import org.hand.mas.custom_view.CustomDotsTextView;
 import org.hand.mas.metropolisleasing.R;
 import org.hand.mas.metropolisleasing.models.DetailListModel;
 import org.hand.mas.metropolisleasing.models.DetailListSvcModel;
@@ -45,6 +46,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
     private TextView mTitleTextView;
     private ImageView mReturnImageView;
     private TextView mHintTextView;
+    private CustomDotsTextView mDotsTextView;
 
     private List<DetailListModel> mDetailList;
     private DetailListSvcModel mModel;
@@ -97,11 +99,12 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
         param.put("project_number", project_number);
         param.put("project_id", project_id);
         mHintTextView.setVisibility(View.VISIBLE);
+        mDotsTextView.setVisibility(View.VISIBLE);
         if (mDetailList != null && !mDetailList.isEmpty()){
 
             detailListView.setAdapter(null);
         }
-        mHandler.postDelayed(mRunnable,1500);
+        mHandler.postDelayed(mRunnable,600);
 //        mModel.load(param);
 
     }
@@ -162,6 +165,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
                 e.printStackTrace();
             }finally {
                 mHintTextView.setVisibility(View.INVISIBLE);
+                mDotsTextView.setVisibility(View.INVISIBLE);
                 ConstantAnim.fadeInView(detailListView,500);
             }
         }
@@ -189,6 +193,7 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
         mTitleTextView = (TextView) findViewById(R.id.titleTextView);
         mReturnImageView = (ImageView) findViewById(R.id.return_to_detailList);
         mHintTextView = (TextView) findViewById(R.id.hint_for_details_loading);
+        mDotsTextView = (CustomDotsTextView) findViewById(R.id.dotsTextView);
 
         detailListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -252,8 +257,10 @@ public class DetailListActivity extends Activity implements LMModelDelegate{
     * finish activity
     * */
     private void finishWithAnim(){
+        setResult(0);
         finish();
-        overridePendingTransition(R.anim.alpha_in,R.anim.move_out_right);
+        overridePendingTransition(R.anim.alpha_in, R.anim.move_out_right);
+
     }
 
 

@@ -16,11 +16,7 @@
         android:layout_gravity="center_vertical"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="3dp"
-            android:orientation="vertical">
+
 
             <TextView
                 android:id="@+id/bp_name_for_detail"
@@ -36,15 +32,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_marginBottom="3dp"
                 android:text="(1)"
                 android:textColor="#999999"
                 android:textSize="18sp" />
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+
 
             <TextView
                 android:id="@+id/description_for_detail"
@@ -56,7 +49,6 @@
                 android:textSize="16sp" />
 
 
-        </LinearLayout>
 
     </LinearLayout>
 

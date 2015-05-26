@@ -320,7 +320,7 @@ public class CustomPullToRefreshListView extends ListView implements AdapterView
                         state = REFRESH;
                         refreshViewByState();
                     }
-                },2000);
+                },1000);
                 break;
             case REFRESH:
                 mProgressBar.setVisibility(INVISIBLE);
@@ -407,7 +407,7 @@ public class CustomPullToRefreshListView extends ListView implements AdapterView
             }
         }
         if (mScrollListener != null){
-            mScrollListener.onScrollStateChanged(view,scrollState);
+            mScrollListener.onScrollStateChanged(view, scrollState);
         }
         this.scrollState = scrollState;
     }
@@ -415,7 +415,7 @@ public class CustomPullToRefreshListView extends ListView implements AdapterView
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (mScrollListener != null){
-            mScrollListener.onScroll(view,firstVisibleItem,visibleItemCount,totalItemCount);
+            mScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
         }
         this.firstVisibleItem = firstVisibleItem;
         this.visibleLastIndex = firstVisibleItem + visibleItemCount;
@@ -425,7 +425,7 @@ public class CustomPullToRefreshListView extends ListView implements AdapterView
     @Override
     public void onBottomListener(AbsListView view, int scrollState) {
         if (mScrollToBottomListener != null){
-            mScrollToBottomListener.onBottomListener(view,scrollState);
+            mScrollToBottomListener.onBottomListener(view, scrollState);
         }
     }
 
@@ -435,5 +435,10 @@ public class CustomPullToRefreshListView extends ListView implements AdapterView
             mScrollToBottomListener.onRefreshListener();
         }
         setFooterEnable(true);
+    }
+
+    public void setRELEASE() {
+        state = RELEASE;
+        refreshViewByState();
     }
 }

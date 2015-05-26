@@ -172,6 +172,11 @@ public class CddViewPagerActivity extends FragmentActivity implements LMModelDel
             public Fragment getItem(int position) {
                 return mFragmentList.get(position);
             }
+
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return mCddGridList.get(position).getCddItemId();
+            }
         };
         mViewPager.setAdapter(mPhotoViewAdapter);
         mViewPager.setCurrentItem(mCurrencyPosition);

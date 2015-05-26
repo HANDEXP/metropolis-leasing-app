@@ -263,7 +263,6 @@ public class CddGridActivity extends Activity implements LMModelDelegate {
                     e.printStackTrace();
                 } finally {
 
-
                 }
 
                 break;

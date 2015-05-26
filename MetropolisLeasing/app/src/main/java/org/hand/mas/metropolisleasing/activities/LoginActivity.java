@@ -314,9 +314,4 @@ public class LoginActivity extends Activity implements LMModelDelegate{
         mLoginEditText.setText(userName);
         mPasswordEditText.setText(userPassword);
     }
-
-
-
-
-
   }

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hand.hrms4android.exception.ParseExpressionException;
 import com.hand.hrms4android.parser.Expression;
@@ -78,7 +79,7 @@ public class SettingActivity extends Activity implements View.OnClickListener{
         quitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SweetAlertDialog(SettingActivity.this,SweetAlertDialog.WARNING_TYPE)
+                new SweetAlertDialog(SettingActivity.this, SweetAlertDialog.WARNING_TYPE)
                         .setTitleText("确定要退出吗？")
                         .setConfirmText("确定")
                         .setCancelText("取消")
@@ -116,6 +117,10 @@ public class SettingActivity extends Activity implements View.OnClickListener{
                                     "value"));
                 } catch (ParseExpressionException e) {
                     e.printStackTrace();
+                    if (url == null){
+                        showErrorMsg();
+                    }
+                    return;
                 }
                 intent.putExtra("url",url);
                 intent.putExtra("title","用户信息");
@@ -129,6 +134,10 @@ public class SettingActivity extends Activity implements View.OnClickListener{
                                     "value"));
                 } catch (ParseExpressionException e) {
                     e.printStackTrace();
+                    if (url == null){
+                        showErrorMsg();
+                    }
+                    return;
                 }
                 intent.putExtra("url",url);
                 intent.putExtra("title","更换密码");
@@ -142,6 +151,10 @@ public class SettingActivity extends Activity implements View.OnClickListener{
                                     "value"));
                 } catch (ParseExpressionException e) {
                     e.printStackTrace();
+                    if (url == null){
+                        showErrorMsg();
+                    }
+                    return;
                 }
                 intent.putExtra("url",url);
                 intent.putExtra("title","常见问题");
@@ -155,6 +168,10 @@ public class SettingActivity extends Activity implements View.OnClickListener{
                                     "value"));
                 } catch (ParseExpressionException e) {
                     e.printStackTrace();
+                    if (url == null){
+                        showErrorMsg();
+                    }
+                    return;
                 }
                 intent.putExtra("url",url);
                 intent.putExtra("title","欢迎吐槽");
@@ -168,6 +185,10 @@ public class SettingActivity extends Activity implements View.OnClickListener{
                                     "value"));
                 } catch (ParseExpressionException e) {
                     e.printStackTrace();
+                    if (url == null){
+                        showErrorMsg();
+                    }
+                    return;
                 }
                 intent.putExtra("url",url);
                 intent.putExtra("title","版本升级");
@@ -181,6 +202,10 @@ public class SettingActivity extends Activity implements View.OnClickListener{
                                     "value"));
                 } catch (ParseExpressionException e) {
                     e.printStackTrace();
+                    if (url == null){
+                        showErrorMsg();
+                    }
+                    return;
                 }
                 intent.putExtra("url",url);
                 intent.putExtra("title","更换角色");
@@ -190,8 +215,8 @@ public class SettingActivity extends Activity implements View.OnClickListener{
         }
     }
     /*
- * 取出缓存的用户资料
- */
+     * 取出缓存的用户资料
+     */
     private void setDefaultUserData(){
         TextView usernameTextView = (TextView) findViewById(R.id.username_textview_in_setting);
         SharedPreferences preferences = getSharedPreferences("userInfo",MODE_APPEND);
@@ -206,5 +231,9 @@ public class SettingActivity extends Activity implements View.OnClickListener{
         if (view != null && !view.isClickable()){
             view.setClickable(true);
         }
+    }
+
+    private void showErrorMsg() {
+        Toast.makeText(SettingActivity.this,"Url没有配置",Toast.LENGTH_SHORT).show();
     }
 }

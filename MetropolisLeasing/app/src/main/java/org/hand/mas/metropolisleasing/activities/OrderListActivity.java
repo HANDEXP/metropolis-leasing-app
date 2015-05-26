@@ -43,6 +43,7 @@ import org.hand.mas.metropolisleasing.models.FunctionListSvcModel;
 import org.hand.mas.metropolisleasing.models.OrderListModel;
 import org.hand.mas.metropolisleasing.models.OrderListSvcModel;
 import org.hand.mas.utl.CommonAdapter;
+import org.hand.mas.utl.ConstantAnim;
 import org.hand.mas.utl.OnScrollToRefreshListener;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -97,6 +98,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
         }
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +108,8 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
         param = new HashMap<>();
         bindAllViews();
         pageNum = 1;
-        mModel.load();
+//        mModel.load();
+
 
     }
 
@@ -128,6 +131,10 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
             mFunctionListModel = new FunctionListSvcModel(this);
         }
         mFunctionListModel.load();
+        if (mOrderListView != null){
+            mOrderListView.setRELEASE();
+        }
+
     }
 
     @Override
@@ -152,6 +159,10 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
         } else {
             exitWithTwiceBackPressed();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
     }
 
@@ -221,6 +232,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
                 if (mOrderListFlag == true) {
                     mOrderListFlag = false;
                 }
+
             }
 
         } else if (model.equals(this.mFunctionListModel)) {
@@ -240,7 +252,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
 
         }
         /* 考虑并发 */
-        if (mOrderListView.getState() != 0){
+        if (mOrderListView.getState() != 0 && model instanceof OrderListSvcModel){
             mOrderListView.setTipContent("请求数据成功");
             mOrderListView.completeTheRefreshing();
         }
@@ -326,6 +338,12 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
         mOrderListView.setItemClickListener(onItemClickListener);
 //        mOrderListView.addFooterView(mFooterView);
         mTitleTextView.setText("租赁申请查询");
+        mTitleTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOrderListView.setRELEASE();
+            }
+        });
         mFilterImageView.setVisibility(View.VISIBLE);
         mFilterImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -462,16 +480,6 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
             finish();
             return;
         }
-    }
-
-    private void fadeAnim(View v, float start, float end, int i) {
-//        RotateAnimation anim = new RotateAnimation(start,end, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
-        AlphaAnimation anim = new AlphaAnimation(start, end);
-        anim.setDuration(i);
-        anim.setFillAfter(true);
-        v.startAnimation(anim);
-
-
     }
 
     /**
