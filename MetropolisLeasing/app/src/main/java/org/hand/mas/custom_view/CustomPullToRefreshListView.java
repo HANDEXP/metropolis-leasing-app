@@ -389,10 +389,14 @@ public class CustomPullToRefreshListView extends ListView implements AdapterView
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         int itemsLastIndex;
+        boolean isTooLittle;
         itemsLastIndex = getAdapter().getCount();
 
+        Log.d("HARU","bottom4parent:"+((View)getParent()).getBottom() + " top4footer:" + getFooterView().getTop());
+        /* 检查是否数据过少 */
+        isTooLittle = ((View)getParent()).getBottom() > getFooterView().getTop() ? true : false;
         Log.d("HARU", "itemsLastIndex: " + String.valueOf(itemsLastIndex) + " visibleLastIndex: " + String.valueOf(visibleLastIndex) + " FooterViewsCount: " + String.valueOf(getFooterViewsCount()));
-        if (itemsLastIndex == visibleLastIndex  && isFooterEnable() == true){
+        if (itemsLastIndex == visibleLastIndex  && isFooterEnable() == true && !isTooLittle){
 
             onBottomListener(view,scrollState);
 
