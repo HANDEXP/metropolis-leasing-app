@@ -115,13 +115,13 @@ public class CustomPullToRefreshListView extends ListView implements AdapterView
         }
 
 
-        measureView(mHeaderView);
-        mHeaderTipTextView = (TextView) mHeaderView.findViewById(R.id.tip);
-        mProgressBar = (ProgressBar) mHeaderView.findViewById(R.id.progress);
+        //measureView(mHeaderView);
+        //mHeaderTipTextView = (TextView) mHeaderView.findViewById(R.id.tip);
+        //mProgressBar = (ProgressBar) mHeaderView.findViewById(R.id.progress);
 
-        headerHeight = mHeaderView.getMeasuredHeight();
+        //headerHeight = mHeaderView.getMeasuredHeight();
         /* 初始状态隐藏header */
-        topPadding(-headerHeight);
+        //topPadding(-headerHeight);
         setOnItemClickListener(this);
         setOnScrollListener(this);
         typedArray.recycle();

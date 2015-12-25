@@ -46,39 +46,10 @@
         android:orientation="vertical"
         android:paddingLeft="15dp"
         android:paddingRight="15dp">
-        <LinearLayout
-            android:id="@+id/take_photo_and_upload"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="拍立传"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                />
-        </LinearLayout>
-        <View style="@style/SettingDivider" />
-        <LinearLayout
-            android:id="@+id/calculatorLL"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="计算器"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                />
-        </LinearLayout>
-        <View style="@style/SettingDivider" />
+
+
         <include layout="@layout/view_function_list" />
-        <View style="@style/SettingDivider"
-            />
+
         <LinearLayout
             android:id="@+id/settingLL"
             android:layout_width="match_parent"
@@ -92,7 +63,6 @@
                 android:textColor="@color/white"
                 android:textSize="20sp" />
         </LinearLayout>
-        <View style="@style/SettingDivider" />
     </LinearLayout>
 
     <LinearLayout

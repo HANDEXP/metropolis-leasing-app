@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">移动金融终端</string>
+    <string name="app_name">中海租赁</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -8,4 +8,5 @@
     <item type="id" name="position"></item>
     <item type="id" name="className"></item>
     <item type="id" name="isRendered"></item>
+    <string name="title_activity_home2">Home2Activity</string>
 </resources>

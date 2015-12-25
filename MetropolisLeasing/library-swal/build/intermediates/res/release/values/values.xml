@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
     <eat-comment/>
     <attr format="reference" name="drawerArrowStyle"/>
     <attr format="dimension" name="height"/>
@@ -22,11 +22,11 @@
     <color name="background_floating_material_light">#ffeeeeee</color>
     <color name="background_material_dark">#ff303030</color>
     <color name="background_material_light">#ffeeeeee</color>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/colors.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="blue_btn_bg_color">#AEDEF4</color>
     <color name="blue_btn_bg_pressed_color">#96BFD2</color>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
     <eat-comment/>
     <color name="bright_foreground_disabled_material_dark">#80ffffff</color>
     <color name="bright_foreground_disabled_material_light">#80000000</color>
@@ -36,22 +36,22 @@
     <color name="bright_foreground_material_light">@android:color/black</color>
     <color name="button_material_dark">#ff5a595b</color>
     <color name="button_material_light">#ffd6d7d7</color>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/colors.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="button_text_color">#FFFFFF</color>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
     <eat-comment/>
     <color name="dim_foreground_disabled_material_dark">#80bebebe</color>
     <color name="dim_foreground_disabled_material_light">#80323232</color>
     <color name="dim_foreground_material_dark">#ffbebebe</color>
     <color name="dim_foreground_material_light">#ff323232</color>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/colors.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="error_stroke_color">#F27474</color>
     <color name="float_transparent">#00000000</color>
     <color name="gray_btn_bg_color">#D0D0D0</color>
     <color name="gray_btn_bg_pressed_color">#B6B6B6</color>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
     <eat-comment/>
     <color name="highlighted_text_material_dark">#6680cbc4</color>
     <color name="highlighted_text_material_light">#66009688</color>
@@ -59,34 +59,34 @@
     <color name="hint_foreground_material_light">@color/bright_foreground_disabled_material_light</color>
     <color name="link_text_material_dark">@color/material_deep_teal_200</color>
     <color name="link_text_material_light">@color/material_deep_teal_500</color>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/colors.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="material_blue_grey_80">#ff37474f</color>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
     <eat-comment/>
     <color name="material_blue_grey_800">#ff37474f</color>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/colors.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="material_blue_grey_90">#ff263238</color>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
     <eat-comment/>
     <color name="material_blue_grey_900">#ff263238</color>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/colors.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="material_blue_grey_95">#ff21272b</color>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
     <eat-comment/>
     <color name="material_blue_grey_950">#ff21272b</color>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/colors.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="material_deep_teal_20">#ff80cbc4</color>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
     <eat-comment/>
     <color name="material_deep_teal_200">#ff80cbc4</color>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/colors.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="material_deep_teal_50">#ff009688</color>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
     <eat-comment/>
     <color name="material_deep_teal_500">#ff009688</color>
     <color name="primary_dark_material_dark">#ff000000</color>
@@ -97,11 +97,11 @@
     <color name="primary_text_default_material_light">#de000000</color>
     <color name="primary_text_disabled_material_dark">#4Dffffff</color>
     <color name="primary_text_disabled_material_light">#39000000</color>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/colors.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="red_btn_bg_color">#DD6B55</color>
     <color name="red_btn_bg_pressed_color">#CD5B55</color>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
     <eat-comment/>
     <color name="ripple_material_dark">#40ffffff</color>
     <color name="ripple_material_light">#40000000</color>
@@ -109,15 +109,15 @@
     <color name="secondary_text_default_material_light">#8a000000</color>
     <color name="secondary_text_disabled_material_dark">#36ffffff</color>
     <color name="secondary_text_disabled_material_light">#24000000</color>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/colors.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="success_stroke_color">#A5DC86</color>
     <color name="sweet_dialog_bg_color">#FFFFFF</color>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
     <eat-comment/>
     <color name="switch_thumb_normal_material_dark">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_light">#fff1f1f1</color>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/colors.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="text_color">#575757</color>
     <color name="theme_color">#1fbaf3</color>
@@ -149,7 +149,7 @@
     <declare-styleable name="Toolbar"><attr format="reference" name="titleTextAppearance"/><attr format="reference" name="subtitleTextAppearance"/><attr name="title"/><attr name="subtitle"/><attr name="android:gravity"/><attr format="dimension" name="titleMargins"/><attr format="dimension" name="titleMarginStart"/><attr format="dimension" name="titleMarginEnd"/><attr format="dimension" name="titleMarginTop"/><attr format="dimension" name="titleMarginBottom"/><attr name="contentInsetStart"/><attr name="contentInsetEnd"/><attr name="contentInsetLeft"/><attr name="contentInsetRight"/><attr format="dimension" name="maxButtonHeight"/><attr format="reference" name="theme"/><attr name="buttonGravity"><flag name="top" value="0x30"/><flag name="bottom" value="0x50"/></attr><attr format="reference" name="collapseIcon"/><attr name="popupTheme"/><attr format="reference" name="navigationIcon"/><attr format="string" name="navigationContentDescription"/><attr name="android:minHeight"/></declare-styleable>
     <declare-styleable name="View"><attr format="dimension" name="paddingStart"/><attr format="dimension" name="paddingEnd"/><attr name="android:focusable"/></declare-styleable>
     <declare-styleable name="ViewStubCompat"><attr name="android:layout"/><attr name="android:inflatedId"/><attr name="android:id"/></declare-styleable>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
     <eat-comment/>
     <dimen name="abc_action_bar_default_height_material">56dp</dimen>
     <dimen name="abc_action_bar_default_padding_material">4dp</dimen>
@@ -188,11 +188,11 @@
     <dimen name="abc_text_size_subtitle_material_toolbar">16dp</dimen>
     <dimen name="abc_text_size_title_material">20sp</dimen>
     <dimen name="abc_text_size_title_material_toolbar">20dp</dimen>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/dimen.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/dimen.xml -->
     <eat-comment/>
     <dimen name="alert_width">290dp</dimen>
     <dimen name="common_circle_width">3dp</dimen>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
     <eat-comment/>
     <item name="dialog_fixed_height_major" type="dimen">80%</item>
     <item name="dialog_fixed_height_minor" type="dimen">100%</item>
@@ -200,10 +200,10 @@
     <item name="dialog_fixed_width_minor" type="dimen">320dp</item>
     <item format="float" name="disabled_alpha_material_dark" type="dimen">0.30</item>
     <item format="float" name="disabled_alpha_material_light" type="dimen">0.26</item>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/dimen.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/dimen.xml -->
     <eat-comment/>
     <dimen name="progress_circle_radius">34dp</dimen>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
     <eat-comment/>
     <item name="action_bar_activity_content" type="id"/>
     <item name="action_bar_spinner" type="id"/>
@@ -215,10 +215,10 @@
     <item name="split_action_bar" type="id"/>
     <item name="up" type="id"/>
     <integer name="abc_max_action_buttons">2</integer>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/strings.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="LOADING">Loading...</string>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
     <eat-comment/>
     <string name="abc_action_bar_home_description">Navigate home</string>
     <string name="abc_action_bar_home_description_format">%1$s, %2$s</string>
@@ -235,13 +235,13 @@
     <string name="abc_searchview_description_voice">Voice search</string>
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/strings.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="app_name">SweetAlertDialog</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_default_title">Here\'s a message!</string>
     <string name="dialog_ok">OK</string>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.0/res/values/values.xml -->
     <eat-comment/>
     <style name="Base.TextAppearance.AppCompat" parent="android:TextAppearance">
         <item name="android:textColor">?android:textColorPrimary</item>
@@ -1285,7 +1285,7 @@ m>        <item name="android:textColorLink">@color/link_text_material_dark</ite
     <style name="Widget.AppCompat.Spinner.DropDown.ActionBar" parent="Base.Widget.AppCompat.Spinner.DropDown.ActionBar"/>
     <style name="Widget.AppCompat.Toolbar" parent="Base.Widget.AppCompat.Toolbar"/>
     <style name="Widget.AppCompat.Toolbar.Button.Navigation" parent="Base.Widget.AppCompat.Toolbar.Button.Navigation"/>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/styles.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="alert_dialog" parent="android:Theme.Dialog">
         <item name="android:windowIsFloating">true</item>

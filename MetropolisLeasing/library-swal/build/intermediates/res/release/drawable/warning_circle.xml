@@ -4,4 +4,4 @@
     <stroke android:color="@color/warning_stroke_color" android:width="@dimen/common_circle_width" />
 </shape>
 
-<!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/drawable/warning_circle.xml -->
+<!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/drawable/warning_circle.xml -->

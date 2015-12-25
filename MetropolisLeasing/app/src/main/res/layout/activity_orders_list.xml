@@ -22,7 +22,7 @@
                 android:orientation="vertical"
                 >
                 <include layout="@layout/view_head_bar"></include>
-                <org.hand.mas.custom_view.CustomPullToRefreshListView
+                <ListView
                     android:id="@+id/order_list"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -31,10 +31,10 @@
                     android:background="@color/white"
                     android:scrollbars="vertical"
                     android:fadeScrollbars="false"
-                    app:pullType="both"
+                    app:pullType="normal"
                     >
 
-                </org.hand.mas.custom_view.CustomPullToRefreshListView>
+                </ListView>
             </LinearLayout>
         </LinearLayout>
     </org.hand.mas.custom_view.SlidingMenu>

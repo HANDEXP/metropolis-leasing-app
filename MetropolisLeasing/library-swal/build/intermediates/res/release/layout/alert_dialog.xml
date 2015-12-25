@@ -157,4 +157,4 @@
             style="@style/dialog_blue_button"
             android:text="@string/dialog_ok" />
     </LinearLayout>
-</LinearLayout><!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/layout/alert_dialog.xml -->
+</LinearLayout><!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-swal/src/main/res/layout/alert_dialog.xml -->

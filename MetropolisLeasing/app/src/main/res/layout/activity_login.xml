@@ -27,7 +27,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="15dp"
 
-                android:src="@drawable/login_icon"
+                android:src="@drawable/ic_new"
                 mas:type="circle"/>
 
             <LinearLayout

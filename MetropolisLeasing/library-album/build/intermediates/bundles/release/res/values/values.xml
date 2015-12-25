@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-album/src/main/res/values/strings.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-album/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="app_name">ImageAlbum</string>
     <string name="hello_world">Hello world!</string>
-    <!-- From: file:/Users/gonglixuan/Project/metropolis-leasing-app/MetropolisLeasing/library-album/src/main/res/values/styles.xml -->
+    <!-- From: file:/Users/titengjiang/Documents/Project/Android/project/metropolis-leasing-app/MetropolisLeasing/library-album/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="AppBaseTheme">
         <!--

@@ -62,20 +62,10 @@ public class SettingActivity extends Activity implements View.OnClickListener{
     private void bindAllViews() {
         Button quitButton = (Button) findViewById(R.id.quitBtn);
 
-        userInfoLL = (LinearLayout) findViewById(R.id.user_info_LL);
-        changeCharacterLL = (LinearLayout) findViewById(R.id.change_character_LL);
-        changePasswordLL = (LinearLayout) findViewById(R.id.change_password_LL);
-        questionLL = (LinearLayout) findViewById(R.id.question_LL);
-        discussLL = (LinearLayout) findViewById(R.id.discuss_LL);
-        versionUpdateLL = (LinearLayout) findViewById(R.id.version_update_LL);
+
 
         setDefaultUserData();
-        userInfoLL.setOnClickListener(this);
-        changeCharacterLL.setOnClickListener(this);
-        changePasswordLL.setOnClickListener(this);
-        questionLL.setOnClickListener(this);
-        discussLL.setOnClickListener(this);
-        versionUpdateLL.setOnClickListener(this);
+
         quitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,109 +98,7 @@ public class SettingActivity extends Activity implements View.OnClickListener{
         Intent intent = new Intent(SettingActivity.this,HtmlBaseActivity.class);
         String url = null;
         switch (v.getId()){
-            case R.id.user_info_LL:
 
-                try {
-                     url = configReader
-                            .getAttr(new Expression(
-                                    "/backend-config/url[@name='user_info_url']",
-                                    "value"));
-                } catch (ParseExpressionException e) {
-                    e.printStackTrace();
-                    if (url == null){
-                        showErrorMsg();
-                    }
-                    return;
-                }
-                intent.putExtra("url",url);
-                intent.putExtra("title","用户信息");
-                startActivity(intent);
-                break;
-            case R.id.change_password_LL:
-                try {
-                    url = configReader
-                            .getAttr(new Expression(
-                                    "/backend-config/url[@name='change_password_url']",
-                                    "value"));
-                } catch (ParseExpressionException e) {
-                    e.printStackTrace();
-                    if (url == null){
-                        showErrorMsg();
-                    }
-                    return;
-                }
-                intent.putExtra("url",url);
-                intent.putExtra("title","更换密码");
-                startActivity(intent);
-                break;
-            case R.id.question_LL:
-                try {
-                    url = configReader
-                            .getAttr(new Expression(
-                                    "/backend-config/url[@name='question_url']",
-                                    "value"));
-                } catch (ParseExpressionException e) {
-                    e.printStackTrace();
-                    if (url == null){
-                        showErrorMsg();
-                    }
-                    return;
-                }
-                intent.putExtra("url",url);
-                intent.putExtra("title","常见问题");
-                startActivity(intent);
-                break;
-            case R.id.discuss_LL:
-                try {
-                    url = configReader
-                            .getAttr(new Expression(
-                                    "/backend-config/url[@name='discuss_url']",
-                                    "value"));
-                } catch (ParseExpressionException e) {
-                    e.printStackTrace();
-                    if (url == null){
-                        showErrorMsg();
-                    }
-                    return;
-                }
-                intent.putExtra("url",url);
-                intent.putExtra("title","欢迎吐槽");
-                startActivity(intent);
-                break;
-            case R.id.version_update_LL:
-                try {
-                    url = configReader
-                            .getAttr(new Expression(
-                                    "/backend-config/url[@name='version_update_url']",
-                                    "value"));
-                } catch (ParseExpressionException e) {
-                    e.printStackTrace();
-                    if (url == null){
-                        showErrorMsg();
-                    }
-                    return;
-                }
-                intent.putExtra("url",url);
-                intent.putExtra("title","版本升级");
-                startActivity(intent);
-                break;
-            case R.id.change_character_LL:
-                try {
-                    url = configReader
-                            .getAttr(new Expression(
-                                    "/backend-config/url[@name='change_character_url']",
-                                    "value"));
-                } catch (ParseExpressionException e) {
-                    e.printStackTrace();
-                    if (url == null){
-                        showErrorMsg();
-                    }
-                    return;
-                }
-                intent.putExtra("url",url);
-                intent.putExtra("title","更换角色");
-                startActivity(intent);
-                break;
 
         }
     }

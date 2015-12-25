@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,7 +61,7 @@ import java.util.List;
 public class OrderListActivity extends Activity implements LMModelDelegate {
 
 
-    private CustomPullToRefreshListView mOrderListView;
+    private ListView mOrderListView;
 
     private TextView mTitleTextView;
     private ImageView mFilterImageView;
@@ -72,8 +73,8 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
     private LinearLayout CalculatorLL;
     private ClearEditText mFilterEditText;
 
-    private List<OrderListModel> mOrderList;
-    private OrderListSvcModel mModel;
+    private List mOrderList;
+    private FunctionListSvcModel mModel;
     private FunctionListSvcModel mFunctionListModel;
     private CommonAdapter adapter;
     private HashMap<String, String> param;
@@ -93,7 +94,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
             if (mOrderListFlag == true)
                 return;
             param.put("page_num", String.valueOf(++pageNum));
-            mModel.load(param);
+            mModel.load();
             mOrderListFlag = true;
         }
     };
@@ -108,7 +109,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
         param = new HashMap<>();
         bindAllViews();
         pageNum = 1;
-//        mModel.load();
+        mModel.load();
 
 
     }
@@ -131,9 +132,9 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
             mFunctionListModel = new FunctionListSvcModel(this);
         }
         mFunctionListModel.load();
-        if (mOrderListView != null){
-            mOrderListView.setRELEASE();
-        }
+//        if (mOrderListView != null){
+//            mOrderListView.setRELEASE();
+//        }
 
     }
 
@@ -170,40 +171,58 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
     public void modelDidFinishLoad(LMModel model) {
 
         AsHttpRequestModel reponseModel = (AsHttpRequestModel) model;
-        if (model instanceof OrderListSvcModel) {
+        if (model == mModel) {
             String json = new String(reponseModel.mresponseBody);
             try {
                 JSONObject jsonObj = new JSONObject(json);
                 String code = ((JSONObject) jsonObj.get("head")).get("code").toString();
-                if (code.equals("success")) {
+                if (code.equals("ok")) {
 
-                    JSONArray bodyArr = (JSONArray) ((JSONObject) jsonObj.get("body")).get("lists");
+                    JSONArray bodyArr = (JSONArray) ((JSONObject) jsonObj.get("body")).get("list");
+                    JSONArray itemsArr = (JSONArray) bodyArr.getJSONObject(0).get("items");
                     try {
-                        initializeData(bodyArr);
+                        initializeData(itemsArr);
                         if (adapter == null) {
-                            adapter = new CommonAdapter<OrderListModel>(getApplicationContext(), mOrderList, R.layout.activity_orders_list_child) {
+                            adapter = new CommonAdapter<JSONObject>(getApplicationContext(), mOrderList, R.layout.cell_home) {
                                 @Override
-                                public void convert(org.hand.mas.utl.ViewHolder helper, OrderListModel obj, int position) {
-                                    TextView projectNumberTextView = helper.getView(R.id.project_number_for_order);
-                                    TextView projectStatusDesc = helper.getView(R.id.project_status_desc_for_order);
-                                    TextView bpName = helper.getView(R.id.bp_name_for_order);
-                                    TextView projectSource = helper.getView(R.id.project_source_for_order);
-                                    TextView bpClass = helper.getView(R.id.bp_class_for_order);
-                                    TextView identifierCode = helper.getView(R.id.identifier_code_for_order);
+                                public void convert(org.hand.mas.utl.ViewHolder helper, JSONObject obj, int position) {
+                                    TextView textView = helper.getView(R.id.tv_user_name);
 
-                                    OrderListModel item = (OrderListModel) obj;
-
-                                    projectNumberTextView.setText(item.getProjectNumber());
-                                    projectStatusDesc.setText(item.getProjectStatusDesc());
-                                    bpName.setText(item.getBpName());
-                                    projectSource.setText(item.getProjectSource());
-                                    String bpStr = item.getBpClass().equals("NP") ? "个人" : "法人";
-                                    bpClass.setText(bpStr.concat("识别号:"));
-                                    if (bpClass.equals("ORG")) {
-                                        identifierCode.setText(item.getOrganizationCode());
-                                    } else if (bpClass.equals("NP")) {
-                                        identifierCode.setText(item.getIdCardNo());
+                                    try {
+                                        textView.setText((String)obj.get("title"));
+                                        final String url = (String)obj.get("url");
+                                        final String title = (String)obj.get("title");
+                                        textView.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                startWebViewActivity(url, title);
+                                            }
+                                        });
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
+
+
+//                                    TextView projectNumberTextView = helper.getView(R.id.project_number_for_order);
+//                                    TextView projectStatusDesc = helper.getView(R.id.project_status_desc_for_order);
+//                                    TextView bpName = helper.getView(R.id.bp_name_for_order);
+//                                    TextView projectSource = helper.getView(R.id.project_source_for_order);
+//                                    TextView bpClass = helper.getView(R.id.bp_class_for_order);
+//                                    TextView identifierCode = helper.getView(R.id.identifier_code_for_order);
+//
+//                                    OrderListModel item = (OrderListModel) obj;
+//
+//                                    projectNumberTextView.setText(item.getProjectNumber());
+//                                    projectStatusDesc.setText(item.getProjectStatusDesc());
+//                                    bpName.setText(item.getBpName());
+//                                    projectSource.setText(item.getProjectSource());
+//                                    String bpStr = item.getBpClass().equals("NP") ? "个人" : "法人";
+//                                    bpClass.setText(bpStr.concat("识别号:"));
+//                                    if (bpClass.equals("ORG")) {
+//                                        identifierCode.setText(item.getOrganizationCode());
+//                                    } else if (bpClass.equals("NP")) {
+//                                        identifierCode.setText(item.getIdCardNo());
+//                                    }
 
                                 }
                             };
@@ -213,12 +232,12 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
 
                             if (count4newData > 0) {
                                 Toast.makeText(OrderListActivity.this, "加载了" + String.valueOf(count4newData + "条新数据"), Toast.LENGTH_SHORT).show();
-                                mOrderListView.setFooterEnable(true);
+//                                mOrderListView.setFooterEnable(true);
                             } else {
                                 Toast.makeText(OrderListActivity.this, "没有更多的数据了", Toast.LENGTH_SHORT).show();
-                                mOrderListView.setFooterEnable(false);
+//                                mOrderListView.setFooterEnable(false);
                             }
-                            mOrderListView.removeExtraView(CustomPullToRefreshListView.FOOTER_VIEW);
+//                            mOrderListView.removeExtraView(CustomPullToRefreshListView.FOOTER_VIEW);
                             adapter.notifyDataSetChanged();
                         }
                     } catch (Exception e) {
@@ -252,10 +271,10 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
 
         }
         /* 考虑并发 */
-        if (mOrderListView.getState() != 0 && model instanceof OrderListSvcModel){
-            mOrderListView.setTipContent("请求数据成功");
-            mOrderListView.completeTheRefreshing();
-        }
+//        if (mOrderListView.getState() != 0 && model instanceof OrderListSvcModel){
+//            mOrderListView.setTipContent("请求数据成功");
+//            mOrderListView.completeTheRefreshing();
+//        }
     }
 
     @Override
@@ -269,29 +288,28 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
     @Override
     public void modelDidFailedLoadWithError(LMModel model) {
         Log.d("LoadWithError", "modelDidFailedLoadWithError");
-        mOrderListView.removeExtraView(CustomPullToRefreshListView.FOOTER_VIEW);
-        if (mOrderListView.isRefresh()){
-            mOrderListView.setTipContent("请求数据失败");
-            mOrderListView.completeTheRefreshing();
-        }
+//        mOrderListView.removeExtraView(CustomPullToRefreshListView.FOOTER_VIEW);
+//        if (mOrderListView.isRefresh()){
+//            mOrderListView.setTipContent("请求数据失败");
+//            mOrderListView.completeTheRefreshing();
+//        }
     }
 
     /*私有方法*/
     private void bindAllViews() {
         pageNum = 1;
-        mModel = new OrderListSvcModel(this);
+        mModel = new FunctionListSvcModel(this);
 
         LayoutInflater layoutInflater =
                 (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        mOrderListView = (CustomPullToRefreshListView) findViewById(R.id.order_list);
+        mOrderListView = (ListView) findViewById(R.id.order_list);
 
         mTitleTextView = (TextView) findViewById(R.id.titleTextView);
         mFilterImageView = (ImageView) findViewById(R.id.filter_for_orderList);
         mSlideMenuImageView = (ImageView) findViewById(R.id.slide_menu);
         mSlidingMenu = (SlidingMenu) findViewById(R.id.sliding_menu_and_content);
         /* Sliding Menu */
-        TakePhotoAndUploadLL = (LinearLayout) mSlidingMenu.findViewById(R.id.take_photo_and_upload);
-        CalculatorLL = (LinearLayout) mSlidingMenu.findViewById(R.id.calculatorLL);
+
         SettingLL = (LinearLayout) mSlidingMenu.findViewById(R.id.settingLL);
 
         mSlideMenuImageView.setVisibility(View.VISIBLE);
@@ -305,7 +323,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
         OnScrollToRefreshListener onScrollToRefreshListener = new OnScrollToRefreshListener() {
             @Override
             public void onBottomListener(AbsListView view, int scrollState) {
-                mOrderListView.setFooterEnable(false);
+//                mOrderListView.setFooterEnable(false);
                 mHandler.postDelayed(mRunnable, 2000);
             }
 
@@ -316,7 +334,7 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
                 mModel.load();
             }
         };
-        mOrderListView.setScrollToBottomListener(onScrollToRefreshListener);
+//        mOrderListView.setScrollToBottomListener(onScrollToRefreshListener);
         AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -335,88 +353,23 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
                 }
             }
         };
-        mOrderListView.setItemClickListener(onItemClickListener);
+//        mOrderListView.setItemClickListener(onItemClickListener);
 //        mOrderListView.addFooterView(mFooterView);
-        mTitleTextView.setText("租赁申请查询");
+        mTitleTextView.setText("首页");
         mTitleTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOrderListView.setRELEASE();
+//                mOrderListView.setRELEASE();
             }
         });
-        mFilterImageView.setVisibility(View.VISIBLE);
-        mFilterImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                dialog = new DialogPlus.Builder(OrderListActivity.this)
-                        .setContentHolder(new ViewHolder(R.layout.view_filter_dialog))
-                        .setGravity(DialogPlus.Gravity.TOP)
-                        .setOnClickListener(new OnClickListener() {
-                            @Override
-                            public void onClick(DialogPlus dialogPlus, View view) {
-                                switch (view.getId()) {
-                                    case R.id.confirm_btn_for_filter:
-                                        startFilterActivity(mFilterEditText);
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                        })
-                        .create();
-                dialog.show();
-                mFilterEditText = (ClearEditText) findViewById(R.id.edittext_for_filter);
-                mFilterEditText.requestFocus();
-                mFilterEditText.setOnKeyListener(new View.OnKeyListener() {
-                    @Override
-                    public boolean onKey(View v, int keyCode, KeyEvent event) {
-                        if (param == null) {
-                            param = new HashMap<String, String>();
-                        }
-                        if (KeyEvent.KEYCODE_ENTER == keyCode && event.getAction() == KeyEvent.ACTION_DOWN) {
-                            startFilterActivity(v);
-                        }
 
-                        return false;
-                    }
-                });
-
-            }
-        });
-        TakePhotoAndUploadLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mSlidingMenu.getIsOpen()) {
-                    mSlideMenuImageView.setImageDrawable(getResources().getDrawable(R.drawable.icon_for_slide_menu));
-                    mSlidingMenu.closeMenu();
-                }
-
-            }
-        });
         SettingLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startSettingActivity();
             }
         });
-        CalculatorLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                XmlConfigReader configReader = null;
-                String url = null;
-                configReader = XmlConfigReader.getInstance();
-                try {
-                    url = configReader
-                            .getAttr(new Expression(
-                                    "/backend-config/url[@name='calculate_url']",
-                                    "value"));
-                } catch (ParseExpressionException e) {
-                    e.printStackTrace();
-                }
-                startWebViewActivity(url, "计算器");
-                v.setClickable(false);
-            }
-        });
+
         setDefaultUserData();
     }
 
@@ -432,17 +385,8 @@ public class OrderListActivity extends Activity implements LMModelDelegate {
         for (int i = 0; i < length; i++) {
             JSONObject data = (JSONObject) jsonArray.get(i);
             try {
-                OrderListModel item = new OrderListModel(
-                        data.getString("project_id"),
-                        data.getString("project_number"),
-                        data.getString("project_status_desc"),
-                        data.getString("bp_class"),
-                        data.getString("organization_code"),
-                        data.getString("bp_name"),
-                        data.getString("id_card_no"),
-                        data.getString("project_source")
-                );
-                mOrderList.add(item);
+
+                mOrderList.add(data);
             } catch (Exception e) {
                 e.printStackTrace();
                 continue;
